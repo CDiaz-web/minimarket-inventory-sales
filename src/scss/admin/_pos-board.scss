@@ -1,0 +1,24 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.board__grid {
+    display: flex;
+    flex-direction: column; /* En dispositivos pequeños será una columna */
+    gap: 20px;
+    width: 100%;
+    height: auto;
+}
+
+@media (min-width: 768px) {
+    .board__grid {
+        flex-direction: row; /* En pantallas más grandes se alinea en fila */
+    }
+    
+    .board__contenido {
+        flex: 2; /* Contenido ocupa 2/3 del espacio */
+    }
+    
+    .board__sidebar {
+        flex: 1; /* Panel derecho ocupa 1/3 del espacio */
+    }
+}

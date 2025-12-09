@@ -1,0 +1,78 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.datagrid table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.4rem;
+    padding: 1rem;
+    @include m.tablet{
+        font-size: 1.6rem;
+    }    
+}
+
+.datagrid table thead th {
+    background-color:v.$cabtabla; 
+    color: v.$blanco;   
+    font-weight:bold; 
+   
+} 
+
+
+.datagrid table th{
+    padding: 1rem;
+    text-align: left;
+}
+.datagrid table tr{
+    &:nth-child(even){
+        background-color: v.$gris-claro;
+    }
+}
+.datagrid table td{
+    padding: .5rem 1rem; 
+    font-size: 1.4rem;
+}   
+.aumentar{
+    color: v.$azul;
+    border:none;   
+    background-color: transparent;
+    font-size: 2.5rem;
+    &:hover
+    {
+         cursor: pointer;         
+     }
+}  
+.eliminar{
+    color: v.$rojo;
+    border:none;
+    background-color: transparent;
+    font-size: 2.5rem;
+    &:hover
+   {
+        cursor: pointer;         
+    }
+}   
+.disminuir{
+    color: v.$naranja;
+    border:none;
+    background-color: transparent;
+    font-size: 2.5rem;
+    &:hover
+    {
+         cursor: pointer;         
+     }
+}   
+.cantidad{
+    padding: 0.5rem;
+    border: 1px solid #b1c7dd;
+    border-radius: 0.5rem;
+    text-align: right;
+    width: 10rem;
+    // @include m.tablet{
+    //     width: auto;
+    // }  
+    input{
+        max-width: 100%;/*hacer que el input ocupe todo el ancho*/
+        box-sizing: border-box;/*asegura que el paddin no afecte el ancho*/
+    }
+}   

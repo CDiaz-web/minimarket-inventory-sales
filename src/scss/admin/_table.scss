@@ -1,0 +1,142 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.4rem;
+    padding: 1rem;  
+    &--ocultar{
+        td:nth-child(1),
+        th:nth-child(1){
+            display: none;
+        }
+    }  
+    
+    @include m.tablet{
+        font-size: 1.6rem;
+    }
+    &__thead{
+        background-color:v.$cabtabla; 
+        color: v.$blanco;        
+    }
+    &__th{
+        padding: 1rem;
+        text-align: left;
+        &--cantidad{
+            width: 80px;
+            max-width: 100px;
+        }
+
+    }
+    &__tderecha{
+        padding: 1rem;
+        text-align: right;
+        &--cantidad{
+            width: 80px;
+            max-width: 100px;
+        }
+
+    }
+    &__tr{
+        &:nth-child(even){
+            background-color: v.$gris-claro;
+        }
+    }
+    &__td{
+        padding: .5rem 1rem;
+        &--acciones{
+            @extend .table__td;
+            display: flex;
+            justify-content: flex-end;
+            gap: 2rem;
+            align-items: center;
+            
+        }
+       
+    }
+    &__accion{
+        all: unset;
+        text-transform: uppercase;
+        
+        font-weight: v.$bold;
+        &--editar{
+            color: v.$azul;
+        }
+        &--eliminar{
+            color: v.$rojo;
+        }
+        &:hover{
+            cursor: pointer;
+        }
+        @include m.tablet{
+            font-size: 1.4rem;
+        }
+    }
+    &__mantenimiento {
+        /* position: relative; */
+       background-position: 50% 50%;
+        padding-top: 0;
+        padding: 5px 5px;
+        //margin: 0 0 6px 6px;
+        width: 30px;
+        height: 30px;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        border-radius: 1;
+        text-align: center;
+        color: #666;
+        border: 1px solid #ddd;
+        background-color: #fafafa;
+       // font-size: 12px;
+        &--editar{
+            color: v.$azul;
+        }
+        &--naranja{
+            color: v.$naranja;
+        }
+        &--eliminar{
+            color: v.$rojo;            
+        }
+        &--salir{
+            color: v.$rojo;
+            border:none;
+        }
+        &:hover{
+            cursor: pointer;
+        }
+        @include m.tablet{
+            font-size: 1.4rem;
+        }
+        &--icono{
+            font-size: 2rem;
+            width: 3.5rem;//ancho del icono del sidebar
+            padding-top: 0;    
+        }
+    }
+
+    &__mantenimiento-modal {        
+        background-position: 50% 50%;
+        padding-top: 0;
+        padding: 15px 5px;      
+        width: 40px;
+        height: 40px;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        border-radius: 1;
+        text-align: center;
+        color: #666;
+        border: 1px solid #ddd;
+        background-color: #fafafa;
+        
+ 
+        &:hover{
+            cursor: pointer;
+            color: v.$azul;
+        }
+        @include m.tablet{
+            font-size: 1.4rem;
+        }
+    }    
+}
+

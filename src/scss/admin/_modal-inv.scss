@@ -1,0 +1,57 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.modal-inv {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-inv-dialog {
+    max-width: 800px;
+    width: 90%;
+    background: #fff;
+    border-radius: 1rem;
+    transform: translateY(-50px);
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+    &.show {
+      transform: translateY(0);
+    }
+  }
+
+  .modal-inv-header {
+    background-color: #007bff;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-inv-body {
+    padding: 2rem;
+    font-size: 1rem;
+  }
+
+  .modal-inv-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+}

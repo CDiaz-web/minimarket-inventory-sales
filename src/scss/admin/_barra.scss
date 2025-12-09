@@ -1,0 +1,95 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+.barra-mobile{   
+    background-color: lighten(v.$gris-oscuro,10%); 
+    padding: 2rem 4rem;
+    display: flex;   
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 0;
+    @include m.tablet{
+        display: none;       
+    } 
+    h1{
+        color:v.$blanco;
+        margin: 0;
+    }
+    &__menu{
+        i{
+            width: 1.5rem;
+            color: v.$blanco; 
+            font-size: 3rem;
+            &:hover{
+                color: v.$azul;    
+                cursor:pointer;
+            }
+        }
+    }
+    span{
+        font-size: 1rem;
+        color: v.$blanco;
+    }
+    &__logo{
+        @include m.logo;   
+        font-size: 2rem;      
+        flex-direction:row; 
+        align-items: left;
+        
+        justify-content: space-between;
+    
+        &--texto{
+            font-family: v.$fuente_principal;
+            font-weight: v.$black;
+            font-size: 0.2rem;
+            margin: 2rem 0;
+        }
+    }
+
+    &__texto{        
+        font-family: v.$fuente_principal;
+        font-weight: v.$black;
+        color: v.$blanco;
+        font-size: 1.5rem;      
+        flex-direction:row; 
+        align-items: left;        
+        justify-content: space-between;    
+   
+    }
+}
+.barra{
+    display: none;
+    @include m.tablet{
+        background-color: v.$gris-claro;
+        padding: 0.5rem 2rem;
+        box-shadow: 1px 12px 9px -13px rgba(0,0,0, .2);
+        display: flex;
+        justify-content:space-between;
+        align-items: center;
+        margin-right: 1rem;
+    }
+    &_horizontal{        
+        display: flex;
+        justify-content:space-between;
+        // align-items: center;
+        // justify-content: left;
+        margin-right: 1rem;
+    }
+    &__texto{
+        font-size: 1.4rem;    
+        //text-transform: uppercase;        
+        font-weight: 500;
+        color: lighten(v.$gris-oscuro,10%);
+            
+    }
+    p{        
+        font-size: 1.4rem;        
+        span{            
+            //float: right;
+            font-weight: 700;
+            color: lighten(v.$gris-oscuro,10%);
+        }
+    
+    }
+
+
+}

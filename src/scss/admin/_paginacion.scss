@@ -1,0 +1,64 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.paginacion{
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;   
+    font-size: 1.8rem; 
+
+    @include m.tablet{    
+        
+        justify-content: flex-end;    
+    }
+
+
+    button{
+        background-color: transparent;
+        border: none;        
+        &:hover{               
+            cursor:pointer;
+        }
+    }
+}
+
+.pagina{
+    display: none;
+    @include m.tablet{
+        display: flex;
+    }
+    &__color_page{
+        display: none;
+        @include m.tablet{
+            color: v.$azul;
+            display: flex;
+        }
+    }  
+}
+
+
+.paginacion_modal{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;   
+    font-size: 1.8rem; 
+    button{
+        background-color: transparent;
+        border: none;        
+        &:hover{               
+            cursor:pointer;
+        }
+    }
+}

@@ -1,0 +1,39 @@
+
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+.listado{
+    list-style: none;
+    padding: 0;
+    margin-top: 3rem;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    font-weight: v.$bold;  
+    @include m.grid(1, 2rem);
+    @include m.tablet{
+        @include m.grid(2, 2rem);
+    }
+    @include m.desktop{
+        @include m.grid(4, 2rem);
+    }
+    &__opciones{
+        border: none;
+        color: v.$blanco;
+        background-color: lighten(v.$naranja,5%);
+        min-height: 12rem;
+        display: flex;
+        align-items: center;
+        padding: 2rem;
+        line-height: 2;
+        border-radius: .5rem;
+        &:hover{
+            background-color: darken(v.$naranja, 5%);
+            cursor:pointer;
+        }
+        a{
+            color: v.$blanco;
+        }
+        &--nombre{
+            margin-left: 1rem;
+        }
+    }
+}

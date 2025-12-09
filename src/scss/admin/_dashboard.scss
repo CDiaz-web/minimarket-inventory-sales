@@ -1,0 +1,527 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.dashboard{
+    height: 100%;     
+    background-color: v.$blanco;
+
+    @include m.tablet{
+        display:flex;
+    }
+     
+    &__header{
+        @include m.shadow-heading;
+        background-color: v.$gris-claro;
+        padding: 2rem;
+    }
+    &__filtros-contenedor{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap; /* por si la pantalla es chica */
+        margin-bottom: 1rem;
+    }
+
+    &__filtros{
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+
+
+    &__header-grid{
+        display: flex;
+        flex-direction: column ;
+        @include m.tablet{
+            flex-direction: column;
+        }
+    }
+
+    &__grid{
+        display: flex;
+        flex: 2 ;
+        overflow-y:auto;
+        flex-direction: column;        
+    }
+
+
+
+    &__sidebar{
+         background-color: lighten(v.$gris-oscuro,10%); 
+        //background-color: lighten(v.$sidebar, 10%); 
+        //background-color: v.$sidebar;
+        opacity: 10 ;
+        display: none ;
+        @include m.tablet{
+            display: flex ;
+        }
+      
+        
+    }
+
+    &__icono-menu{
+        img{
+            width: .8rem;
+            &:hover{
+                cursor:pointer;
+            }
+        }
+    }
+    &__barra{
+        display: flex;     
+        justify-content: space-between;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        font-weight: v.$bold;
+        p{
+            color:v.$azul;
+        }
+        span{
+            color: v.$gris-oscuro;            
+        }
+        &--inicio{
+            margin-top: 0rem;  
+            margin-left: 5rem;          
+        }
+
+        &--menu-ico{
+            z-index: 2;
+            width: fit-content;
+            height: auto;
+          
+            margin: 3px;
+          
+        
+            cursor: pointer;
+            .line1 , .line2 , .line3{
+                width: 20px;
+                height: 2px;
+                margin: 4px 4px;
+                background-color: #000;
+                border-radius: 50px;
+            }
+        }        
+
+    }
+    &__menu{
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;  
+        gap: .5rem;
+    
+    }
+
+    &__logo{
+        @include m.logo; 
+        @include m.texto-degradado(v.$azul, v.$secundario);
+        display: flex;
+        flex-direction:row; 
+        align-items: center;
+        margin-top: 0; 
+        padding-left: 1rem;        
+        justify-content: space-between;
+        &--titulo{
+            // font-family: v.$fuente_principal;
+            // font-weight: v.$black;
+            font-size: 3rem;
+        }
+
+    }
+    &__enlace{
+        //color: lighten(v.$sidebar, 80);
+        color: lighten(v.$gris-oscuro, 40);
+        display: flex;
+        flex-direction:row;   
+        opacity: 1;
+        padding: .5rem; //altura de boton
+        text-decoration: none !important;
+        transition: 300ms background-color ease-in-out, 300ms color ease, 300ms border-radius ease;
+        &--salir{
+            @include m.tablet{
+                display: none ;
+            }
+        }
+        &:hover,
+        &--actual{
+           // background-color: lighten(v.$sidebar, 20);
+            background-color: lighten(v.$gris-oscuro, 20);
+            color: v.$blanco;  
+            border-radius: 0.5rem; 
+            cursor: pointer;         
+        }
+        &--icono{ 
+            font-size: 1.5rem;
+            width: 2.8rem;//ancho del icono del sidebar          
+        }
+        &--icono-salir{ 
+            font-size: 1.2rem;
+            width: 2.2rem;//ancho del icono del sidebar          
+        }
+        &--icono-desplegable{
+            margin-top: 0.5rem;
+            //margin-left: 0.5rem;            
+            font-size: 1.5rem;
+            // width: 3.5rem;//ancho del icono del sidebar    
+        }
+      
+    }
+
+    &__menu-texto{
+        font-size: 1rem;
+        text-transform: uppercase;
+        font-weight: v.$bold;
+        margin-top: .2rem;      
+    }
+    &__separador{
+        @extend .dashboard__menu-texto;
+        color: v.$blanco;
+        span{
+            color: v.$azul;
+        }
+    }
+    &__usuario{
+        @extend .dashboard__menu-texto;
+        color: v.$morado;
+    }
+    &__contenido{
+        padding: 1rem 1rem 3rem 1rem;
+        width: 100%;
+        overflow-y: scroll;
+        @include m.tablet{
+            padding: 1rem 5rem 3rem 5rem;
+        }
+        // @include m.desktop{
+        //     padding: 1rem 3rem 3rem 3rem;
+        // }
+    }
+    &__contendor-boton{
+        @include m.tablet{
+            display: flex;
+            justify-content: space-between;            
+            margin-bottom: 5rem
+        }
+    }
+    &__buscar{
+        padding: 0.8rem;        
+        border: 1px solid darken(v.$gris-claro,20%);
+        border-radius: .5rem; 
+        width: 100%;
+        margin-top: 1%; 
+        font-size: 1.4rem;        
+        @include m.tablet{
+            margin-top: 0.5%; 
+            font-size: 1.6rem;  
+            width: auto;  
+            float: right;                   
+        }
+    }
+    &__boton{
+        @include m.boton(v.$gris, v.$blanco);        
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;      
+        border-radius: 0.5rem;         
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+        }
+    }
+    &__boton-agregar{        
+        @include m.boton(v.$azul, v.$blanco);  
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;     
+        border-radius: 0.5rem;   
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+        } 
+        &--pos{
+            margin-top: 5%; 
+            width: auto;
+            @include m.tablet{
+                margin-top: 5%; 
+                max-width: 10rem;
+            }
+        }
+    }
+
+    &__boton-verde{        
+        @include m.boton(v.$verde, v.$blanco);  
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;     
+        border-radius: 0.5rem;   
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+        } 
+        &--pos{
+            margin-top: 5%; 
+            width: auto;
+            @include m.tablet{
+                margin-top: 5%; 
+                max-width: 10rem;
+            }
+        }
+    }
+
+    &__boton-caja{        
+        @include m.boton(v.$amarillo, v.$negro);  
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;     
+        border-radius: 0.5rem;   
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+        } 
+
+    }
+
+
+    &__boton-limpiar{        
+        @include m.boton(v.$rojo, v.$blanco);  
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;     
+        border-radius: 0.5rem;   
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+        }
+        &--pos{
+            margin-top: 5%; 
+            width: auto;
+            @include m.tablet{
+                margin-top: 5%; 
+                max-width: 10rem;
+            }
+        }
+    }
+    &__boton-naranja{        
+        @include m.boton(v.$naranja, v.$blanco);  
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;     
+        border-radius: 0.5rem;   
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+        }
+        &--pos{
+            margin-top: 5%; 
+            width: auto;
+            @include m.tablet{
+                margin-top: 5%; 
+                max-width: 10rem;
+            }
+        }
+    }
+    &__boton-exportar{
+        
+        @include m.boton(v.$naranja, v.$blanco);  
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;       
+        border-radius: 0.5rem;    
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+        } 
+    }
+    &__boton-carga{
+        
+        @include m.boton(v.$naranja, v.$blanco);  
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;      
+        border-radius: 0.5rem;     
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+        } 
+    }
+    &__botoncargar{
+        @include m.boton(v.$gris, v.$blanco);        
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;            
+        &--deshabilitada{  
+            opacity: .5;
+            &:hover{
+                cursor: not-allowed;
+            }
+        }
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+           
+        }
+    }
+    &__botoncargar--deshabilitada{
+        @include m.boton(v.$gris, v.$blanco);        
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;            
+     
+        opacity: .5;
+        &:hover{
+            cursor: not-allowed;
+        }
+      
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+           
+        }
+    }
+    &__boton-regresar{
+        @include m.boton(v.$naranja, v.$blanco);        
+        text-transform: uppercase;
+        font-size: 1.4rem;    
+        margin-top: 1%;            
+        @include m.tablet{
+            margin-top: 0%; 
+            width: auto;
+        }
+    }
+   
+    &__contenedor{
+        @include m.shadow;
+       // @include m.shadow-contenedor;
+        background-color: v.$blanco;
+        padding: 1rem;
+        border-radius: 1rem;
+        size: 2rem;
+    }
+
+    &__formulario{
+        @extend .dashboard__contenedor;
+        @include m.contenedor-md;      
+    }
+
+    &__formulario_xl{
+        @extend .dashboard__contenedor;       
+        @include m.contenedor;
+        // display: flex;
+        // justify-content: space-between;
+        margin-top: .5rem
+    }
+    &__formulario-botones{
+        @extend .dashboard__contenedor;       
+        @include m.contenedor;
+        // @include m.grid(2, 2rem);
+        // justify-content: space-between;
+        margin-top: .5rem
+    }
+    &__grafica{
+        @include m.contenedor-sm;
+    }
+}
+.ocultar {
+    opacity: 0;
+}
+.mostrar {
+    padding: 2rem;
+    opacity: 1;
+    height: 200%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb( 0 0 0 / .90);
+}
+.cerrar-menu{
+    @include m.logo; 
+    display: flex;
+    flex-direction:row; 
+    align-items: center;
+    margin-top: 0; 
+    padding-left: 1rem;        
+    justify-content: space-between;    
+    
+    @include m.tablet{
+        display: none;
+    }
+    
+    i{
+        width: 2.5rem; 
+        color: v.$blanco; 
+        font-size: 3rem;     
+        &:hover{
+            color: v.$azul;    
+            cursor:pointer;
+        }
+    }
+    
+}
+
+ .dropdown-btn{
+
+    @extend .dashboard__menu-texto;
+    //color: lighten(v.$sidebar, 80);
+    color: lighten(v.$gris-oscuro, 40);
+    display: flex;
+    flex-direction:row;   
+    opacity: 1;    
+    padding-left: 0.5rem; //altura de boton
+    padding-right: 0.5rem; //altura de boton
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    transition: 300ms background-color ease-in-out, 300ms color ease, 300ms border-radius ease;
+    border: none;
+    &:hover,
+    &--actual{
+        //background-color: lighten(v.$sidebar, 20);
+        background-color: lighten(v.$gris-oscuro, 20);
+        //color: v.$blanco;  
+        color: lighten(v.$gris-oscuro, 40);
+        border-radius: 0.5rem; 
+        cursor: pointer;         
+    }
+    &--icono{
+        font-size: 2rem;
+        width: 3.5rem;//ancho del icono del sidebar    
+    }
+}
+
+
+
+.dropdown-container {
+    display: none;    
+    flex-direction: column;
+    padding-left: 15px;
+    overflow: hidden;
+    height: 0;
+    transition: height 0.5s ease-out; /* Duración y tipo de transición */
+         a{
+        //padding-top: 0%;
+         margin-top: 0.5rem;
+         font-size: 1.1rem;
+         font-weight: v.$bold;
+         text-decoration: none;   
+         text-transform: uppercase;
+         color: v.$azul;  
+     }
+}
+
+.dropdown-container.show {
+    height: auto;
+}
+.div-derecha {
+    @include m.tablet{       
+      padding-top: 0%;
+        float: right;                   
+    }
+}
+
+ .div-izquierda {
+     @include m.tablet{        
+         width: auto;  
+         float: left;                   
+     }
+ }
