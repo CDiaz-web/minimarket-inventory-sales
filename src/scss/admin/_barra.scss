@@ -1,7 +1,8 @@
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
-.barra-mobile{   
-    background-color: lighten(v.$gris-oscuro,10%); 
+@use "sass:color";
+.barra-mobile{ 
+    background-color: color.adjust(v.$gris-oscuro, $lightness: 10%); 
     padding: 2rem 4rem;
     display: flex;   
     justify-content: space-between;
@@ -78,7 +79,7 @@
         font-size: 1.4rem;    
         //text-transform: uppercase;        
         font-weight: 500;
-        color: lighten(v.$gris-oscuro,10%);
+        color: color.adjust(v.$gris-oscuro, $lightness: 10%);
             
     }
     p{        
@@ -86,7 +87,7 @@
         span{            
             //float: right;
             font-weight: 700;
-            color: lighten(v.$gris-oscuro,10%);
+            color: color.adjust(v.$gris-oscuro, $lightness: 10%);
         }
     
     }

@@ -1,3 +1,4 @@
+@use "sass:color";   // ← agregado
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
 
@@ -117,7 +118,10 @@
     &__input,
     &__select {
         padding: 1rem;
-        border: 1px solid darken(v.$gris-claro,20%);
+        border: 1px solid color.adjust(v.$gris-claro, $lightness: -20%);
+
+        border: 1px solid color.adjust(v.$gris-claro, $lightness: -20%);
+
         border-radius: .5rem;
         font-size: 2rem;
         &--file{
@@ -141,8 +145,9 @@
         }
     }
     &__select-xl {
-        padding: 1rem;
-        border: 1px solid darken(v.$gris-claro,20%);
+        padding: 1rem;        
+        border: 1px solid color.adjust(v.$gris-claro, $lightness: -20%);
+
         border-radius: .5rem;
         width: 100%;
 

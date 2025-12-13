@@ -1,5 +1,6 @@
 @use 'base/mixins' as m;
 @use 'base/variables' as v;
+@use "sass:color";
 .categorias{
     
     &__grid{
@@ -25,7 +26,7 @@
         transition: 300ms background-color ease;
 
         &:hover{
-            background-color: darken(v.$azul, 10%);
+            background-color: color.adjust(v.$azul, $lightness: 10%);
             cursor: pointer;
         }
     }

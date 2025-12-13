@@ -1,6 +1,7 @@
 
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
+@use "sass:color";
 .listado{
     list-style: none;
     padding: 0;
@@ -18,7 +19,7 @@
     &__opciones{
         border: none;
         color: v.$blanco;
-        background-color: lighten(v.$naranja,5%);
+        background-color: color.adjust(v.$naranja, $lightness: 5%);
         min-height: 12rem;
         display: flex;
         align-items: center;
@@ -26,7 +27,7 @@
         line-height: 2;
         border-radius: .5rem;
         &:hover{
-            background-color: darken(v.$naranja, 5%);
+            background-color: color.adjust(v.$naranja, $lightness: 5%);
             cursor:pointer;
         }
         a{

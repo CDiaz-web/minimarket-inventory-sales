@@ -1,3 +1,4 @@
+@use "sass:color";   // ← agregado
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
 
@@ -48,9 +49,8 @@
 
 
 
-    &__sidebar{
-         background-color: lighten(v.$gris-oscuro,10%); 
-        //background-color: lighten(v.$sidebar, 10%); 
+    &__sidebar{        
+         background-color: color.adjust(v.$gris-oscuro, $lightness: 10%); 
         //background-color: v.$sidebar;
         opacity: 10 ;
         display: none ;
@@ -131,7 +131,8 @@
     }
     &__enlace{
         //color: lighten(v.$sidebar, 80);
-        color: lighten(v.$gris-oscuro, 40);
+        
+        color: color.adjust(v.$gris-oscuro, $lightness: 40%);
         display: flex;
         flex-direction:row;   
         opacity: 1;
@@ -144,9 +145,8 @@
             }
         }
         &:hover,
-        &--actual{
-           // background-color: lighten(v.$sidebar, 20);
-            background-color: lighten(v.$gris-oscuro, 20);
+        &--actual{    
+            background-color: color.adjust(v.$gris-oscuro, $lightness: 20%);
             color: v.$blanco;  
             border-radius: 0.5rem; 
             cursor: pointer;         
@@ -204,8 +204,11 @@
         }
     }
     &__buscar{
-        padding: 0.8rem;        
-        border: 1px solid darken(v.$gris-claro,20%);
+        padding: 0.8rem;       
+    
+        border: 1px solid color.adjust(v.$gris-claro, $lightness: 20%);
+
+        
         border-radius: .5rem; 
         width: 100%;
         margin-top: 1%; 
@@ -464,7 +467,7 @@
 
     @extend .dashboard__menu-texto;
     //color: lighten(v.$sidebar, 80);
-    color: lighten(v.$gris-oscuro, 40);
+    color: color.adjust(v.$gris-oscuro, $lightness: 40%);
     display: flex;
     flex-direction:row;   
     opacity: 1;    
@@ -477,9 +480,9 @@
     &:hover,
     &--actual{
         //background-color: lighten(v.$sidebar, 20);
-        background-color: lighten(v.$gris-oscuro, 20);
+        background-color: color.adjust(v.$gris-oscuro, $lightness: 20%);
         //color: v.$blanco;  
-        color: lighten(v.$gris-oscuro, 40);
+        color: color.adjust(v.$gris-oscuro, $lightness: 40%);
         border-radius: 0.5rem; 
         cursor: pointer;         
     }

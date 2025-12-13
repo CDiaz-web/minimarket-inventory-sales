@@ -1,5 +1,5 @@
 @use 'variables' as v;
-
+@use "sass:color";
 /** Media Queries **/
 @mixin telefono {
     @media (min-width: v.$telefono) {
@@ -39,8 +39,8 @@
     width: 100%;
     display: inline-block;
 
-    &:hover {
-        background-color: darken( $bgColor, 10% );
+    &:hover {  
+        background-color: color.adjust($bgColor, $lightness: 10%);
         cursor: pointer;
     }
 }
@@ -62,7 +62,7 @@
         width: auto;
     }
     &:hover {
-        background-color: darken( $bgColor, 10% );
+        background-color: color.adjust($bgColor, $lightness: 10%);
         cursor: pointer;
     }
 }
@@ -221,8 +221,8 @@
     }
 }
 
-@mixin card{
-    border: 1px solid lighten(v.$gris,10%);
+@mixin card{    
+    border: 1px solid color.adjust(v.$gris, $lightness: 10%);
     padding: 1rem;
     &__nombre{
         font-weight: v.$black;
@@ -231,12 +231,12 @@
     }
 }
 @mixin bg-gradient($bg_color){
-    background-image:linear-gradient(to left top,$bg_color,lighten($bg_color,15%));
+    background-image:linear-gradient(to left top,$bg_color,color.adjust($bg_color, $lightness: 15%));
 }
 
 @mixin enlace_logout{
     all: unset;
-    color: lighten(v.$rojo, 30);     
+    color: color.adjust(v.$rojo, $lightness: 10%);
     font-size: 1.1rem;
     text-transform: uppercase;
     font-weight: v.$bold;    
@@ -258,8 +258,8 @@
 }
 
 @mixin enlace_menu{
-    all: unset;
-    color: lighten(v.$gris-oscuro, 40);  
+    all: unset; 
+    color:  color.adjust(v.$gris-oscuro, $lightness: 40%);
     font-size: 1.1rem;
     text-transform: uppercase;
     font-weight: v.$bold;    

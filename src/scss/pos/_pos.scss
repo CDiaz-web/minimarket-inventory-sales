@@ -1,5 +1,6 @@
 @use 'base/mixins' as m;
 @use 'base/variables' as v;
+@use "sass:color";
 
 /* Contenedor principal con Grid */
 .container {
@@ -60,8 +61,7 @@
     color: v.$blanco;
     border-radius: 4px;
     &:hover{
-       // background-color: lighten(v.$sidebar, 20);
-        background-color: darken(v.$gris-claro,20%);
+        background-color: color.adjust(v.$gris-claro, $lightness: 20%);
         color: v.$blanco;   
         cursor: pointer;         
     }

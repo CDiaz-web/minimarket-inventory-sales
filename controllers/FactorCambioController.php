@@ -28,7 +28,7 @@ class FactorCambioController {
 
         
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $factores = FactorCambio::procedureLista('prc_ListaTipoCambio',[$idempresa, $anio, $mes]);
+        $factores = FactorCambio::procedureLista('prc_ListaTipoCambio',[$idempresa, $anio, $mes]);        
         $alertas = [];
         
         $router ->render('admin/mantenimiento/factor/index',[

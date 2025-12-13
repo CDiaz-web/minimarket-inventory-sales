@@ -1,6 +1,6 @@
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
-
+@use "sass:color";
 .header{
     min-height: 2rem;  
     //background-color: v.$gris-claro;
@@ -39,7 +39,7 @@
     &__desplegable{
         //@include m.enlace_menu;
         all: unset;
-        color: lighten(v.$gris-oscuro, 40);  
+        color:  color.adjust(v.$gris-oscuro, $lightness: 40%);
         font-size: 1rem;
         text-transform: uppercase;
         font-weight: v.$bold;            
