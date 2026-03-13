@@ -6,7 +6,7 @@
     }
     
     async function MasVedidos(){
-        const url = '/api/masvendidos';
+        const url = `${window.BASE_URL}/api/masvendidos`;
         const respuesta = await fetch(url)
         const resultado = await respuesta.json() 
             

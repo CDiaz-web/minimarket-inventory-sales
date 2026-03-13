@@ -22,7 +22,7 @@ class EmpresaController {
         }
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $id = $_SESSION['empresa'];
+        $id = $_SESSION['idempresa'];
                
         $empresa = Empresa::find($id);
       

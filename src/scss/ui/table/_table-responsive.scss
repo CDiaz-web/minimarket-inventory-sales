@@ -1,0 +1,37 @@
+@use 'base/mixins' as m;
+
+/* =========================
+   TABLE RESPONSIVE
+========================= */
+
+@include m.respond(tablet) {
+
+    .table {
+        font-size: 1.3rem;
+        min-width: 50rem; // evita romper columnas
+    }
+
+    .table-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+ 
+    .table-actions {
+        order: 1;
+        // display: flex;
+        // gap: 1rem;
+        // align-items: center;
+        // flex-wrap: wrap;
+    }
+
+    .table-search {
+        margin-left: auto;
+        order: 2;
+        flex: 1;
+    }
+    .table-footer {
+        justify-content: center;
+    }
+}

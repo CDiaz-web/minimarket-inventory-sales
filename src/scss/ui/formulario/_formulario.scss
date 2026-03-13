@@ -6,8 +6,8 @@
     display: flex;
     flex-direction: column;
     font-size: 1.3rem;
-    @include m.tablet{
-        font-size: 1.6rem;        
+    @include m.respond(tablet) {
+        font-size: 1.6rem; 
     }
     &--centrar{
         align-items: center;
@@ -16,14 +16,18 @@
         border: none;
         margin-top: 1rem;
         padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+        gap: 2rem;
  
     }
+
     &__titulo{
         border: none;
         border-radius: 0.5rem; 
-        background-color: v.$azul;
+        background-color: v.$color-azul;
         padding: 1rem 3rem;
-        color: v.$blanco;
+        color: v.$color-blanco;
         font-size: 1.8rem;
         font-weight: 700;        
         
@@ -32,25 +36,47 @@
         display: inline-block;
  
     }
+    
+    &__titulo-cargar{
+        border: none;
+        border-radius: 0.5rem; 
+        background-color: v.$color-gris;
+        padding: 1rem 3rem;
+        color: v.$color-blanco;
+        font-size: 1.8rem;
+        font-weight: 700;        
+        
+        text-align: center;
+        width: 100%;
+        display: inline-block;
+ 
+    }
+
     &__fieldset-xl{
         border: none;
         margin-top: 1rem;
         padding: 0;
-        @include m.tablet{
-            @include m.grid(2,1rem);
+        display: grid;
+        @include m.respond(tablet) {
+            @include m.grid-auto(2,1rem); 
         }
     }
     
     &__legend{
-        color: v.$gris;
+        color: v.$color-gris;
         font-size: 2.2rem;
         margin-bottom: 1rem;
+        grid-column: 1 / -1;
     }
     &__campo{
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        margin: 0.6rem 0;
+        // display: flex;
+        // flex-direction: column;
+        // gap: 0.5rem;
+        // margin: 0.6rem 0;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: .6rem;
+        margin: .6rem 0;
         &--columna{
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -82,29 +108,30 @@
         overflow: hidden;
     }
     &__icono{
-        background-color: v.$gris-oscuro;
+        background-color: v.$color-gris-oscuro;
         width: 4rem;
         display: flex;
         align-items: center;
         justify-content: center;
 
         i{
-            color: v.$blanco;
+            color: v.$color-blanco;
             font-size: 2rem;
         }
     }
     &__label{
         display: block;
         font-size: 2rem;
-        color: rgba(v.$negro, .8);
+        color: rgba(v.$color-negro, .8);
         font-weight: bold;
+        line-height: 1.2;
         &--negrita{
-            font-weight: v.$bold;
+            font-weight: v.$font-bold;
             font-size: 1.8rem;
         }
         &--vuelto{
-            font-weight: v.$bold;
-            color: v.$rojo;
+            font-weight: v.$font-bold;
+            color: v.$color-rojo;
             font-size: 1.6rem;
         }
         &--docu{            
@@ -118,35 +145,18 @@
     &__input,
     &__select {
         padding: 1rem;
-        border: 1px solid color.adjust(v.$gris-claro, $lightness: -20%);
-
-        border: 1px solid color.adjust(v.$gris-claro, $lightness: -20%);
+        border: 1px solid color.adjust(v.$color-gris-claro, $lightness: -20%);
 
         border-radius: .5rem;
         font-size: 2rem;
         &--file{
             border: none;
         }
-        &--sociales{
-            @extend .formulario__input;
-            flex: 1;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-        &--readonly {
-            @extend .formulario__input;
-            flex: 1;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            background-color: #f0f8ff; /* azul clarito */
-            color: #333;
-            font-weight: bold;
-            cursor: not-allowed;
-        }
+
     }
     &__select-xl {
         padding: 1rem;        
-        border: 1px solid color.adjust(v.$gris-claro, $lightness: -20%);
+        border: 1px solid color.adjust(v.$color-gris-claro, $lightness: -20%);
 
         border-radius: .5rem;
         width: 100%;
@@ -184,16 +194,16 @@
         margin-top: 1.5rem;
 
         > li{
-            background-color: v.$azul;
+            background-color: v.$color-azul;
             padding: 1rem;
             border-radius: .5rem;
             font-size: 1.4rem;
-            color: v.$blanco;
-            font-weight: v.$bold;
+            color: v.$color-blanco;
+            font-weight: v.$font-bold;
         }
     }
     &__submit{
-        @include m.boton(v.$azul, v.$blanco);
+        @include m.boton(v.$color-azul, v.$color-blanco);
         width: auto;
         align-self: flex-start;
         &--registrar,
@@ -202,7 +212,7 @@
         }
     }
     &__solicitar{
-        @include m.boton(v.$secundario, v.$blanco);
+        @include m.boton(v.$secondary, v.$color-blanco);
         width: auto;
         align-self: flex-start;
         &--registrar,
@@ -210,7 +220,81 @@
             width: 100%;
         }
     }
+        &__campo--check {
+        grid-template-rows: auto;
+    }
+
+    &__check {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+        font-size: 1.6rem;
+        color: rgba(v.$color-negro, .8);
+
+        input[type="checkbox"] {
+            width: 1.8rem;
+            height: 1.8rem;
+            cursor: pointer;
+        }
+    }
 }
-.oculto {
-  display: none !important;
+
+.formulario__input--readonly {
+    background-color: #f0f8ff;
+    color: #333;
+    font-weight: bold;
+    cursor: not-allowed;
+}
+.formulario__input--sociales {
+    flex: 1;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.formulario__fieldset {
+    margin-top: 1.5rem;
+}
+
+.formulario__legend {
+    margin-bottom: 2rem;
+}
+
+.formulario__submit {
+    align-self: flex-end;
+}
+.formulario__input,
+.formulario__select {
+    height: 4.2rem;
+}
+.formulario__input:focus,
+.formulario__select:focus {
+    outline: none;
+    border-color: v.$primary;
+    box-shadow: 0 0 0 2px rgba(v.$primary, .15);
+}
+
+.formulario__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.formulario__loading img {
+    width: 60px; /* opcional */
+    height: auto;
+}
+
+.formulario__fieldset--detalle{
+    grid-column: 1 / -1;
+}
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1rem;
+}
+
+.form-grid-full{
+    grid-column:1/-1;
 }

@@ -1,0 +1,6 @@
+@use 'base/variables' as v;
+
+.swal2-title {
+    font-family: v.$fuente-principal;
+    font-size: 2.4rem !important;
+}

@@ -1,10 +1,33 @@
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
-.menu-redes{
-    @include m.menu-social(v.$morado,2rem);
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
+
+/* =========================
+   SOCIAL COMPONENT
+========================= */
+
+.social {
+
+    @include m.menu-social(v.$primary, 2rem);
+
+    @include m.flex(center, center, 2rem);
+
     margin: 1rem 0;
 
+    /* variantes */
+
+    &--footer {
+        @include m.menu-social(v.$secondary, 2rem);
+    }
+
+    &--dark {
+        @include m.menu-social(v.$color-blanco, 2rem);
+    }
+
+    &--sm {
+        @include m.menu-social(v.$primary, 1.6rem);
+    }
+
+    &--lg {
+        @include m.menu-social(v.$primary, 2.6rem);
+    }
 }

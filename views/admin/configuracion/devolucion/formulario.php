@@ -1,4 +1,5 @@
 <fieldset class="formulario__fieldset">
+    
     <legend class="formulario__legend">Informacion Motivo Devolucion</legend> 
 
     <div class="formulario__campo">    

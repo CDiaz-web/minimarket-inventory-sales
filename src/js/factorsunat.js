@@ -1,9 +1,5 @@
 import Swal from "sweetalert2";
 
-// function formatearFecha(fecha) {
-//     const partes = fecha.split("-"); // ["2025","09","04"]
-//     return `${partes[2]}/${partes[1]}/${partes[0]}`; // "04/09/2025"
-// }
 
 document.addEventListener("DOMContentLoaded", () => {
     const fechaInput = document.getElementById("fecha");

@@ -1,6 +1,5 @@
 <fieldset class="formulario__fieldset">
     <legend class="formulario__legend">Informacion Unidad de Medida</legend> 
-
     <div class="formulario__campo">    
         <label for="codigo" class="formulario__label">Código</label>
         <input

@@ -13,12 +13,15 @@
     <link rel="stylesheet" href="/build/css/app.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     
+
+    <link rel="stylesheet" href="/build/css/app.css">
+    <!-- JS Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/build/css/app.css">
     <!-- JS Bootstrap 5 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"  rel="stylesheet">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
@@ -29,30 +32,63 @@
 
 
 </head>
-<body class="dashboard">
-
-        <?php
-            include_once __DIR__ .'/templates/admin-sidebar.php';  
-        ?>
-        <div class="dashboard__grid">
-            <?php 
-                include_once __DIR__ .'/templates/admin-header.php';
+    <body>
+        <div class="admin">
+            <?php
+                include_once __DIR__ .'/templates/admin-sidebar.php';  
             ?>
-            <main class="dashboard__contenido">
+                <!-- overlay mobile -->
+            <div class="sidebar-overlay"></div>
+            <div class="content">
                 <?php 
-                    echo $contenido; 
-                ?> 
-            </main>
+                    include_once __DIR__ .'/templates/admin-header.php';
+                ?>
+                <main class="content__body">
+                    <?php 
+                        echo $contenido; 
+                    ?> 
+                </main>
+            </div>
 
-
-
-        </div>    
+        </div>
+            
         <!-- Librería XLSX desde CDN -->
+
+        <script>
+            window.APP = {
+                config: {
+                    empresa_id: <?php echo $_SESSION['idempresa'] ?? 0; ?>,
+                    moneda_base: <?php echo $_SESSION['moneda'] ?? 0; ?>,
+                    validar_tc: <?php echo $_SESSION['validar_tc'] ?? 0 ; ?>,
+                    variacion_tc: <?php echo $variaciontc ?? 0; ?>
+                }
+            };
+        </script>
+
         <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>        
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="/build/js/main.min.js" defer></script>          
-       
+        <script>
+            window.BASE_URL = "/admin";
+        </script>
+        <!-- <script src="/build/js/main.min.js" defer></script>   -->
+        <script src="/build/js/app.min.js" defer></script>
 
+<div id="appModal" class="dashboard-modal hidden">
 
-</body>
+    <div class="modal__contenido">
+
+        <div class="modal__header">
+            <h3 class="modal__title"></h3>
+            <button class="modal__close">✕</button>
+        </div>
+
+        <div class="modal__body"></div>
+
+        <div class="modal__footer"></div>
+
+    </div>
+
+</div>
+
+    </body>
 </html>

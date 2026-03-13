@@ -1,34 +1,107 @@
-// Fuentes
+/* ===============================
+   TIPOGRAFÍA
+================================= */
+
 $fuente-principal: 'Outfit', sans-serif;
 
-// Tamaño de Media Queries
-$telefono: 480px;
-$tablet: 768px;
-$desktop: 1024px;
-$xl_desktop: 1280px;
-$xxl_desktop: 1920px;
+$font-delgada: 300;
+$font-regular: 400;
+$font-bold: 700;
+$font-black: 900;
 
-// Colores
-$azul: #007df4;
-$secundario: #00c8c2;
 
-$negro: #1a1b15;
-$blanco: #FFFFFF;
-$gris: #64748B;
-$gris-claro: #F8FAFC;
-$gris-oscuro: #1E293B;
+/* ===============================
+   BREAKPOINTS
+================================= */
 
-$rojo: rgb(169, 0, 0);
-$verde: #02db02;
-$verdeoscuro: #008f39;
-$morado: #7C3AED;
-$naranja:#F59E0B;
-$amarillo:	#f0f00c;
-$sidebar: #4b0082;
-$cabtabla:#17a2b8; 
+$bp-telefono: 480px;
+$bp-tablet: 768px;
+$bp-desktop: 1024px;
+$bp-xl: 1280px;
+$bp-xxl: 1920px;
 
-// Fuentes
-$delgada: 300;
-$regular: 400;
-$bold: 700;
-$black: 900
+
+/* ===============================
+   COLORES BASE (NO TOCAR)
+================================= */
+
+$color-azul: #007df4;
+$color-secundario: #00c8c2;
+
+$color-negro: #1a1b15;
+$color-blanco: #FFFFFF;
+
+$color-gris: #64748B;
+$color-gris-claro: #F8FAFC;
+$color-gris-oscuro: #1E293B;
+
+$color-rojo: rgb(169, 0, 0);
+$color-verde: #02db02;
+$color-verde-oscuro: #008f39;
+$color-morado: #7C3AED;
+$color-naranja: #F59E0B;
+$color-amarillo: #f0f00c;
+
+
+/* ===============================
+   COLORES SEMÁNTICOS (USAR ESTOS)
+================================= */
+
+$primary: $color-azul;
+$secondary: $color-secundario;
+
+$success-light: $color-verde;
+$success: $color-verde-oscuro;
+$danger: $color-rojo;
+$warning: $color-naranja;
+
+$ambar: $color-amarillo;
+
+$text-primary: $color-gris-oscuro;
+$text-secondary: $color-gris;
+
+$bg-body: $color-gris-claro;
+$bg-surface: $color-blanco;
+
+$sidebar-bg: #4b0082;
+$table-header-bg: #17a2b8;
+
+
+
+/* ===============================
+   TAMAÑO SIDEBAR
+================================= */
+
+$sidebar-width: 260px;
+$sidebar-collapsed-width: 70px;
+
+/* ===============================
+   CSS VARIABLES (RUNTIME THEME)
+================================= */
+
+:root {
+
+    /* colores principales */
+    --primary: #{$primary};
+    --secondary: #{$secondary};
+
+    /* estados */
+    --success: #{$success};
+    --success-ligth: #{$success-light};
+    --danger: #{$danger};
+    --warning: #{$warning};
+    --ambar: #{$ambar};
+    --gris: #{$ambar};
+
+    /* textos */
+    --text-primary: #{$text-primary};
+    --text-secondary: #{$text-secondary};
+
+    /* fondos */
+    --bg-body: #{$bg-body};
+    --bg-surface: #{$bg-surface};
+
+    /* layout */
+    --sidebar-bg: #{$sidebar-bg};
+    --table-header-bg: #{$table-header-bg};
+}

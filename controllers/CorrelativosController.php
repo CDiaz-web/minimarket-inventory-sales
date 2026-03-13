@@ -24,7 +24,7 @@ class CorrelativosController {
              return;
         }
         $alertas = [];
-        $valor = [$_SESSION['empresa']];  
+        $valor = [$_SESSION['idempresa']];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);  
         $correlativos = Correlativos::procedureLista('prc_ListaCorrelativos',$valor);
 
@@ -40,7 +40,7 @@ class CorrelativosController {
         if(!is_admin()){
             header('Location: /login');
         }
-        $valor = $_SESSION['empresa'];  
+        $valor = $_SESSION['idempresa'];  
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $correlativo = new Correlativos;    
@@ -92,7 +92,7 @@ class CorrelativosController {
             header('Location: /login');
         }
         $alertas = [];
-        $valor = [$_SESSION['empresa']];  
+        $valor = [$_SESSION['idempresa']];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);  
         $correlativos = Correlativos::procedureLista('prc_ListaCorrelativos',$valor);
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -101,12 +101,10 @@ class CorrelativosController {
             
             $correlativo = Correlativos::find($id);      
 
-
             $busca = Correlativos::findArrayOperador([
                 ['campo' => 'id',  'operador' => '=','valor' => $id],
                 ['campo' => 'ultimo_numero', 'operador' => '>', 'valor' => 0]
             ], true);
-
             
             if(!isset($correlativo)){
                 header('Location: /admin/configuracion/correlativos');

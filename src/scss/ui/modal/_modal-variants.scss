@@ -1,0 +1,13 @@
+.modal--sm .modal__contenido {
+    width: min(90%, 35rem);
+}
+
+.modal--lg .modal__contenido {
+    width: min(95%, 70rem);
+}
+
+.modal--fullscreen .modal__contenido {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+}

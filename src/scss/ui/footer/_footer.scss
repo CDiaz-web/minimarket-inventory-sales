@@ -1,46 +1,45 @@
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
 
-.footer{
-    //background-color: v.$azul;
-    //background-color: v.$gris-oscuro;
-    margin-top: 2rem;
-    padding-top: 2rem;
-    color: v.$black;
-    &__grid{
+.footer {
+    margin-top: 4rem;
+    padding: 3rem 0 2rem;
+
+    background-color: v.$bg-surface;
+    color: v.$text-primary;
+
+    border-top: 1px solid v.$color-gris-claro;
+
+    &__grid {
         @include m.contenedor;
-        @include m.tablet{
-            @include m.grid(1,0rem);
-        }
-    }
-    &__logo{
-        color: v.$azul;
         text-align: center;
-        // margin-bottom: 2rem;
+    }
+
+    &__logo {
+        color: v.$primary;
         white-space: nowrap;
-        @include m.tablet{
-            //text-align: centr;
-            margin: 0;
-        }
+
         @include m.texto-fluido(2rem, 4rem);
     }
 
-    &__texto{
-        line-height: 2;
-        text-align: center;
-        @include m.tablet{
-            text-align: left;
-        }
+    &__texto {
+        margin-top: 1rem;
+        line-height: 1.8;
+        color: v.$text-secondary;
     }
-    &__copyright{
-      //  background-color: darken(v.$gris-oscuro, 10);
-        margin: 3rem 0 0 0;
-        padding: 2rem 0;
+
+    &__copyright {
+        margin-top: 3rem;
+        padding-top: 2rem;
+
+        border-top: 1px solid v.$color-gris-claro;
+
         text-align: center;
         font-size: 1.4rem;
-        font-weight: v.$black;
-        &--regular{
-            font-weight: v.$regular;
+        font-weight: v.$font-bold;
+
+        &--regular {
+            font-weight: v.$font-regular;
         }
     }
 }

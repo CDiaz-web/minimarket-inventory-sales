@@ -19,8 +19,10 @@ class DashboardController {
         //obtener ultimos registros
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
                 
-        $valor = [$_SESSION['idtienda']];         
-        $cards = Dashboard::procedure('prc_ObtenerDatosDashboard',$valor);       
+        $valor = [$_SESSION['idtienda']];      
+       
+        $cards = Dashboard::procedure('prc_ObtenerDatosDashboard',$valor);  
+             
         $simbolo_moneda = $_SESSION['simbolo_moneda'];
     
         $router ->render('admin/dashboard/index',[

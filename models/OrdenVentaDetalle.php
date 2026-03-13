@@ -20,6 +20,11 @@ class OrdenVentaDetalle extends ActiveRecord {
     public int $idusermodi = 0;
     public ?string $fechamodi = null;
 
+    public string $unidad = '';
+    public string $nombre = '';
+    public string $codigo = '';
+
+
     
     // Constructor opcional (sobreescribe valores si se pasan en $args)
     public function __construct(array $args = [])

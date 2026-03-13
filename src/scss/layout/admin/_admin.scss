@@ -1,0 +1,136 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.admin {
+
+    min-height: 100vh;
+    display: flex;
+
+    @include m.respond(desktop) {
+        display: grid;
+        grid-template-columns: 26rem 1fr;
+        transition: grid-template-columns .25s ease;
+    }
+}
+.admin--sidebar-open {
+    .sidebar {
+        transform: translateX(0);
+    }
+}
+
+/* ===============================
+   OVERLAY MOBILE
+================================= */
+
+.admin__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: .25s ease;
+    z-index: 850;
+
+    @include m.respond(desktop) {
+        display: none;
+    }
+}
+
+/* estado abierto */
+.admin--sidebar-open {
+
+    .sidebar {
+        transform: translateX(0);
+    }
+
+    .admin__overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.admin.sidebar-collapsed {
+
+    .sidebar {
+        width: v.$sidebar-collapsed-width;
+    }
+    .menu-admin__link:hover .menu-admin__link-texto {
+
+        position: absolute;
+        left: 70px; /* distancia desde icono */
+        top: 50%;
+        transform: translateY(-50%);
+
+        width: auto;
+        opacity: 1;
+        pointer-events: auto;
+
+        background-color: #1f2937;
+        color: white;
+
+        padding: .6rem 1rem;
+        border-radius: .6rem;
+
+        font-size: 1.3rem;
+        white-space: nowrap;
+
+        box-shadow: 0 4px 12px rgba(0,0,0,.2);
+
+        z-index: 1000;
+    }
+
+}
+.menu-admin__text {
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.admin.sidebar-collapsed {
+
+    .menu-admin__text {
+        opacity: 0;
+        transform: translateX(-10px);
+        pointer-events: none;
+    }
+        .menu-admin__link {
+        justify-content: center;
+    }
+    .menu-admin__section {
+        display: none;
+    }
+    .sidebar__empresa {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+}
+
+
+.admin.sidebar-collapsed .menu-admin__link {
+    justify-content: center;
+}
+.menu-admin__section {
+    transition: opacity .2s ease;
+}
+
+.admin.sidebar-collapsed .menu-admin__section {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+.sidebar__empresa {
+    transition: opacity .25s ease, width .25s ease;
+    display: inline-block;
+}
+
+.admin.sidebar-open .sidebar {
+    transform: translateX(0);
+}
+@include m.respond(desktop) {
+
+    .admin.sidebar-collapsed {
+        grid-template-columns: v.$sidebar-collapsed-width 1fr;
+    }
+
+}

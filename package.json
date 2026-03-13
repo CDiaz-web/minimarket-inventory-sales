@@ -24,7 +24,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-sass": "^5.0.0",
     "gulp-sourcemaps": "^3.0.0",
-    "gulp-terser-js": "^5.2.2",
+    "gulp-terser": "^2.1.0",
     "gulp-webp": "^4.0.1",
     "sass": "^1.41.1",
     "style-loader": "^4.0.0",
@@ -32,7 +32,6 @@
   },
   "dependencies": {
     "axios": "^1.7.2",
-    "D": "^1.0.0",
     "puppeteer": "^22.12.1",
     "sweetalert2": "^11.11.1",
     "swiper": "^11.1.4",

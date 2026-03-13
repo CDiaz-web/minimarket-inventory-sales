@@ -1,4 +1,4 @@
-//var articulosSeleccionados = []; // Variable global para almacenar los artículos
+window.articulosSeleccionados = [];// Variable global para almacenar los artículos
 
 var buscaArticulo = document.getElementById('buscarArticulo');
 if (buscaArticulo) {
@@ -27,10 +27,12 @@ if (buscaArticulo) {
         });
 
         function agregarArticuloATabla(articulo) {
+
             var filaExistente = $("#tablaArticulos tbody tr").filter(function () {
-                return $(this).find('td:first').text().trim() === articulo.id.toString();
+                return $(this).data('idproducto') == articulo.id;
             });
-            
+
+
             if (filaExistente.length > 0) {
                 var cantidadInput = filaExistente.find('.cantidad');
                 var nuevaCantidad = parseInt(cantidadInput.val()) + 1;
@@ -43,19 +45,26 @@ if (buscaArticulo) {
                     mostrarAlerta("warning", "Stock máximo alcanzado", "No puedes agregar más de la cantidad en stock.");
                 }
             } else {
-                var fila = `<tr class="table__tr">
-                    <td style="display: none;">${articulo.id}</td>
-                    <td>${articulo.label}</td>
-                    <td><input type="number" value="1" min="1" max="${articulo.stock}" class="cantidad"></td>
-                    <td>${articulo.unidad}</td>
-                    <td>${articulo.venta}</td>
-                    <td class="total">${articulo.venta}</td>
+
+                var fila = `
+                <tr class="table__tr"
+                    data-idproducto="${articulo.id}"
+                    data-precio="${articulo.venta}">
+                    
+                    <td class="descripcion">${articulo.label}</td>
                     <td>
-                        <button class="aumentar"><i class="fa-solid fa-circle-plus"></i></button>
-                        <button class="disminuir"><i class="fa-solid fa-circle-minus"></i></button>
-                        <button class="eliminar"><i class="fa-solid fa-trash-can"></i></button>
+                        <input type="number" value="1" min="1" max="${articulo.stock}" class="cantidad">
+                    </td>
+                    <td class="unidad">${articulo.unidad}</td>
+                    <td class="precio">${parseFloat(articulo.venta).toFixed(2)}</td>
+                    <td class="total">${parseFloat(articulo.venta).toFixed(2)}</td>
+                    <td>
+                        <button class="aumentar">+</button>
+                        <button class="disminuir">-</button>
+                        <button class="eliminar">x</button>
                     </td>
                 </tr>`;
+
                 $("#tablaArticulos tbody").append(fila);
                 
                 actualizarVariableGlobal();
@@ -109,8 +118,11 @@ if (buscaArticulo) {
         });
 
         function actualizarTotalFila(fila) {
-            var precio = parseFloat(fila.find("td:nth-child(5)").text());
-            var cantidad = parseInt(fila.find(".cantidad").val());
+            const precio   = parseFloat(fila.data('precio'));
+            const cantidad = parseInt(fila.find(".cantidad").val());
+
+            if (isNaN(precio) || isNaN(cantidad)) return;
+
             fila.find(".total").text((cantidad * precio).toFixed(2));
             actualizarTotales();
         }
@@ -124,23 +136,25 @@ if (buscaArticulo) {
             $("#totalVenta").text(totalGeneral.toFixed(2));
         }
 
+     
+
         function actualizarVariableGlobal() {
-            articulosSeleccionados = [];  
-             
+            window.articulosSeleccionados = [];
+
             $("#tablaArticulos tbody tr").each(function () {
-                var fila = $(this);
-                var articulo = {
-                    id: fila.find("td:first").text().trim(),
+                const fila = $(this);
+
+                window.articulosSeleccionados.push({
+                    idproducto: fila.data("idproducto"),
                     nombre: fila.find("td:nth-child(2)").text().trim(),
-                    cantidad: fila.find(".cantidad").val(),
+                    cantidad: parseFloat(fila.find(".cantidad").val()),
                     unidad: fila.find("td:nth-child(4)").text().trim(),
                     precio: parseFloat(fila.find("td:nth-child(5)").text()),
                     total: parseFloat(fila.find(".total").text())
-                };   
-                articulosSeleccionados.push(articulo);                
+                });
             });
-
         }
+
 
         $("#eliminarTodo").click(function () {
             $("#tablaArticulos tbody").empty();

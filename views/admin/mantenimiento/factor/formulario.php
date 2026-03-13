@@ -1,6 +1,6 @@
 <fieldset class="formulario__fieldset">
-    <legend class="formulario__legend">Informacion Tipo de Cambio</legend> 
-    <button type="button" id="btnTraerSunat" class="formulario__solicitar formulario__solicitar--registrar">Traer tipo de cambio SUNAT</button>
+    <legend class="formulario__legend">Informacion Tipo de Cambio</legend>     
+    <button type="button" id="btnTraerSunat" class="formulario__solicitar formulario__solicitar--registrar">Traer tipo de cambio SUNAT</button>    
     <div class="formulario__campo">    
         <label for="fecha" class="formulario__label">Fecha</label>
         <input

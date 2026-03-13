@@ -1,0 +1,63 @@
+@use 'base/variables' as v;
+@use "sass:color";
+
+.ds-card {
+    background-color: v.$bg-surface;
+    border-radius: .8rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================   HEADER
+========================= */
+
+.ds-card__header {
+    padding: 1.6rem 2rem;
+    border-bottom: 1px solid v.$color-gris-claro;
+    font-weight: v.$font-bold;
+    font-size: 1.8rem;
+}
+
+/* =========================
+   BODY
+========================= */
+
+.ds-card__body {
+    padding: 2rem;
+    flex: 1;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.ds-card__footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid v.$color-gris-claro;
+}
+/* =========================
+   DASHBOARD
+========================= */
+.dashboard-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dashboard-card__titulo {
+    font-size: 1.4rem;
+    color: v.$text-secondary;
+}
+
+.dashboard-card__valor {
+    font-size: 3rem;
+    font-weight: v.$font-bold;
+    color: v.$text-primary;
+}
+
+.dashboard-card__extra {
+    font-size: 1.2rem;
+    color: v.$success;
+}

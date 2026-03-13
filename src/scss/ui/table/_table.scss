@@ -1,0 +1,388 @@
+@use 'base/variables' as v;
+@use "sass:color";
+@use 'base/mixins' as m;
+
+$table-padding-x: 2rem;
+$table-padding-y: 1.5rem;
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.4rem;
+    background-color: transparent;
+    min-width: 100%;
+
+
+    th {
+        text-align: left;
+        padding: 1.2rem 1.5rem;
+        font-size: 1.3rem;
+        font-weight: v.$font-bold;
+        color: v.$color-gris-oscuro;
+        letter-spacing: .03rem;
+        border-bottom: 1px solid v.$color-gris-claro;
+        text-transform: uppercase;
+    }
+
+    td {
+        padding: 1.2rem 1.5rem;
+        border-bottom: 1px solid v.$color-gris-claro;
+    }
+
+    tbody tr {
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+
+
+    tbody tr:hover {
+        background-color: color.adjust(v.$color-gris-claro, $lightness: 10%);   
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+    thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;        
+        border-bottom: 2px solid v.$color-gris-claro;
+        background-color: color.adjust(v.$color-gris-claro, $lightness: 1%);
+        
+    }
+}
+
+/* =========================
+   VARIANTES
+========================= */
+
+.table--compact {
+    font-size: 1.2rem;
+
+    th,
+    td {
+        padding: .8rem 1rem;
+    }
+}
+.table--wide {
+    min-width: 60rem;
+}
+.table--venta {
+    td {
+        font-weight: v.$font-bold;
+    }
+}
+
+
+
+.table-actions {
+    display: flex;
+    flex-direction: column; // 👈 vertical por defecto (mobile)
+    gap: 1rem;
+    align-items: stretch;
+}
+
+
+/* Mobile */
+.table-actions > .boton,
+.table-actions > a {
+    width: 100%;
+}
+
+/* Tablet en adelante */
+@include m.respond(tablet) {
+    .table-actions {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .table-actions > .boton,
+    .table-actions > a {
+        width: auto;       // 👈 muy importante
+        flex: 0 0 auto;    // 👈 evita que crezcan igual
+    }
+}
+
+.table__col-actions {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+}
+.table--right {
+    th,
+    td {
+        text-align: right;
+    }
+}
+
+.table--left {
+    th,
+    td {
+        text-align: left;
+    }
+}
+
+.table--center {
+    th,
+    td {
+        text-align: center;
+    }
+}
+
+/* =========================
+   TABLE WRAPPER (UI SYSTEM)
+========================= */
+
+.table-wrapper {
+    padding: .5rem 0;
+    background-color: v.$color-blanco;
+    border-radius: .8rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+
+
+.table-header {
+    padding: $table-padding-y $table-padding-x;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    padding-bottom: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+
+    @include m.respond(tablet) {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+.table-hgestion {
+    padding: $table-padding-y $table-padding-x;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    padding-bottom: 2rem;
+
+    // display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    // flex-direction: column;
+    gap: 1rem;
+    // align-items: stretch;
+    align-items: center;
+
+    @include m.respond(desktop) {
+        grid-template-columns: auto 1fr;
+        gap: 1rem 2rem;
+    }
+
+    label {
+        margin-bottom: 0;
+        white-space: nowrap;
+    }
+
+    .formulario__campo {
+        width: 100%;
+    }
+
+}
+.table-search {
+    width: auto;
+    max-width: none;
+    
+    input {
+        width: 100%;
+        // padding: .8rem 1.2rem;
+
+        border: 1px solid v.$color-gris-claro;
+        border-radius: .4rem;
+
+        font-size: 1.5rem;
+        padding: 1rem 1.4rem;
+
+        &:focus {
+            outline: none;
+            border-color: v.$primary;
+        }
+    }
+}
+
+.table-footer {
+    padding: 1.2rem $table-padding-x $table-padding-y;
+    border-top: 1px solid v.$color-gris-claro;
+
+    display: flex;
+    justify-content: center;
+}
+
+.table-pagination {
+    display: flex;
+    gap: .5rem;
+
+    button {
+        border: 1px solid v.$color-gris-claro;
+        background-color: transparent;
+
+        padding: .5rem .9rem;
+        border-radius: .4rem;
+        cursor: pointer;
+
+        font-size: 1.2rem;
+
+        transition: all .2s ease;
+
+        &:hover {
+            background-color: v.$color-gris-claro;
+        }
+
+        &.active {
+            background-color: v.$primary;
+            color: white;
+            border-color: v.$primary;
+        }
+    }
+}
+
+/* =========================
+   TABLE BODY
+========================= */
+
+.table-body {
+    padding: 0 $table-padding-x $table-padding-y;
+    padding-top: 2rem;
+    overflow-x: auto;
+    max-height: 55vh;
+    .table-body {
+    -webkit-overflow-scrolling: touch;
+}
+}
+
+.table thead th {
+    box-shadow: 0 1px 0 v.$color-gris-claro;
+    
+}
+tbody tr:nth-child(even) {
+    background-color: rgba(0,0,0,.02);
+}  
+.table-header .boton {
+    flex: 0 0 auto;
+}
+
+.table__acciones .boton {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+
+    display: inline-flex;    
+    align-items: center;
+    justify-content: center;
+    transition: transform .15s ease;
+}
+
+.table__acciones .boton:hover {
+    transform: translateY(-1px);
+}
+
+.table__acciones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: .6rem;
+}
+
+.table__acciones .table__formulario {
+    display: flex;
+}
+
+.table-header__left {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    @include m.respond(tablet) {
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 2rem;
+    }
+}
+
+.table-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.table-filters label {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.table-filters input,
+.table-filters select {
+    padding: .8rem 1rem;
+    border: 1px solid v.$color-gris-claro;
+    border-radius: .4rem;
+    font-size: 1.4rem;
+}
+
+.table-filters button {
+    height: 38px;
+}
+
+
+/* =========================
+   detalle inventario
+========================= */
+
+// .select-producto{
+//     width:45rem;
+// }
+// .unidad{
+//     width:10rem;
+// }
+// .cantidad{
+//     width:10rem;
+// }
+// .costo-unitario{
+//     width:10rem;
+// }
+
+#tabla-detalle{
+    width:100%;
+    table-layout:fixed;
+}
+
+#tabla-detalle th:nth-child(1),
+#tabla-detalle td:nth-child(1){
+    width:50%;
+}
+
+#tabla-detalle th:nth-child(2),
+#tabla-detalle td:nth-child(2){
+    width:15%;
+}
+
+#tabla-detalle th:nth-child(3),
+#tabla-detalle td:nth-child(3){
+    width:15%;
+}
+
+#tabla-detalle th:nth-child(4),
+#tabla-detalle td:nth-child(4){
+    width:15%;
+}
+
+#tabla-detalle th:nth-child(5),
+#tabla-detalle td:nth-child(5){
+    width:5%;
+}
+
+.select-producto,
+.unidad,
+.cantidad,
+.costo-unitario{
+    width:100%;
+    box-sizing:border-box;
+}
+

@@ -100,7 +100,15 @@
             <?php }?> 
         </select>
     </div>
-    
+    <div class="formulario__campo">
+        <label for="idlista" class="formulario__label">Lista de Precios</label>
+        <select class="formulario__select-xl" id="idlista" name ="idlista">
+        <option value="" >-Seleccionar-</option>
+            <?php foreach($listas as $lista) { ?>
+                <option <?php echo ($cliente->idlista == $lista->id) ? 'selected' : '' ; ?> value="<?php echo $lista->id; ?>" > <?php echo $lista->descripcion; ?> </option>
+            <?php }?> 
+        </select>
+    </div>
     <div class="formulario__campo">
         <label for="idestado" class="formulario__label">Estado</label>
         <select class="formulario__select-xl" id="idestado" name ="idestado">

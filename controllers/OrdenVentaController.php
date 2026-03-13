@@ -2,14 +2,15 @@
 
 namespace Controllers;
 
+use Model\Monedas;
 use Model\FactorCambio;
 use Model\Opciones;
 use Model\OrdenVenta;
+use Model\OrdenVentaDetalle;
+use Model\Empresa;
 use MVC\Router;
 
 require '../vendor/autoload.php';
-// use PhpOffice\PhpSpreadsheet\IOFactory;
-
 
 class OrdenVentaController {
     
@@ -25,19 +26,24 @@ class OrdenVentaController {
         $moneda = $_SESSION['moneda'];
         $tpago_defecto = $_SESSION['tpago_defecto'];
         $validar_tc = $_SESSION['validar_tc'];
+        $lista_monedas = Monedas::all('ASC');
         $router ->render('admin/gestion/ventas/orden/index',[
                 'titulo' => 'Orden de Ventas',
                 'opciones'=>$opciones,
                 'moneda'=>$moneda,
                 'tpago_defecto'=>$tpago_defecto,
                 'simbolo_moneda'=>$simbolo_moneda,
+                'lista_monedas'=>$lista_monedas,
                 'validar_tc'=>$validar_tc,
                 'opciones'=>$opciones,
                 'tc' => $tc        
             ]);
     }
 
+   
+
     public static function validarTipoCambio() {
+
         session_start();
         
         $fecha = $_POST['fecha'] ?? null;
@@ -46,8 +52,13 @@ class OrdenVentaController {
         $monedaBase = $_SESSION['moneda'];
         $controlTC = $_SESSION['validar_tc'];
 
-        if ($idMoneda == $monedaBase || $controlTC != 1) {
-            echo json_encode(['success' => true, 'tc' => null]);
+        // Si la empresa no valida TC
+        if ($controlTC != 1) {
+            echo json_encode([
+                'success' => true,
+                'requiere_tc' => false,
+                'tc' => null
+            ]);
             return;
         }
 
@@ -56,44 +67,150 @@ class OrdenVentaController {
         if ($FactorCambio) {
             echo json_encode([
                 'success' => true,
-                'tc' => $FactorCambio->venta_oficial
+                'requiere_tc' => true,
+                'tc' => $FactorCambio->venta_mercado
             ]);
         } else {
-            echo json_encode(['success' => false]);
+            echo json_encode([
+                'success' => false,
+                'requiere_tc' => true,
+                'tc' => null
+            ]);
+        }
+    }
+    
+    public static function generar() {
+
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            if (!$data) {
+                throw new \Exception('JSON inválido o vacío');
+            }
+
+            if (empty($data['detalle'])) {
+                throw new \Exception('Detalle vacío');
+            }
+
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $idTienda  = $_SESSION['idtienda'] ?? null;
+            $idUsuario = $_SESSION['id'] ?? null;
+
+            if (!$idTienda || !$idUsuario) {
+                throw new \Exception('Sesión no válida');
+            }
+
+            // 👉 completar cabecera desde backend
+            $data['cabecera']['idtienda']  = $idTienda;
+            $data['cabecera']['idusercrea'] = $idUsuario;
+
+            $jsonVenta = json_encode($data, JSON_UNESCAPED_UNICODE);
+
+            $resultado = OrdenVenta::procedureMantenimiento(
+                "prm_registrar_orden_venta",
+                [$jsonVenta]
+            );
+
+            // 👇 convertir mysqli_result a array
+            $fila = $resultado->fetch_assoc();
+
+            if (!$fila) {
+                throw new \Exception('No se pudo obtener resultado del procedimiento');
+            }
+
+            echo json_encode([
+                'ok'      => true,
+                'idorden' => $fila['idorden'],
+                'numero'  => $fila['numero']
+            ]);
+
+
+        } catch (\Throwable $e) {
+
+            http_response_code(500);
+
+            echo json_encode([
+                'ok'      => false,
+                'mensaje' => $e->getMessage(),
+                'trace'   => $e->getLine()
+            ]);
         }
     }
 
 
-    public static function generar() {
-        // Leer los datos JSON enviados desde JS
-        $data = json_decode(file_get_contents("php://input"), true);
-
-        if (!$data) {
-            echo json_encode(['success' => false, 'message' => 'No se recibió información válida']);
+    public static function imprimir(Router $router)
+    {
+        if (!is_auth()) {
+            header('Location: /login');
             return;
         }
 
+        if (empty($_GET['id'])) {
+            echo "<h4>Error: No se especificó el ID de la Orden de Venta.</h4>";
+            exit;
+        }
+
+        $idorden = (int) $_GET['id'];
+
         try {
-            // Convertimos el array nuevamente a JSON string para pasarlo al SP
-            $jsonVenta = json_encode($data, JSON_UNESCAPED_UNICODE);
 
-            // Llamamos a tu SP usando el ActiveRecord
-            $resultado = OrdenVenta::procedureMantenimiento("prm_registrar_orden_venta", [$jsonVenta]);
+            // Empresa
+            $empresa = Empresa::find($_SESSION['idempresa']);
 
-            // Si no hay errores, respondemos con éxito
-            echo json_encode([
-                'success' => true,
-                'message' => 'Orden de venta registrada correctamente.',
-                // opcional: puedes devolver el número de OV o ID recién creada
-                'numero' => $data['cabecera']['numero'] ?? null
-            ]);
-        } catch (\Exception $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al registrar la OV: ' . $e->getMessage()
-            ]);
+            // Cabecera
+            $cabecera = OrdenVenta::procedureLista(
+                'prc_orden_venta_impresion',
+                [$idorden, 1]
+            );
+            $cabecera = $cabecera[0] ?? null;
+
+            // Detalle
+            $detalle = OrdenVentaDetalle::procedureLista(
+                'prc_orden_venta_impresion',
+                [$idorden, 2]
+            );
+
+            if (!$cabecera) {
+                echo "<h4>No se encontró la orden solicitada.</h4>";
+                exit;
+            }
+
+            if (empty($detalle)) {
+                echo "<h4>La orden no tiene detalle.</h4>";
+                exit;
+            }
+
+            // Renderizar plantilla
+            ob_start();
+            include __DIR__ . '/../views/admin/gestion/ventas/orden/pdf_template.php';
+            $html = ob_get_clean();
+
+            // DOMPDF
+            $options = new \Dompdf\Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isRemoteEnabled', true);
+
+            $dompdf = new \Dompdf\Dompdf($options);
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            $dompdf->stream(
+                "Orden_Venta_{$cabecera->numero}.pdf",
+                ['Attachment' => false]
+            );
+
+        } catch (\Throwable $e) {
+            echo "<h3>Error al generar PDF</h3>";
+            echo "<pre>{$e->getMessage()}</pre>";
         }
     }
+
+
+
     
 }
 

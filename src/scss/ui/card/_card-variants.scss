@@ -1,0 +1,56 @@
+@use 'base/variables' as v;
+
+/* =========================
+   SOMBRAS
+========================= */
+
+.ds-card--flat {
+    box-shadow: none;
+    border: 1px solid v.$color-gris-claro;
+}
+
+.ds-card--hover {
+    transition: transform .2s ease, box-shadow .2s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 18px rgba(0,0,0,.12);
+    }
+}
+
+/* =========================
+   COLORES (dashboard)
+========================= */
+
+.ds-card--primary {
+    border-left: .5rem solid v.$primary;
+}
+
+.ds-card--success {
+    border-left: .5rem solid v.$success;
+}
+
+.ds-card--warning {
+    border-left: .5rem solid v.$warning;
+}
+
+.ds-card--danger {
+    border-left: .5rem solid v.$danger;
+}
+.ds-card--morado {
+    border-left: .5rem solid v.$color-morado;
+}
+.ds-card--amarillo {
+    border-left: .5rem solid v.$color-amarillo;
+}
+/* =========================
+   ESPACIADO
+========================= */
+
+.ds-card--sm .card__body {
+    padding: 1.2rem;
+}
+
+.ds-card--lg .card__body {
+    padding: 3rem;
+}

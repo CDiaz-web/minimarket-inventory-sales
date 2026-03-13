@@ -1,0 +1,92 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+/* ===============================
+   OVERLAY
+================================= */
+
+.dashboard-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+
+    @include m.flex(center, center);
+
+    z-index: 1060;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+}
+
+/* ===============================
+   CAJA DEL MODAL
+================================= */
+
+.modal__contenido {
+    background: v.$color-blanco;
+    border-radius: .8rem;
+    width: min(95%, 50rem);
+    max-height: 90vh;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===============================
+   HEADER
+================================= */
+
+.modal__header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid v.$color-gris-claro;
+
+    @include m.flex(space-between, center);
+
+    h3 {
+        margin: 0;
+        font-size: 1.8rem;
+    }
+}
+/* ===============================
+   BODY
+================================= */
+.modal__body {
+    padding: 2rem;
+    overflow-y: auto;
+    flex: 1;
+}
+/* ===============================
+   FOOTER
+================================= */
+.modal__footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid v.$color-gris-claro;
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+/* ===============================
+   HIDDEN
+================================= */
+.hidden {
+    display: none;
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.formulario{
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.dashboard-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}

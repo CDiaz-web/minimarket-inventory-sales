@@ -1,0 +1,39 @@
+@use 'base/mixins' as m;
+@use 'base/variables' as v;
+
+.admin-toolbar {
+    width: 100%;
+
+    @include m.flex(space-between, center, 2rem);
+    flex-wrap: wrap;
+}
+
+/* ZONA IZQUIERDA */
+.admin-toolbar__left {
+    @include m.flex(flex-start, center, 1rem);
+    flex-wrap: wrap;
+}
+
+/* ZONA DERECHA */
+.admin-toolbar__right {
+    @include m.flex(flex-end, center, 1rem);
+    flex-wrap: wrap;
+}
+
+/* BUSCADOR */
+.admin-toolbar__search {
+    position: relative;
+
+    input {
+        padding: .9rem 1.2rem;
+        border-radius: .6rem;
+        border: 1px solid v.$color-gris-claro;
+        min-width: 22rem;
+        font-size: 1.4rem;
+    }
+}
+
+/* GRUPO BOTONES */
+.admin-toolbar__actions {
+    @include m.flex(flex-end, center, 1rem);
+}

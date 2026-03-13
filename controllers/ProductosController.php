@@ -20,7 +20,7 @@ class ProductosController {
 
         // $productos = Productos::all('ASC');
         $alertas = [];
-        $valor = [$_SESSION['empresa']]; 
+        $valor = [$_SESSION['idempresa']]; 
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $productos = Productos::procedureLista('prc_ListaProductos',$valor);
         $router ->render('admin/mantenimiento/productos/productos/index',[
@@ -80,7 +80,7 @@ class ProductosController {
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
        
             //leer imagen      
             $producto->sincronizar($_POST);
@@ -179,7 +179,7 @@ class ProductosController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             
             $producto->sincronizar($_POST);
 
@@ -282,7 +282,7 @@ class ProductosController {
  
                     $datosFila['idtienda'] = $_SESSION['idtienda']; // Agregar el ID del usuario al array asociativo    
                     $datosFila['idusercrea'] = $_SESSION['id'];      
-                    $datosFila['idempresa'] = $_SESSION['empresa'];
+                    $datosFila['idempresa'] = $_SESSION['idempresa'];
                     
                     if (!empty($datosFila)) {
                        
@@ -314,4 +314,49 @@ class ProductosController {
         ]);
        
     }
+
+    public static function activas() {
+        header('Content-Type: application/json');
+        $valor = $_SESSION['idempresa'];      
+        $productos = TiendProductosas::findArray(['idempresa'=> $valor,'idestado'=> 7],false) ?? [];
+        echo json_encode($productos);
+    }
+
+  public static function buscar(){        
+   
+        header('Content-Type: application/json');
+
+        $empresaId = $_SESSION['idempresa'];
+
+        $q = trim($_GET['q'] ?? '');
+        $page = (int)($_GET['page'] ?? 1);
+
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+
+
+
+        $productos = Productos::buscarPaginado(
+            $empresaId,
+            $q,
+            $limit,
+            $offset
+        );
+
+        $total = Productos::contarBusqueda(
+            $empresaId,
+            $q
+        );
+
+        $last_page = ceil($total / $limit);
+
+        echo json_encode([
+            'data' => array_map(fn($p) => $p->toPublicArray(), $productos),
+            'page' => $page,
+            'last_page' => $last_page
+        ]);
+
+        exit;
+    }
+    
 }

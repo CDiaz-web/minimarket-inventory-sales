@@ -21,7 +21,10 @@ class EligeTiendaController{
                 return;
             }
             $valores = [$id]; 
-            
+
+            $perfil = $_SESSION['perfil']; 
+            $empresa = $_SESSION['empresa']; 
+            $usuario = $_SESSION['nombre'] ." " . $_SESSION['apellido']  ;
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
          
                             
@@ -42,7 +45,10 @@ class EligeTiendaController{
             $tiendas = UsuariosTiendas::procedureLista('prc_ListaTiendasUsuario',$valores);
             //$tiendas = Tiendas::all();
             $router ->render('tiendas/index',[
-                'titulo' => 'Seleccione Tienda',        
+                'titulo' => 'Seleccione Tienda',
+                'usuario' => $usuario, 
+                'perfil' => $perfil,  
+                'empresa' => $empresa,         
                 'tiendas'=>$tiendas
             ]);
         }

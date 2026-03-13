@@ -4,12 +4,12 @@ namespace Model;
 
 class TipoCliente extends ActiveRecord {
     protected static $tabla = 'tipo_cliente';
-    protected static $columnasDB = ['id', 'codigo', 'nombre','idlista','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id', 'codigo', 'nombre','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
  
     public ?int $id = null;
     public string $codigo = '';
     public string $nombre = '';
-    public int $idlista = 0;
+    
     public int $idestado = 0;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
@@ -39,9 +39,7 @@ class TipoCliente extends ActiveRecord {
         if(!$this->nombre) {
             self::$alertas['error'][] = 'El Nombre no puede ir vacio';
         }
-        if(!$this->idlista) {
-            self::$alertas['error'][] = 'La Lista de Precios es Obligatorio';
-        }
+
         if(!$this->idestado) {
             self::$alertas['error'][] = 'El estado es Obligatorio';
         }

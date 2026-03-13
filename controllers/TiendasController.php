@@ -18,7 +18,7 @@ class TiendasController {
         }
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);     
-        $tiendas = Tiendas::where('idempresa',$_SESSION['empresa'],false);        
+        $tiendas = Tiendas::where('idempresa',$_SESSION['idempresa'],false);        
         $router ->render('admin/configuracion/tiendas/index',[
                 'titulo' => 'Tiendas',
                 'tiendas'=>$tiendas,
@@ -41,26 +41,28 @@ class TiendasController {
                 header('Location: /login');
             }
             $busca = Tiendas::where('codigo', $_POST['codigo'],false);
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             // //agregamos informacion de auditoria al $_post
             date_default_timezone_set('America/Lima');
             $_POST['idusercrea']=$_SESSION['id'];
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
-            //leer imagen      
-            
+      
+
             $tienda->sincronizar($_POST);
             //validar
+       
             $alertas = $tienda->validar();
             if($busca){
                 $alertas['error'][] = 'CODIGO YA REGISTRADO';
             }
+            
             //guardar el registro
             if(empty($alertas)){
                 //guardar en la base de datos
                 $resultado = $tienda->guardar();
+           
                 if($resultado){
                     header('Location: /admin/configuracion/tiendas');
                 }
@@ -100,12 +102,12 @@ class TiendasController {
                 header('Location: /login');
             } 
             //agregamos informacion de auditoria al $_post
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $tienda->sincronizar($_POST);
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
 
             $alertas = $tienda->validar();
 
@@ -154,7 +156,7 @@ class TiendasController {
             } 
 
             $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);     
-            $tiendas = Tiendas::where('idempresa',$_SESSION['empresa'],false);        
+            $tiendas = Tiendas::where('idempresa',$_SESSION['idempresa'],false);        
             $router ->render('admin/configuracion/tiendas/index',[
                     'titulo' => 'Tiendas',
                     'tiendas'=>$tiendas,
@@ -165,6 +167,12 @@ class TiendasController {
         }
     }
 
-    
+    public static function activas() {
+        header('Content-Type: application/json');
+
+        $tiendas = Tiendas::where('idestado', 9);
+
+        echo json_encode($tiendas);
+    }
 
 }

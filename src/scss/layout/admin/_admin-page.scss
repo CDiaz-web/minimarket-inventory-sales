@@ -1,0 +1,26 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+
+.admin-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* HEADER DE PAGINA */
+.admin-page__header {
+    @include m.flex(space-between, center);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.admin-page__title {
+    font-size: 2.4rem;
+    font-weight: v.$font-black;
+    color: v.$text-primary;
+}
+
+.admin-page__actions {
+    @include m.flex(flex-end, center, 1rem);
+}

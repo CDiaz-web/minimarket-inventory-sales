@@ -1,0 +1,54 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+/* =========================
+   APP LAYOUT
+========================= */
+
+.app {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 26rem 1fr;
+    background-color: v.$bg-body;
+
+    @include m.respond(tablet) {
+        grid-template-columns: 26rem 1fr;
+    }
+
+    @include m.respond(telefono) {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* sidebar */
+
+.app__sidebar {
+    background-color: v.$sidebar-bg;
+    color: v.$color-blanco;
+}
+
+/* contenido general */
+
+.app__main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* header */
+
+.app__header {
+    background-color: v.$bg-surface;
+    border-bottom: 1px solid v.$color-gris-claro;
+}
+
+/* contenido */
+
+.app__content {
+    flex: 1;
+    padding: 2rem;
+
+    @include m.respond(tablet) {
+        padding: 3rem;
+    }
+}

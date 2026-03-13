@@ -1,8 +1,7 @@
-<fieldset class="formulario__fieldset-xl">
+<fieldset class="formulario__fieldset">
     <legend class="formulario__legend">Informacion General</legend>
 
-    <?php if(($empresa->logo_actual)!=='') { ?>    
-        <!-- <p class="formulario__texto">Logo Actual:</p> -->
+    <?php if(($empresa->logo_actual)!=='') { ?>            
         <div class="formulario__imagen">
             <picture>
                 <source srcset="<?php echo $_ENV['HOST'] . '/img/' . $empresa->logo; ?>.webp" type="image/webp">
@@ -12,6 +11,16 @@
         </div>
 
     <?php } ?>    
+
+    <div class="formulario__campo">
+        <label for="logo" class="formulario__label">Logo</label>
+        <input
+            type = "file"
+            class = "formulario__input formulario__input--file"
+            id = "logo"
+            name="logo"
+        />
+    </div>  
 
     <div class="formulario__campo">  
         <label for="ruc" class="formulario__label">Ruc</label>
@@ -86,19 +95,8 @@
                 value ="<?php echo $empresa->porcentaje_imp;?>"                                   
             />
     </div>
-  
-    <div class="formulario__campo">
-        <label for="logo" class="formulario__label">Logo</label>
-        <input
-            type = "file"
-            class = "formulario__input formulario__input--file"
-            id = "logo"
-            name="logo"
-        />
-    </div>    
-    
-    <div class="formulario__campo-fila"> 
-        <label for="validar_tc" class="formulario__label">
+    <div class="formulario__campo formulario__campo--check"> 
+        <label for="validar_tc" class="formulario__check">
             <input
                 type = "checkbox"
                 class = "formulario__input"
@@ -108,5 +106,19 @@
             /> Valida Tipo de Cambio
         </label>
     </div> 
+      <div class="formulario__campo">   
+            <label for="variaciontc" class="formulario__label">Variacion TC Mer.</label>
+            <input
+                type="number" 
+                class = "formulario__input"
+                id = "variaciontc"
+                name="variaciontc"  
+                placeholder="0.00"   
+                step="0.01"
+                min="0"                    
+                value ="<?php echo number_format($empresa->variaciontc, 2, '.', ''); ?>"                                 
+            />
+    </div>
+    
 
 </fieldset>

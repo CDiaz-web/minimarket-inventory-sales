@@ -1,0 +1,118 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.topbar {
+    background-color: v.$bg-surface;
+    border-bottom: 1px solid v.$color-gris-claro;
+    height: 6rem;
+
+    @include m.flex(space-between, center);
+    padding: 0 2rem;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+}
+
+/* ===============================
+   IZQUIERDA
+================================= */
+
+.topbar__left {
+    @include m.flex(flex-start, center, 1.5rem);
+}
+
+.topbar__toggle {
+    all: unset;
+    line-height: 1;
+    font-size: 2.2rem;
+    cursor: pointer;
+
+
+    @include m.flex(center, center);
+
+    @include m.respond(desktop) {
+        display: none;
+    }
+}
+
+.topbar__title {
+    font-size: 1.8rem;
+    font-weight: v.$font-bold;
+    color: v.$text-primary;
+}
+
+/* ===============================
+   DERECHA
+================================= */
+
+.topbar__right {
+    @include m.flex(flex-end, center, 1.5rem);
+}
+
+.topbar__empresa {
+    font-size: 1.3rem;
+    color: v.$text-secondary;
+}
+
+.topbar__user {
+    @include m.flex(center, center, .8rem);
+    cursor: pointer;
+}
+
+.topbar__avatar {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background-color: v.$primary;
+    color: v.$color-blanco;
+    flex-shrink: 0;
+    @include m.flex(center, center);
+
+    font-weight: v.$font-bold;
+}
+
+.topbar__name {
+    font-size: 1.4rem;
+    font-weight: v.$font-bold;
+
+    @include m.respond(telefono){
+        display: none;
+    }
+}
+
+
+.topbar__btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+/* ======================
+   MOBILE FIRST
+====================== */
+/* mobile visible */
+.topbar__btn--mobile {
+    display: inline-flex;
+}
+
+/* desktop oculto por defecto */
+.topbar__btn--desktop {
+    display: none;
+}
+
+
+/* ======================
+   DESKTOP
+====================== */
+@include m.respond(desktop){
+
+    .topbar__btn--mobile {
+        display: none !important;
+    }
+
+    .topbar__btn--desktop {
+        display: flex !important;
+    }
+}

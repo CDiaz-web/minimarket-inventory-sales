@@ -39,8 +39,8 @@ class TipoClientesController{
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $tipo = new TipoCliente; 
         $valor = $_SESSION['empresa'];   
-        $listas = Listas::where('idempresa',$valor,false);
-        $listas = Listas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
+        // $listas = Listas::where('idempresa',$valor,false);
+        // $listas = Listas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
         $estados = Estados::where('idmaster','3',false);
         $tipo->idestado = 9; //  Activo por defecto  
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -76,8 +76,7 @@ class TipoClientesController{
         $router ->render('admin/mantenimiento/clientes/clasificacion/crear',[
             'titulo' => 'Registrar Clasificacion',
             'alertas' => $alertas,     
-            'tipo'=>$tipo,
-            'listas'=>$listas,
+            'tipo'=>$tipo, 
             'estados'=>$estados,
             'opciones'=>$opciones        
   
@@ -97,7 +96,7 @@ class TipoClientesController{
         }       
         $tipo = TipoCliente::find($id);
         $valor = $_SESSION['empresa'];   
-        $listas = Listas::where('idempresa',$valor,false);
+        // $listas = Listas::where('idempresa',$valor,false);
         $estados = Estados::where('idmaster','3',false);
         if(!$tipo){
             header('Location: /admin/mantenimiento/clientes/clasificacion');
@@ -130,8 +129,7 @@ class TipoClientesController{
         $router ->render('admin/mantenimiento/clientes/clasificacion/editar',[
             'titulo' => 'Actualizar Clasificacion',
             'alertas' => $alertas,       
-            'tipo'=>$tipo,
-            'listas'=>$listas,
+            'tipo'=>$tipo,      
             'estados'=>$estados,
             'opciones'=>$opciones        
         ]);

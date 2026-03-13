@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Model\Empresa;
 use Model\FactorCambio;
 use Model\Monedas;
 use Model\Opciones;
@@ -23,7 +24,7 @@ class FactorCambioController {
         // Año y mes actuales por defecto
         $anio = $_GET['anio'] ?? date("Y");
         $mes = $_GET['mes'] ?? date("m");
-        $idempresa = $_SESSION['empresa']; // Supongo que la guardas en sesión
+        $idempresa = $_SESSION['idempresa']; // Supongo que la guardas en sesión
 
 
         
@@ -49,24 +50,28 @@ class FactorCambioController {
         if(!is_admin()){
             header('Location: /login');
         }
+
+        $empresa = Empresa::where('id',$_SESSION['idempresa']);   
+        $variaciontc= $empresa[0]->variaciontc;
+   
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $factor = new FactorCambio;   
         $monedas = Monedas::all('ASC'); 
-        $factor->idmoneda_origen = 1; // soles    
-        $factor->idmoneda_destino = 2; // dolares
+        $factor->idmoneda_origen = 2; // soles    
+        $factor->idmoneda_destino = 1; // dolares
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
             }            
-            $valor = $_SESSION['empresa'];
+            $valor = $_SESSION['idempresa'];
             $origen = $_POST['idmoneda_origen'];
             $destino = $_POST['idmoneda_destino'];
             $fechabuscar = $_POST['fecha'];
             // //agregamos informacion de auditoria al $_post
             $busca = FactorCambio::findArray(['idempresa'=> $valor,'fecha'=> $fechabuscar,'idmoneda_origen'=> $origen,'idmoneda_destino'=> $destino],true) ?? [];
           
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             date_default_timezone_set('America/Lima');
             $_POST['idusercrea']=$_SESSION['id'];
             $_POST['fechacrea']=date("Y-m-d H:i:s");
@@ -97,6 +102,7 @@ class FactorCambioController {
             'alertas' => $alertas,     
             'factor'=>$factor,
             'monedas' => $monedas,
+            'variaciontc'=> $variaciontc,
             'opciones'=>$opciones        
   
         ]);
@@ -124,7 +130,7 @@ class FactorCambioController {
                 header('Location: /login');
             } 
             //agregamos informacion de auditoria al $_post
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
@@ -176,35 +182,32 @@ class FactorCambioController {
         }
     }
 
-public static function traerSUNAT() {
-    header('Content-Type: application/json');
+    public static function traerSUNAT() {
+        header('Content-Type: application/json');
 
-    // Unificamos: ahora siempre 'fecha'
-    $fecha = $_GET['date'] ?? date('Y-m-d');
+        // Unificamos: ahora siempre 'fecha'
+        $fecha = $_GET['date'] ?? date('Y-m-d');
 
-    $url = 'https://api.apis.net.pe/v1/tipo-cambio-sunat?fecha=' . $fecha;
+        $url = 'https://api.apis.net.pe/v1/tipo-cambio-sunat?fecha=' . $fecha;
 
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_FAILONERROR => true,
-        CURLOPT_SSL_VERIFYPEER => false, // evitar problemas SSL en localhost
-        CURLOPT_SSL_VERIFYHOST => false
-    ]);
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FAILONERROR => true,
+            CURLOPT_SSL_VERIFYPEER => false, // evitar problemas SSL en localhost
+            CURLOPT_SSL_VERIFYHOST => false
+        ]);
 
-    $respuesta = curl_exec($curl);
+        $respuesta = curl_exec($curl);
 
-    if ($respuesta === false) {
-        echo json_encode(['error' => 'Error al consultar SUNAT: ' . curl_error($curl)]);
-        return;
+        if ($respuesta === false) {
+            echo json_encode(['error' => 'Error al consultar SUNAT: ' . curl_error($curl)]);
+            return;
+        }
+
+        echo $respuesta;
     }
-
-    echo $respuesta;
-}
-
-
-
     
 
 }

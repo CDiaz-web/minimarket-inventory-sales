@@ -1,0 +1,20 @@
+@use 'base/variables' as v;
+@use "sass:color";
+
+.alerta--error {
+    background-color: color.adjust(v.$danger, $lightness: 60%);
+    border-left-color: v.$danger;
+    color: v.$danger;
+}
+
+.alerta--exito {
+    background-color: color.adjust(v.$success, $lightness: 45%);
+    border-left-color: v.$success;
+    color: color.adjust(v.$success, $lightness: -10%);
+}
+
+.alerta--warning {
+    background-color: color.adjust(v.$warning, $lightness: 45%);
+    border-left-color: v.$warning;
+    color: color.adjust(v.$warning, $lightness: -25%);
+}

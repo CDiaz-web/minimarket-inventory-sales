@@ -1,0 +1,58 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.ventas {
+
+    &__buscadores {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+
+        @include m.respond(desktop) {
+            flex-direction: row;
+            align-items: flex-end;
+        }
+    }
+
+    &__campo {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: .4rem;
+    }
+
+    &__campo--producto {
+        flex: 2;
+    }
+
+    &__acciones {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+
+        @include m.respond(desktop) {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    &__total {
+        font-size: 2rem;
+        font-weight: 700;
+        color: v.$primary;
+
+        strong {
+            margin-left: .5rem;
+        }
+    }
+
+    &__botones {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+}

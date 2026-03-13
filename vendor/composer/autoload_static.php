@@ -24,6 +24,7 @@ class ComposerStaticInitc4068cb9abce7e66e2a5435917e5ddbb
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Svg\\' => 4,
+            'Services\\' => 9,
             'Sabberworm\\CSS\\' => 15,
         ),
         'P' => 
@@ -90,6 +91,10 @@ class ComposerStaticInitc4068cb9abce7e66e2a5435917e5ddbb
         array (
             0 => __DIR__ . '/..' . '/dompdf/php-svg-lib/src/Svg',
         ),
+        'Services\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Services',
+        ),
         'Sabberworm\\CSS\\' => 
         array (
             0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
@@ -100,8 +105,8 @@ class ComposerStaticInitc4068cb9abce7e66e2a5435917e5ddbb
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (

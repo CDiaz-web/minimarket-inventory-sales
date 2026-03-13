@@ -4,7 +4,7 @@ namespace Model;
 
 class Empresa extends ActiveRecord {
     protected static $tabla = 'empresa';
-    protected static $columnasDB = ['id', 'nombre','ruc','direccion', 'idmoneda','idtipo_pago','porcentaje_imp','email','logo','validar_tc','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id', 'nombre','ruc','direccion', 'idmoneda','idtipo_pago','porcentaje_imp','email','logo','validar_tc','variaciontc','idusercrea','fechacrea','idusermodi','fechamodi'];
 
 
     public ?int $id = null;
@@ -22,7 +22,8 @@ class Empresa extends ActiveRecord {
     public ?string $fechacrea = null;
     public int $idusermodi = 0;
     public ?string $fechamodi = null;   
-
+    public ?float $variaciontc = null;
+    
     public string $logo_actual = '';
     
     public function __construct(array $args = [])

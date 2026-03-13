@@ -23,7 +23,7 @@ class CategoriasController {
         }
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $categorias = Categorias::where('idempresa',$_SESSION['empresa'],false);
+        $categorias = Categorias::where('idempresa',$_SESSION['idempresa'],false);
 
         $router ->render('admin/mantenimiento/productos/categorias/index',[
                 'titulo' => 'Categorias',
@@ -52,7 +52,7 @@ class CategoriasController {
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             //leer imagen      
             
             $categoria->sincronizar($_POST);
@@ -108,7 +108,7 @@ class CategoriasController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             $categoria->sincronizar($_POST);
 
             $alertas = $categoria->validar();
@@ -140,7 +140,7 @@ class CategoriasController {
         }
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $categorias = Categorias::where('idempresa',$_SESSION['empresa'],false);
+        $categorias = Categorias::where('idempresa',$_SESSION['idempresa'],false);
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
             $id = $_POST['id'];   
@@ -222,7 +222,7 @@ class CategoriasController {
                     }                   
                     $datosFila['idestado'] = '9'; 
                     $datosFila['idusercrea'] = $_SESSION['id']; // Agregar el ID del usuario al array asociativo  
-                    $datosFila['idempresa'] = $_SESSION['empresa'];                 
+                    $datosFila['idempresa'] = $_SESSION['idempresa'];                 
                     if (!empty($datosFila)) {
                        
                         $categoria->sincronizar($datosFila);                     

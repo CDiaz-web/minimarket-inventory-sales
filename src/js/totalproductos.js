@@ -26,7 +26,8 @@
                     nombre:producto.nombre,
                     venta:producto.venta,
                     stock:producto.stock,
-                    minimo:producto.stock_minimo                   
+                    minimo:producto.stock_minimo,
+                    maximo:producto.stock_maximo                      
                 }
             })          
         }
@@ -53,6 +54,9 @@
                                 </td>    
                                 <td class="table__td">
                                     ${producto.minimo}  
+                                </td> 
+                                <td class="table__td">
+                                    ${producto.maximo}  
                                 </td> 
                             </tr> 
                             `               
@@ -101,6 +105,7 @@
                                     <th scope='col' class="table__th">P.Venta</th> 
                                     <th scope='col' class="table__th">Stock</th>                      
                                     <th scope='col' class="table__th">Stock Min.</th> 
+                                    <th scope='col' class="table__th">Stock Max.</th> 
                                 </tr>
                             </thead>
                             <tbody class="table__tbody" id="tabla">                                

@@ -4,16 +4,10 @@ document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll(".btnEditarMovimiento").forEach(boton => {
     boton.addEventListener("click", function() {
       const idMovimiento = this.dataset.id;
-      // const modalEl = document.getElementById("modalEditarMovimiento");
-      // const modal = new bootstrap.Modal(modalEl);
 
-      // // Mostrar el modal inmediatamente
-      // modal.show();
-      // modalEl.removeAttribute("aria-hidden"); // ✅ evita bloqueo de foco
       const modalEl = document.getElementById("modalEditarMovimiento");
-      abrirModalInventario(); // muestra el modal personalizado
-
-      // Mostrar indicador de carga
+      abrirModalInventario(); 
+      
       const contenido = document.getElementById("contenidoEditarMovimiento");
       contenido.innerHTML = `
         <div class="text-center py-4">

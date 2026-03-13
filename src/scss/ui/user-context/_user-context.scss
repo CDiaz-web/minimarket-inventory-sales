@@ -1,0 +1,30 @@
+@use 'base/variables' as v;
+
+.user-context {
+    padding-inline: 2rem;
+    margin-bottom: 1.5rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}
+
+/* saludo principal */
+.user-context__welcome {
+    font-size: 1.5rem;
+    color: rgba(0,0,0,.7);
+    margin: 0;
+}
+
+/* nombre usuario */
+.user-context__name {
+    font-weight: v.$font-bold;
+    color: v.$primary;
+}
+
+/* información secundaria */
+.user-context__meta {
+    font-size: 1.2rem;
+    color: rgba(0,0,0,.55);
+    margin: 0;
+}

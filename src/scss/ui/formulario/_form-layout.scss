@@ -1,0 +1,12 @@
+@use "sass:color";   // ← agregado
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.form-wrapper {
+    padding: 2.5rem;
+    background-color: v.$color-blanco;
+    border-radius: .8rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    max-width: 90rem;
+    margin: 2rem auto 0 auto;
+}

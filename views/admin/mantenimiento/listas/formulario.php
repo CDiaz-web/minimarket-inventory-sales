@@ -25,15 +25,7 @@
             value ="<?php echo $lista->descripcion;?>"     
         />
     </div>   
-    <div class="formulario__campo">
-        <label for="idmoneda" class="formulario__label">Moneda</label>
-        <select class="formulario__select-xl" id="idmoneda" name ="idmoneda">
-        <option value="" >-Seleccionar-</option>
-            <?php foreach($monedas as $moneda) { ?>
-                <option <?php echo ($lista->idmoneda == $moneda->id) ? 'selected' : '' ; ?> value="<?php echo $moneda->id; ?>" > <?php echo $moneda->nombre; ?> </option>
-            <?php }?> 
-        </select>
-    </div>
+
     <div class="formulario__campo">
         <label for="idestado" class="formulario__label">Estado</label>
         <select class="formulario__select-xl" id="idestado" name ="idestado">

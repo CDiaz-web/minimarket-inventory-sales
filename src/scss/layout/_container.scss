@@ -1,0 +1,13 @@
+@use 'base/mixins' as m;
+
+.container {
+    @include m.contenedor;
+}
+
+.container--md {
+    @include m.contenedor-md;
+}
+
+.container--sm {
+    @include m.contenedor-sm;
+}

@@ -36,15 +36,17 @@
     </fieldset>
 
     <!-- === DETALLE === -->
-    <fieldset class="formulario__fieldset">
+    <fieldset class="formulario__fieldset formulario__fieldset--detalle">
         <legend class="formulario__legend">Detalle</legend>
 
         <table class="table" id="tabla-detalle">
             <thead>
                 <tr>
-                    <th>Producto</th>
+                    <th>Producto</th>                    
                     <th>Unidad</th>
                     <th>Cantidad</th>
+                    <th>Costo</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -53,13 +55,14 @@
             </tbody>
         </table>
 
-        <button type="button" id="btn-agregar-detalle">➕ Agregar producto</button>
+        
     </fieldset>
 
     <!-- === BOTONES === -->
-    <div class="formulario__acciones">
-        <input type="submit" value="Guardar" class="btn btn-primario">
-        <a href="/admin/logistica/gestion/inventario" class="btn btn-secundario">Cancelar</a>
+    <div class="table-actions">
+        <button type="button" class="boton boton--filtrar" id="btn-agregar-detalle">Agregar</button>
+        <input type="submit" value="Guardar" class="boton boton-primario">
+        <a href="/admin/gestion/logistica/inventario" class="boton boton--danger-link">Cancelar</a>
     </div>
 </form>
 

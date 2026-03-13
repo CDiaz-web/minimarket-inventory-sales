@@ -167,4 +167,18 @@ class DevolucionesController {
         }
     }    
 
+    public static function listar(Router $router)
+{
+
+    $motivos = Devoluciones::where('idestado','9',false);
+    $respuesta = [];
+
+    foreach ($motivos as $m) {
+        $respuesta[$m->id] = $m->nombre;
+    }
+
+    echo json_encode($respuesta);
+}
+
+
 }

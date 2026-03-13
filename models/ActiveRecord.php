@@ -185,7 +185,29 @@ public function sanitizarAtributos(): array {
 
         return $atributos;
     }
+    public function toPublicArray(): array {
+        $atributos = [];
+        foreach (static::$columnasDB as $columna) {    
 
+            $valor = $this->$columna ?? null;
+
+            if ($valor instanceof \DateTime) {
+                // Guardar fechas en formato estándar
+                $atributos[$columna] = $valor->format('Y-m-d H:i:s');
+            } elseif (is_bool($valor)) {
+                // Convertir bool a 1 o 0
+                $atributos[$columna] = $valor ? 1 : 0;
+            } elseif (is_float($valor)) {
+                // Asegurar formato decimal
+                $atributos[$columna] = number_format($valor, 2, '.', '');
+            } else {
+                // Cualquier otro valor (int, string, null, etc.)
+                $atributos[$columna] = $valor;
+            }
+        }
+
+        return $atributos;
+    }
 
     // Registros - CRUD
     public function guardar() {
@@ -212,14 +234,14 @@ public function sanitizarAtributos(): array {
     }
 
     // Busqueda Where con Columna 
-    public static function where($columna, $valor,$unico = false) {
-        //si unico es true retorna array_shift($resultado)(solo 1) caso contrario $resultado (varios)
+    public static function where($columna, $valor,$unico = false) {        
         $valor = self::$db->escape_string($valor);
         $query = "SELECT * FROM " . static::$tabla . " WHERE {$columna} = '{$valor}'";        
-        // debuguear($query );
+        //debuguear($query );
         $resultado = self::consultarSQL($query); 
         return $unico ? array_shift($resultado) : $resultado; 
     } 
+
 
     // Busqueda Where con multriples opciones 
     public static function findArray($array =[],$unico = false) {
@@ -233,6 +255,7 @@ public function sanitizarAtributos(): array {
                  $query .= " {$key} = '{$value}' AND ";
              }            
          }       
+        //  debuguear($query);
          $resultado = self::consultarSQL($query); 
          return $unico ? array_shift($resultado) : $resultado; 
     }
@@ -261,6 +284,9 @@ public function sanitizarAtributos(): array {
         $resultado = self::consultarSQL($query);        
         return array_shift( $resultado ) ;
     }
+
+
+
     // Busca un registro por su id
 
     public static function procedureLista($nombre, $valores =[]) {
@@ -288,31 +314,6 @@ public function sanitizarAtributos(): array {
         return array_shift( $resultado ) ;
     }
 
-
-    // public static function procedureMantenimiento($nombre, $valores =[]) {
-    //     // $variables = '"' . implode('","',$valores) . '"';
-        
-    //     $variables = implode(',', array_map(function($v) {
-    //         $v = $v ?? '';
-    //         return "'" . self::$db->real_escape_string($v) . "'";
-    //     }, $valores));
-
-    //     try {
-    //         if($valores){
-    //             $query = " CALL {$nombre}({$variables}) "; 
-    //         }else{
-    //             $query = " CALL {$nombre} "; 
-    //         }       
-    //         debuguear($query);
-    //         $resultado = self::$db->query($query);  
-            
-    //         return $resultado  ;
-    //     } catch (\mysqli_sql_exception $e) {
-    //         throw new \Exception("Error ejecutando procedimiento: " . $e->getMessage());
-    //     }
-
-    // }
-
     public static function procedureMantenimiento($nombre, $valores =[]) {
         $parts = array_map(function($v) {
             if ($v === null) {
@@ -328,7 +329,7 @@ public function sanitizarAtributos(): array {
 
         try {
             $query = "CALL {$nombre}({$variables})";
-            //debuguear($query);
+            debuguear($query);
             $resultado = self::$db->query($query);
             return $resultado;
         } catch (\mysqli_sql_exception $e) {
@@ -452,7 +453,7 @@ public function sanitizarAtributos(): array {
     // Eliminar un Registro por su ID
     public function eliminar() {
         $query = "DELETE FROM "  . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
-        
+        // debuguear($query);
         $resultado = self::$db->query($query);
     
         return $resultado;
@@ -473,4 +474,52 @@ public function sanitizarAtributos(): array {
         $resultado = self::$db->query($query);
         return $resultado;
     }
+
+    public static function buscarPaginado($empresaId, $q, $limit, $offset)
+    {
+        $empresaId = (int)$empresaId;
+        $limit = (int)$limit;
+        $offset = (int)$offset;
+
+        $whereBusqueda = "";
+
+        if ($q !== '') {
+            $q = self::$db->real_escape_string($q);
+            $whereBusqueda = "AND nombre LIKE '%{$q}%'";
+        }
+
+        $sql = "
+            SELECT *
+            FROM " . static::$tabla . "
+            WHERE idempresa = {$empresaId}
+            AND idestado = 7
+            {$whereBusqueda}
+            ORDER BY nombre ASC
+            LIMIT {$limit}
+            OFFSET {$offset}
+        ";
+
+        return self::consultarSQL($sql);
+    }
+
+  
+    public static function contarBusqueda($empresaId, $q)
+    {
+        $q = self::$db->real_escape_string($q);
+
+        $sql = "
+            SELECT COUNT(*) as total
+            FROM " . static::$tabla . "
+            WHERE idempresa = '{$empresaId}'
+            AND idestado = 7
+            AND nombre LIKE '%{$q}%'
+        ";
+
+        $resultado = self::$db->query($sql);
+        $fila = $resultado->fetch_assoc();
+
+        return $fila['total'] ?? 0;
+    }
+
+
 }

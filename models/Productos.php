@@ -19,17 +19,25 @@ class Productos extends ActiveRecord {
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
     public int $idusermodi = 0;
+    public int $tiene_stock= 0;
+    
     public ?string $fechamodi = null;    
     public ?float $costo = null;
     public ?float $venta = null;
     public ?float $utilidad = null;    
     public ?float $stock_actual = null;
-    public ?float $stock_minimo = null;
-    public ?float $stock_maximo = null;
+    public ?float $stock_min = null;
+    public ?float $stock_max = null;
     public string $categoria = '';
 
+    public ?float $stock_comprometido = null;
+    public ?float $stock_disponible = null;
 
+    public ?float $total = null;
+    public ?float $cantidad = null;
     public string $unidad = '';
+
+
    
     public function __construct(array $args = [])
     {

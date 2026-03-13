@@ -16,7 +16,7 @@ class UsuariosController {
             header('Location: /login');
         }  
         $alertas = [];     
-        $valor = [$_SESSION['empresa']];  
+        $valor = [$_SESSION['idempresa']];  
         // $productos = Productos::all('ASC');
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);  
         $usuarios = Usuario::procedureLista('prc_ListaUsuarios',$valor);
@@ -49,6 +49,7 @@ class UsuariosController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['empresa'];
+    
        
             //leer imagen      
             $usuario->sincronizar($_POST);
@@ -189,20 +190,116 @@ class UsuariosController {
             ]);     
         }
     }
-    public static function tiendas(Router $router){
-        if(!is_admin()){
-            header('Location: /login');
-        }       
 
-        $valor = [$_GET['id']];  
-        $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $tiendas = UsuariosTiendas::procedureLista('prc_ListaTiendasUsuario',$valor);
-        $usuario= Usuario::find($_GET['id']);
-        
-        $router ->render('admin/seguridad/usuarios/tiendas/index',[
-            'titulo' => 'Agregar Tiendas - ' . $usuario->nombre . ' ' . $usuario->apellido,  
-            'tiendas'=>$tiendas,          
-            'opciones'=>$opciones            
-        ]);
-    }   
+    public static function tiendasasignadas(Router $router) {
+
+        header('Content-Type: application/json');
+
+        $idUsuario = $_GET['idusuario'] ?? null;
+
+        if (!$idUsuario) {
+            echo json_encode([]);
+            return;
+        }
+
+        // El SP espera parámetros, normalmente un array
+        $valor = [$idUsuario];
+
+        $resultado = UsuariosTiendas::procedureLista(
+            'prc_ListaTiendasUsuario',
+            $valor
+        );
+
+        echo json_encode($resultado);
+    }
+
+    public static function asignartienda() {
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        header('Content-Type: application/json');
+
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        $idUsuario = $data['idusuario'] ?? null;
+        $idTienda  = $data['idtienda'] ?? null;
+        $user_crea = $_SESSION['id'] ?? null;
+
+        if (!$idUsuario || !$idTienda || !$user_crea) {
+            echo json_encode([
+                'success' => false,
+                'msg' => 'Datos incompletos o sesión inválida'
+            ]);
+            return;
+        }
+
+        $valores = [1, $idUsuario, $idTienda, $user_crea];
+
+        try {
+            UsuariosTiendas::procedureMantenimiento(
+                'prc_mantenimiento_asignatienda',
+                $valores
+            );
+
+            echo json_encode([
+                'success' => true
+            ]);
+
+        } catch (Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'msg' => $e->getMessage() // útil para depurar
+            ]);
+        }
+    }
+
+    public static function eliminartienda() {
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        header('Content-Type: application/json');
+
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        $idUsuario = $data['idusuario'] ?? null;
+        $idTienda  = $data['idtienda'] ?? null;
+        $user_crea = $_SESSION['id'] ?? null; // puede no usarse, pero validamos sesión
+
+        if (!$idUsuario || !$idTienda || !$user_crea) {
+            echo json_encode([
+                'success' => false,
+                'msg' => 'Datos incompletos o sesión inválida'
+            ]);
+            // return;
+            exit;
+        }
+
+        // _tipo = 2 => DELETE
+        $valores = [2, $idUsuario, $idTienda, $user_crea];
+
+        try {
+            UsuariosTiendas::procedureMantenimiento(
+                'prc_mantenimiento_asignatienda',
+                $valores
+            );
+
+            echo json_encode([
+                'success' => true
+            ]);
+            exit;
+
+        } catch (Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'msg' => $e->getMessage()
+            ]);
+            exit;
+        }
+    }
+
+
 }

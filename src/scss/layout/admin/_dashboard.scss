@@ -1,0 +1,130 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+/* ===============================
+   DASHBOARD
+================================= */
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* GRID DE CARDS */
+.dashboard__grid {
+    display: grid;
+    gap: 2rem;
+
+    grid-template-columns: 1fr; // mobile
+}
+
+
+/* GRID INFERIOR (graficos/tablas) */
+.dashboard__paneles {
+    display: grid;
+    gap: 2rem;
+
+    grid-template-columns: 2fr 1fr;
+
+    @include m.respond(desktop){
+        grid-template-columns: 2fr 1fr;
+    }
+    .ds-card:first-child {
+        grid-column: 1 / -1;
+    }
+}
+.dashboard__tablas {
+    display: grid;
+    gap: 2rem;
+
+    grid-template-columns: 1fr;
+
+    @include m.respond(tablet){
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.dashboard-card {
+    justify-content: space-between;
+    min-height: 120px;
+}
+
+/* tablet */
+@include m.respond(tablet){
+    .dashboard__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* laptop */
+@include m.respond(desktop){
+    .dashboard__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* pantallas grandes */
+@media (min-width: 1400px){
+    .dashboard__grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.chart canvas {
+    width: 100% !important;
+    height: 320px !important;
+}
+
+.dashboard__contendor-boton {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+}
+
+.dashboard__contendor-boton .boton {
+    width: auto;
+}
+
+.dashboard__filtros {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    padding: 1.5rem 2rem; // espacio interno (igual que otras secciones)
+
+    input,
+    select {
+        border: 1px solid v.$color-gris-claro;
+        border-radius: .4rem;
+        padding: .8rem 1rem;
+        font-size: 1.4rem;
+        width: 100%;
+    }
+
+    label {
+        font-size: 1.3rem;
+        margin-bottom: .2rem;
+    }
+
+    button {
+        width: 100%;
+    }
+    @include m.respond(desktop){
+        flex-direction: row;
+        align-items: center;
+        gap: 1.2rem;
+
+        input {
+            width: 12rem; // año más compacto
+        }
+
+        select {
+            width: 14rem; // ancho del mes
+        }
+
+        button {
+            width: auto;
+            margin-left: .5rem;
+        }
+    }
+}

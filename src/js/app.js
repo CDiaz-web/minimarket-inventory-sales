@@ -1,35 +1,45 @@
 
-import './slider.js';
-import './mapa.js';
-import './registro.js';
-import './header.js';
-import './alertas.js';
-import './buscar.js';
-import './masvendidos.js';
-import './pocostock.js';
-import './exportar.js';
-import './buscaproductos.js';
-import './carrusel.js';
-import './menu.js';
-import './grafico.js';
-import './treeview.js';
-import './caja.js';
-import './detallepocostock.js';
-import './totalproductos.js';
-import './detalleventasdia.js';
-import './detalleganacia.js';
-import './detalleventas.js';
-import './detalleinventario.js';
-import './venta.js';
-// import './nuevocliente.js';
-import './eliminaalertas.js';
-import './factorsunat.js';
-import './cliente.js';
-import './tiendaproducto.js';
-import './clientesunat.js';
-import './editainventario.js';
-import './global.js';
-import swal from 'sweetalert2';
-window.Swal = swal;
 
+window.App = window.App || {};
+// ==========================
+// IMPORTS (SIEMPRE ARRIBA)
+// ==========================
+
+import { initModalLoader } from './core/modal-loader.js';
+import { events } from './core/events.js';
+import { iniciarAlertas } from './ui/alertas.js';
+import { initTables } from './ui/table.js';
+import { iniciarSidebar } from './ui/sidebar.js';
+import { initDashboardChart, destroyDashboardChart } from './admin/dashboard-chart.js';
+import { initCardsModal } from './admin/cards-modal.js';
+import { initUsuariosTiendas } from './modules/usuarios-tiendas.js';
+import { initListaProductos } from './modules/lista-productos.js';
+import { initClientesForm } from "./modules/clientes/clientes-form.js";
+import { initTipoCambio } from "./modules/tipo-cambio/tipo-cambio.js";
+import { initVentas } from "./modules/ventas/ventas.js";
+import { initInventarios } from "./modules/inventarios/movimientos.js";
+import { initImprimeInventario } from "./modules/inventarios/inventario-imprimir.js";
+// ==========================
+// APP BOOTSTRAP
+// ==========================
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    initModalLoader();
+    iniciarAlertas();
+    initTables();
+    iniciarSidebar();
+    initDashboardChart(); 
+    initCardsModal();
+    initUsuariosTiendas();
+    initListaProductos();
+    initClientesForm();
+    initTipoCambio();
+    initVentas(); 
+    initInventarios();
+    initImprimeInventario();
+    App.events = events;
+    App.events.init();
+
+});
 

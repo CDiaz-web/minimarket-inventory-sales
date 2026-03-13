@@ -1,14 +1,13 @@
 <h2 class="dashboard__heading"><?php echo $titulo; ?></h2>
 
-<div class="dashboard__contendor-boton">
-    <a class="dashboard__boton" href="/admin/configuracion/tipopago">
+<div class="table-header">
+    <a class="boton boton--primary-link" href="/admin/configuracion/tipopago">
         <i class="fa-solid fa-circle-arrow-left"></i>
         Volver
     </a>
 </div>
 
-
-<div class="dashboard__formulario">
+<div class="form-wrapper">
 
    <?php 
         include_once __DIR__ . '/../../../templates/alertas.php';          
@@ -20,3 +19,4 @@
         <input class="formulario__submit formulario__submit--registrar" type="submit" value="Registrar Tipo Pago" id="btnGuardar">
     </form>
 </div>
+

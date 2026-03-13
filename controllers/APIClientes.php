@@ -2,7 +2,7 @@
 
 namespace Controllers;
 
-use Model\clientes;
+use Model\Clientes;
 
 
 class APIClientes{
@@ -10,8 +10,8 @@ class APIClientes{
     public static function clientes(){
         if(is_auth()){          
 
-           
-            $clientes = clientes::where('idempresa','1');
+            $empresa  = $_SESSION['idempresa'];
+            $clientes = clientes::where('idempresa',$empresa);
          
             echo json_encode($clientes, JSON_UNESCAPED_SLASHES);
         }

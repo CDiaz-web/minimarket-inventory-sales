@@ -1,29 +1,53 @@
-<div class="barra-mobile">
-    <div class="barra-mobile__texto">
-        <p>  
-        Tienda: <?php echo $_SESSION['tienda'] ?  $_SESSION['tienda']  : 'Elegir Empresa' ; ?>         
-        </p>                
-    </div> 
 
-    <div class="barra-mobile__menu">       
-        <i id="mobile-menu"  class="fa-solid fa-bars"></i>
+
+
+<div class="topbar">
+
+    <!-- IZQUIERDA -->
+    <div class="topbar__left">
+
+        <!-- MOBILE: abre sidebar -->
+        <button
+            id="btnSidebarMobile"
+            class="topbar__btn topbar__btn--mobile">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <!-- DESKTOP: colapsa sidebar -->
+        <button
+            id="btnSidebarDesktop"
+            class="topbar__btn topbar__btn--desktop">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <a href="/tiendas" class="topbar__title topbar__tienda">
+            <i class="fa-solid fa-store"></i>
+            <?php echo $_SESSION['tienda'] ?: 'Elegir Tienda'; ?>
+            <i class="fa-solid fa-chevron-down"></i>
+        </a>
+
     </div>
-</div>
 
-<div class="barra">
-    
-        <p>
-            <!-- Hola: <span><?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellido'] . '    ' ; ?></span> -->
-            Tienda: <span><?php echo $_SESSION['tienda'] ?  $_SESSION['tienda'] : 'Elegir Tienda' ; ?></span>
-            
-        </p>
 
-    <form method="POST" action="/logout" class="dashboard__form" id="frSalir2">     
+    <!-- DERECHA -->
+    <div class="topbar__right">
 
-        <button class="table__mantenimiento table__mantenimiento--salir"  type="button" id = "cerrar-sesion2"">
-                <i class="fa-solid fa-right-from-bracket"></i>  
-        </button> 
+        <div class="topbar__user">
+            <div class="topbar__avatar">
+                <?php echo strtoupper(substr($_SESSION['nombre'],0,1)); ?>
+            </div>
 
-    </form>
-   
+            <span class="topbar__name">
+                <?php echo $_SESSION['nombre']; ?>
+            </span>
+        </div>
+
+        <form id="frSalir" method="POST" action="/logout">
+            <button class="topbar__btn" type="button" data-action="cerraSesion">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </form>
+
+    </div>
+
 </div>

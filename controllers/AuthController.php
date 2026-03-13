@@ -5,6 +5,7 @@ use Classes\Email;
 use Model\Empresa;
 use Model\Monedas;
 use Model\Usuario;
+use Model\Perfiles;
 use MVC\Router;
 
 class AuthController { 
@@ -55,17 +56,20 @@ class AuthController {
 
         $empresa = Empresa::where('id', $usuario->idempresa,true);
         $moneda = Monedas::where('id', $empresa->idmoneda,true);
+        $perfil = Perfiles::where('id', $usuario->idperfil,true);
         $_SESSION = [
             'id'            => $usuario->id,
             'nombre'        => $usuario->nombre,
             'apellido'      => $usuario->apellido,
-            'empresa'       => $usuario->idempresa,
+            'idempresa'       => $usuario->idempresa, 
+            'empresa'       => $empresa->nombre,            
             'email'         => $usuario->email,
             'idperfil'      => $usuario->idperfil,
+            'perfil'        => $perfil->nombre,
             'admin'         => $usuario->admin ?? null,
             'idtienda'      => '',
             'tienda'        => null,
-            'simbolo_moneda'=> $moneda->simbolo,
+            'simbolo_moneda'=> $moneda->simbolo,         
             'moneda'        => $empresa->idmoneda,           
             'igv'           => $empresa->porcentaje_imp,
             'validar_tc'    => $empresa->validar_tc,

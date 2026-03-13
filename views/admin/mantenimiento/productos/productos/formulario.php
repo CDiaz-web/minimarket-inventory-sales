@@ -1,4 +1,4 @@
-<fieldset class="formulario__fieldset-xl">
+<fieldset class="formulario__fieldset">
     <legend class="formulario__legend">Informacion Producto</legend>
 
     <div class="formulario__campo">  

@@ -1,29 +1,87 @@
 @use 'variables' as v;
 @use 'mixins' as m;
 
+/* ===============================
+   RESET BASE
+================================= */
+
 html {
     font-size: 62.5%;
     box-sizing: border-box;
     height: 100%;
 }
+
 *, *:before, *:after {
     box-sizing: inherit;
 }
+
 body {
-    font-family: v.$fuente_principal;
-    
-    @include m.tablet{
-        font-size: 1.5rem;
-    }
-}
-a {
-    text-decoration: none;
-}
-img {
-    width: 100%;
-    height: auto;
+    font-family: v.$fuente-principal;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    background-color: v.$bg-body;
+    color: v.$text-primary;
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
 }
 
-.swal2-popup{
-    font-size: 2rem!important;
+/* ===============================
+   ELEMENTOS GENERALES
+================================= */
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ===============================
+   FORMULARIOS (CLAVE PARA MODALES)
+================================= */
+
+input,
+select,
+textarea,
+button {
+    font-family: inherit;
+    font-size: 1.4rem;
+}
+
+/* elimina estilos raros nativos */
+button {
+    border: none;
+    background: none;
+}
+
+/* ===============================
+   TABLAS CONSISTENTES
+================================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* ===============================
+   SWEETALERT AJUSTE GLOBAL
+================================= */
+
+.swal2-popup {
+    font-size: 1.6rem !important;
+}
+main {
+    flex: 1;
+}
+
+.no-scroll {
+    overflow: hidden;
 }

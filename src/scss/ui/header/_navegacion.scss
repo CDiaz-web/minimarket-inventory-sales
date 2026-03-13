@@ -1,23 +1,35 @@
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
 
-.navegacion{
-    display: flex;
+.navegacion {
+
+    @include m.flex(center, center);
     flex-direction: column;
-    @include m.desktop{
+
+    @include m.respond(desktop) {
         flex-direction: row;
     }
-    &__enlace{
-        color: v.$blanco;
-        font-size: 2rem;
-        padding: 2rem;
-        font-weight: v.$black;
+
+    &__enlace {
+        @include m.transition(background-color);
+
+        color: v.$color-blanco;
+        font-size: 1.6rem;
+        padding: 1.6rem 2rem;
+        font-weight: v.$font-black;
         text-transform: uppercase;
         text-align: center;
-        &--actual,
-        &:hover{
-            background-color: v.$blanco;
-            color: v.$azul;
+
+        display: block;
+
+        &:hover {
+            background-color: v.$bg-surface;
+            color: v.$primary;
+        }
+
+        &--actual {
+            background-color: v.$bg-surface;
+            color: v.$primary;
         }
     }
 }

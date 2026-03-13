@@ -1,0 +1,5 @@
+@use 'base/mixins' as m;
+
+.admin-grid {
+    @include m.grid-auto(28rem, 2rem);
+}

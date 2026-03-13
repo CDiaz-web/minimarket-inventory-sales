@@ -4,7 +4,7 @@ namespace Model;
 
 class Clientes extends ActiveRecord {
     protected static $tabla = 'clientes';
-    protected static $columnasDB = ['id','idempresa','tipo_persona','documento','nombre','apellidos','razon_social','nombre_cliente','idtipo','telefono','direccion','idtienda_default','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id','idempresa','tipo_persona','documento','nombre','apellidos','razon_social','nombre_cliente','idtipo','telefono','direccion','idtienda_default','idlista','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;
     public int $idempresa = 0;
@@ -23,7 +23,7 @@ class Clientes extends ActiveRecord {
     public ?string $fechacrea = null;
     public int $idusermodi = 0;
     public ?string $fechamodi = null;
-
+    public int $idlista = 0;
     public string $clasificacion = '';
 
     // Constructor opcional (sobreescribe valores si se pasan en $args)
@@ -48,7 +48,9 @@ class Clientes extends ActiveRecord {
         if(!$this->tipo_persona) {
             self::$alertas['error'][] = 'El tipo de persona es obligatorio';
         }
-
+        if(!$this->idlista) {
+            self::$alertas['error'][] = 'La Lista de Precios es Obligatorio';
+        }
         if(!$this->tipo_persona ==="N") {
             if(!$this->nombre) {
                 self::$alertas['error'][] = 'El Nombre es Obligatorio';

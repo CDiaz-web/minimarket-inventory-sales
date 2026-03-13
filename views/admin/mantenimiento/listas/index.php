@@ -2,60 +2,98 @@
    <?php 
         include_once __DIR__ . '/../../../templates/alertas.php';          
     ?>
-<div class="dashboard__contenedor">
 
-    <a class="dashboard__boton-agregar" href="/admin/mantenimiento/listas/crear">
-        <i class="fa-solid fa-circle-plus"></i>
-        Añadir
-    </a>
 
-    <input
-        type = "text"
-        class = "dashboard__buscar"
-        id="buscar"
-        name="buscar"
-        placeholder="Buscar..."                        
-    /> 
-</div>
-<br>
-<div class="dashboard__contenedor"  id="table_box_master">
-    <?php if(!empty($listas)) { ?>
-        <table class="table" id ="tabla" border="0">
-            <thead class="table__thead">
-                <tr>      
-                    <th scope='col' class="table__th">Codigo</th>    
-                    <th scope='col' class="table__th">Descripcion</th>                               
-                    <th scope='col' class="table__th"></th>
-                </tr>
-            </thead>
-            <tbody class="table__tbody" id="tabla">
-                <?php foreach($listas as $lista) { ?>
-                    <tr class="table__tr">            
-                        <td class="table__td">
-                            <?php echo $lista->codigo ;?>
-                        </td>    
-                        <td class="table__td">
-                            <?php echo $lista->descripcion;?>
-                        </td>                  
-                        <td class="table__td--acciones">
-                            <a class="table__mantenimiento table__mantenimiento--editar" href="/admin/mantenimiento/listas/editar?id=<?php echo $lista->id ?>">
-                                <i class="fa-solid fa-user-pen  table____mantenimient--icono"></i>                                
-                            </a>
 
-                            <form id ="frEliminar<?php echo $lista->id; ?>"  method="POST" action="/admin/mantenimiento/listas/eliminar" class="table__formulario">
-                                <input type="hidden" name="id" value="<?php echo $lista->id; ?>">
-                                <button class="table__mantenimiento table__mantenimiento--eliminar"  type="button" data-id="<?php echo $lista->id; ?>">
-                                    <i class="fa-solid fa-circle-xmark  table____mantenimient--icono"></i>
-                                </button>
-                            </form>
-                        </td>
+<div class="table-wrapper">      
+
+    <div class="table-header">
+        <div class="table-actions">
+            <a class="boton boton--primary-link " href="/admin/mantenimiento/listas/crear">
+                <i class="fa-solid fa-circle-plus"></i>
+                Añadir
+            </a>
+        </div>
+        <div class="table-search">
+            <input
+                class="formulario__input"
+                type="text"
+                placeholder="Buscar Lista..."
+                data-table-search="tablaListas"
+            />
+        </div>
+    </div>  
+
+    <div class="table-body">
+        <?php if(!empty($listas)) { ?>
+            <table id="tablaListas"  class="table" data-table data-page-size="5">
+                <thead class="table thead">
+                    <tr>               
+                        <th scope='col' class="table__th">Codigo</th>    
+                        <th scope='col' class="table__th">Descripcion</th>             
+                        <th scope='col' class="table__th">Acciones</th>
                     </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-    <?php } else { ?>
-        <p class="text-center">No hay Listas Registradas</p>
-    <?php } ?>
+                </thead>
+                <tbody class="table-tbody" id="tabla">
+                    <?php foreach($listas as $lista) { ?>
+                        <tr class="table__tr">
+                            <td class="table__td">
+                                <?php echo $lista->codigo ;?>
+                            </td>    
+                            <td class="table__td">
+                                <?php echo $lista->descripcion;?>
+                            </td>                                  
+                            <td class="table__col-actions" >
+
+                                <div class="table__acciones">
+                                    <a class="boton boton--primary" href="/admin/mantenimiento/listas/editar?id=<?php echo $lista->id ?>">
+                                        <i class="fa-solid fa-user-pen"></i>                                
+                                    </a>
+<!-- 
+                                    <a href="#" class="boton boton--primary btn-producto" data-id="<?= $lista->id ?>">   
+                                        <i class="fas fa-archive"></i> 
+                                    </a> -->
+
+                                    <a 
+                                        href="#" 
+                                        class="boton boton--primary"
+                                        data-action="abrir-productos"
+                                        data-id="<?= $lista->id ?>"
+                                    >
+                                        <i class="fas fa-archive"></i> 
+                                    </a> 
+
+
+                                    <a class="boton boton--primary" href="/admin/mantenimiento/listas/carga_masiva/cargar?id=<?php echo $lista->id ?>">
+                                        <i class="fa-solid fa-circle-down"></i>                                
+                                    </a>
+
+                                    <form id ="frEliminar<?php echo $lista->id; ?>"  method="POST" action="/admin/mantenimiento/listas/eliminar" class="table__formulario">
+                                        <input type="hidden" name="id" value="<?php echo $lista->id; ?>">
+                                        <button
+                                            class="boton boton--danger"
+                                            type="button"
+                                            data-action="deleteRecord"
+                                            data-id="<?php echo $lista->id; ?>"
+                                        >
+                                            <i class="fa-solid fa-circle-xmark"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } else { ?>
+            <p class="text-center">No hay Listas Registradas</p>
+        <?php } ?>
+    </div>    
+
+    <div class="table-footer">
+        <div class="table-pagination" data-table-pagination="tablaListas"></div>  
+    </div>
+    
 </div>
-                 
-<div id="index_native_master" class="box"></div>
+

@@ -1,77 +1,135 @@
+<aside class="sidebar"> 
 
+    <nav class="menu-admin">  
 
-<aside class="dashboard__sidebar"> 
-    <nav class="dashboard__menu">     
-        <div class="dashboard__logo" href=""> 
-            <h2 class="dashboard__logo--titulo">     
-                <i class="fa-solid fa-business-time "></i>  
-                Arteus
-            </h2>
-            <div class="cerrar-menu">
-                <i class="fa-sharp fa-solid fa-circle-xmark"></i>
-            </div> 
+        <button class="sidebar__close" id="btnSidebarClose">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="sidebar__brand">
+
+            <i class="fa-solid fa-business-time sidebar__logo"></i>  
+            <!-- <img src="<?= $logo ?>" class="sidebar__logo"> -->
+            <span class="sidebar__empresa">
+                <?php echo $_SESSION['empresa']; ?>
+            </span>
+
         </div>
 
-        <p class="dashboard__separador">
-        <span>Hola: </span><?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellido'] . '    ' ; ?>       
-        </p> 
-        <?php foreach($opciones as $opcion) { ?>
 
-            <?php if (!$opcion->idsuperior): ?>
 
-                <span class="dashboard__separador">
-                    <?php echo $opcion->nombre ;?>
-                </span>
+        <!-- MENU -->
+        <ul class="menu-admin__list">  
 
-            <?php elseif ($opcion->boton === "0" and $opcion->subnivel === "0" and $opcion->admin ==="1"): ?>
+            <!-- SALUDO -->
+            <!-- <li class="menu-admin__section">
+                <span>Hola:</span>
+                <?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellido']; ?>
+            </li>  -->
 
-                <a href= "<?php echo "/admin" . $opcion->vista;?>" class="dashboard__enlace <?php echo pagina_actual( $opcion->vista) ? 'dashboard__enlace--actual' : '' ; ?>">
-                    <i class="<?php  echo $opcion->icono;?>"></i>            
-                    <span class="dashboard__menu-texto">
-                        <?php echo $opcion->nombre ;?>
-                    </span>
-                </a>
-            <?php elseif ($opcion->boton === "0" and $opcion->subnivel === "0" and $opcion->admin ==="0"): ?>
-                <a href="<?php echo $opcion->vista;?>" class="dashboard__enlace">
-                    <i class="<?php  echo $opcion->icono;?>"></i> 
-                    <span class="dashboard__menu-texto">
-                    <?php echo $opcion->nombre ;?>
-                    </span>
-                </a>
-            <?php elseif ($opcion->boton === "1"): ?>
+            <?php foreach($opciones as $opcion) { ?>
 
-                <form class="dropdown-btn dashboard__enlace">                      
-                    <i class="<?php  echo $opcion->icono;?>"></i>  
-                    <input type="button" value="<?php echo $opcion->nombre ;?>"class="header__desplegable">          
-                </form>    
+                <!-- =========================
+                     SEPARADOR (GRUPO)
+                ========================== -->
+                <?php if (!$opcion->idsuperior): ?>
 
-                <!-- Aquí van los submenús -->
-                <div class="dropdown-container">
-                    <?php foreach($opciones as $submenu) { ?>
-                        <?php if ($submenu->idsuperior == $opcion->id && $submenu->subnivel === "1"): ?>
-                            <a href="<?php echo "/admin" . $submenu->vista; ?>" class="dashboard__enlace <?php echo pagina_actual($submenu->vista) ? 'dashboard__enlace--actual' : ''; ?>">
-                                <i class="<?php echo $submenu->icono; ?>"></i>
-                                <span class="dashboard__menu-texto">
-                                    <?php echo $submenu->nombre; ?>
-                                </span>
-                            </a>
-                        <?php endif; ?>
-                    <?php } ?>
-                </div>
-               
-            <?php endif; ?>
+                    <li class="menu-admin__section">
+                        <?php echo $opcion->nombre; ?>
+                    </li>
 
-            
-        <?php } ?>
-              
+                <!-- =========================
+                     LINK NORMAL
+                ========================== -->
+                <?php elseif ($opcion->boton === "0" && $opcion->subnivel === "0" && $opcion->admin === "1"): ?>
 
-        <form method="POST" action="/logout" class="dashboard__enlace--salir" id="frSalir">
-            <i class="fa-solid fa-right-from-bracket dashboard__enlace--icono"></i>
-            <input type="submit" value="Cerrar Sesión" class="header__logout" id = "cerrar-sesion">          
-        </form>  
-  
+                    <li class="menu-admin__item">
+                        <a href="/admin<?php echo $opcion->vista;?>"
+                           class="menu-admin__link <?php echo pagina_actual($opcion->vista) ? 'menu-admin__link--actual' : ''; ?>">
 
-</aside>   
+                            <i class="<?php echo $opcion->icono;?>"></i>
+
+                            <span class="menu-admin__link-texto">
+                                <?php echo $opcion->nombre;?>
+                            </span>
+
+                        </a>
+                    </li>
+
+                <!-- =========================
+                     ITEM CON SUBMENU
+                ========================== -->
+                <?php elseif ($opcion->boton === "1"): ?>
+
+                    <li class="menu-admin__item">
+
+                        <button class="menu-admin__link menu-admin__toggle" type="button">
+
+                            <i class="<?php echo $opcion->icono;?>"></i>
+
+                            <span class="menu-admin__link-texto">
+                                <?php echo $opcion->nombre;?>
+                            </span>
+
+                        </button>
+
+                        <ul class="menu-admin__submenu">
+
+                            <?php foreach($opciones as $submenu) { ?>
+                                <?php if ($submenu->idsuperior == $opcion->id && $submenu->subnivel === "1"): ?>
+
+                                    <li class="menu-admin__subitem">
+
+                                        <a href="/admin<?php echo $submenu->vista;?>"
+                                           class="menu-admin__link <?php echo pagina_actual($submenu->vista) ? 'menu-admin__link--actual' : ''; ?>">
+
+                                            <i class="<?php echo $submenu->icono;?>"></i>
+
+                                            <span class="menu-admin__link-texto">
+                                                <?php echo $submenu->nombre;?>
+                                            </span>
+
+                                        </a>
+
+                                    </li>
+
+                                <?php endif; ?>
+                            <?php } ?>
+
+                        </ul>
+
+                    </li>
+
+                <?php endif; ?>
+
+            <?php } ?>
+
+            <!-- =========================
+                 LOGOUT
+            ========================== -->
+            <li class="menu-admin__item menu-admin__logout">
+
+                <form method="POST" action="/logout" id="frSalir">
+
+                    <button type="submit" class="menu-admin__link"  data-action="cerraSesion">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        <span class="menu-admin__link-texto">
+                            Cerrar sesión
+                        </span>
+
+                    </button>
+
+                </form>
+
+            </li>
+
+        </ul>
+
+    </nav>
+
+</aside>
 
 
 

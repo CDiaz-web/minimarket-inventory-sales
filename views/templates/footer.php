@@ -6,24 +6,24 @@
                 Arteus
             </h3>
         </div>
-        <nav class="menu-redes"> 
-            <a class="menu-redes__enlace" rel="noopener noreferrer" target="_blank" href="https://www.facebook.com/carlos.diazramirez.56">
-                <span class="menu-redes__ocultar">Facebook</span>
+        <nav class="social"> 
+            <a class="social__enlace" rel="noopener noreferrer" target="_blank" href="https://www.facebook.com/carlos.diazramirez.56">
+                <span class="social__ocultar">Facebook</span>
             </a> 
-            <a class="menu-redes__enlace" rel="noopener noreferrer" target="_blank" href="https://twitter.com/codigoconjuan">
-                <span class="menu-redes__ocultar">Twitter</span>
+            <a class="social_enlace" rel="noopener noreferrer" target="_blank" href="https://twitter.com/codigoconjuan">
+                <span class="social__ocultar">Twitter</span>
             </a> 
-            <a class="menu-redes__enlace" rel="noopener noreferrer" target="_blank" href="https://youtube.com/codigoconjuan">
-                <span class="menu-redes__ocultar">YouTube</span>
+            <a class="social__enlace" rel="noopener noreferrer" target="_blank" href="https://youtube.com/codigoconjuan">
+                <span class="social__ocultar">YouTube</span>
             </a> 
-            <a class="menu-redes__enlace" rel="noopener noreferrer" target="_blank" href="https://instagram.com/codigoconjuan">
-                <span class="menu-redes__ocultar">Instagram</span>
+            <a class="social__enlace" rel="noopener noreferrer" target="_blank" href="https://instagram.com/codigoconjuan">
+                <span class="social__ocultar">Instagram</span>
             </a> 
-            <a class="menu-redes__enlace" rel="noopener noreferrer" target="_blank" href="https://tiktok.com/@codigoconjuan">
-                <span class="menu-redes__ocultar">Tiktok</span>
+            <a class="social__enlace" rel="noopener noreferrer" target="_blank" href="https://tiktok.com/@codigoconjuan">
+                <span class="social__ocultar">Tiktok</span>
             </a> 
-            <a class="menu-redes__enlace" rel="noopener noreferrer" target="_blank" href="https://github.com/codigoconjuan">
-                <span class="menu-redes__ocultar">Github</span>
+            <a class="social__enlace" rel="noopener noreferrer" target="_blank" href="https://github.com/codigoconjuan">
+                <span class="social__ocultar">Github</span>
             </a>
         </nav>
     </div>

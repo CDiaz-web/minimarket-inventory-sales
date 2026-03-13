@@ -1,92 +1,137 @@
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
 @use "sass:color";
-.header{
-    min-height: 2rem;  
-    //background-color: v.$gris-claro;
-    &__contenedor{
+
+.header {
+
+    min-height: 2rem;
+
+    /* =====================
+       CONTENEDOR
+    ====================== */
+
+    &__contenedor {
         @include m.contenedor;
-        //background-color: v.$gris-oscuro;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        @include m.flex(center, center);
     }
-    &__navegacion{
-        padding: 5rem 0;
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        @include m.tablet{
+
+    /* =====================
+       NAV AREA
+    ====================== */
+
+    &__navegacion {
+        padding: 4rem 0;
+
+        @include m.flex(center, center, 2rem);
+
+        @include m.respond(tablet) {
             justify-content: flex-end;
         }
     }
-    &__enlace{
+
+    &__form {
+        @include m.flex(center, center);
+    }
+
+    /* =====================
+       LINKS
+    ====================== */
+
+    &__enlace {
         @include m.enlace;
     }
-    &__form{
-        display: flex;
+
+    &__submit {
+        @include m.enlace;
     }
-    &__submit{
-        @extend .header__enlace;
-    }
-    &__logout{
+
+    &__logout {
         @include m.enlace_logout;
-       
     }
-    &__empresa{
+
+    &__empresa {
         @include m.enlace_empresa;
     }
-    &__desplegable{
-        //@include m.enlace_menu;
+
+    &__desplegable {
         all: unset;
-        color:  color.adjust(v.$gris-oscuro, $lightness: 40%);
         font-size: 1rem;
+        font-weight: v.$font-bold;
         text-transform: uppercase;
-        font-weight: v.$bold;            
-        padding-left: 1.2rem;
-        padding-right: .5rem;
-        padding-top: .5rem;
-        padding-bottom: .5rem;
-        &:hover{    
-            color: v.$blanco;
+        padding: .5rem 1rem;
+
+        color: color.adjust(v.$text-primary, $lightness: 35%);
+
+        @include m.transition(color);
+
+        &:hover {
+            color: v.$color-blanco;
             cursor: pointer;
         }
     }
-    &__contenido{
-        padding-top: 5rem;
-        @include m.tablet{
+
+    /* =====================
+       HERO CONTENT
+    ====================== */
+
+    &__contenido {
+        padding-top: 4rem;
+
+        @include m.respond(tablet) {
             padding: 3rem;
         }
     }
-    &__logo{
-        @include m.texto-fluido(2rem,8rem);
-        @include m.texto-degradado(v.$azul, v.$secundario);
-        text-align: center;        
-        @include m.tablet{
+
+    &__logo {
+        @include m.texto-fluido(2rem, 8rem);
+        @include m.texto-degradado(v.$primary, v.$secondary);
+
+        text-align: center;
+
+        @include m.respond(tablet) {
             text-align: left;
             display: inline-block;
         }
     }
-    &__texto{
-        font-size: 3rem;
-        font-weight: v.$bold;
-        color: v.$blanco;
+
+    &__texto {
+        font-size: 2.6rem;
+        font-weight: v.$font-bold;
+        color: v.$color-blanco;
         margin: 2rem 0;
         text-align: center;
         text-transform: uppercase;
-        @include m.tablet{
+
+        @include m.respond(tablet) {
             text-align: left;
         }
-        &--modalidad{
+
+        &--modalidad {
             font-size: 2rem;
         }
     }
-    &__boton{
-        @include m.boton(v.$secundario,v.$blanco);
-        text-transform:uppercase;
+
+    &__boton {
+        @include m.boton(v.$secondary, v.$color-blanco);
+        text-transform: uppercase;
         margin: 2rem 0;
-        @include m.desktop{
-            width: auto;            
+
+        @include m.respond(desktop) {
+            width: auto;
         }
     }
+}
+
+.topbar__tienda{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+    color:#333;
+    font-size:18px;
+    font-weight:600;
+}
+
+.topbar__tienda:hover{
+    color:#1e73be;
 }

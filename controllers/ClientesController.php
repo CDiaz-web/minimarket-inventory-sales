@@ -5,6 +5,7 @@ namespace Controllers;
 use MVC\Router;
 use Model\Clientes;
 use Model\Estados;
+use Model\Listas;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 // use PhpOffice\PhpSpreadsheet\Calculation\TextData\Format;
 use Model\Opciones;
@@ -24,7 +25,7 @@ class ClientesController {
              return;
         }
         $alertas = [];
-        $valor = [$_SESSION['empresa']];  
+        $valor = [$_SESSION['idempresa']];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);       
         $clientes = Clientes::procedureLista('prc_ListaClientes',$valor);
         $router ->render('admin/mantenimiento/clientes/clientes/index',[
@@ -40,13 +41,15 @@ class ClientesController {
             header('Location: /login');
         }
         $alertas = [];
-        $valor = $_SESSION['empresa'];  
+        $valor = $_SESSION['idempresa'];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $cliente = new Clientes();
         $estados = Estados::where('idmaster','3',false);
         $cliente->idestado = 9; // 👈 Activo por defecto       
         $tipos = TipoCliente::findArray(['idestado'=> 9],false) ?? [];
         $tiendas = Tiendas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
+        $listas = Listas::where('idempresa',$valor,false);
+        $listas = Listas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
         $cliente->idtienda_default = $_SESSION['idtienda'];
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
@@ -64,7 +67,7 @@ class ClientesController {
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             //leer imagen      
             
             $cliente->sincronizar($_POST);
@@ -93,6 +96,7 @@ class ClientesController {
             'tipos'=>$tipos,
             'tiendas'=>$tiendas,
             'estados'=>$estados,
+            'listas'=>$listas,
             'opciones'=>$opciones       
   
         ]);
@@ -108,12 +112,14 @@ class ClientesController {
         if(!$id){
             header('Location: /admin/mantenimiento/clientes');
         }    
-        $valor = $_SESSION['empresa'];  
+        $valor = $_SESSION['idempresa'];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);    
         $cliente = Clientes::find($id);
         $estados = Estados::where('idmaster','3',false);
         $tipos = TipoCliente::findArray(['idestado'=> 9],false) ?? [];
         $tiendas = Tiendas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
+        $listas = Listas::where('idempresa',$valor,false);
+        $listas = Listas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
         if(!$cliente){
             header('Location: /admin/mantenimiento/clientes/clientes');
         }   
@@ -129,7 +135,7 @@ class ClientesController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             $cliente->sincronizar($_POST);
 
             $alertas = $cliente->validar();
@@ -153,6 +159,7 @@ class ClientesController {
             'cliente'=>$cliente,
             'tipos'=>$tipos,
             'tiendas'=>$tiendas,
+            'listas'=>$listas,
             'estados'=>$estados,
             'opciones'=>$opciones       
         ]);
@@ -163,7 +170,7 @@ class ClientesController {
         }
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $clientes = Clientes::where('idempresa',$_SESSION['empresa'],false);
+        $clientes = Clientes::where('idempresa',$_SESSION['idempresa'],false);
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
             $id = $_POST['id'];   
@@ -250,7 +257,7 @@ class ClientesController {
                     //fin
                     $datosFila['idestado'] = '9'; 
                     $datosFila['idusercrea'] = $_SESSION['id']; // Agregar el ID del usuario al array asociativo  
-                    $datosFila['idempresa'] = $_SESSION['empresa'];   
+                    $datosFila['idempresa'] = $_SESSION['idempresa'];   
                     
                     // debuguear($datosFila);
                     if (!empty($datosFila)) {

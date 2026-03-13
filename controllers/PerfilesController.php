@@ -22,7 +22,7 @@ class PerfilesController {
         // $productos = Productos::all('ASC');
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $perfiles = Perfiles::where('idempresa',$_SESSION['empresa'],false);
+        $perfiles = Perfiles::where('idempresa',$_SESSION['idempresa'],false);
         $router ->render('admin/seguridad/perfiles/index',[
             'titulo' => 'Perfiles',
             'perfiles'=>$perfiles,

@@ -1,35 +1,18 @@
 @use 'base/variables' as v;
-@use "sass:color";
-.alerta{
+
+.alerta {
     padding: 1.5rem 1.5rem 1.5rem 3rem;
-    text-transform: uppercase;
     margin: 1rem 0;
-    font-size: 1.2rem;
-    font-weight: v.$bold;
-    &__error{        
-        background-color: color.adjust(v.$rojo, $lightness: 60%);
-        border-left: .5rem solid v.$rojo;
-        color: v.$rojo;
-    }
-    &__exito{
-        // background-color: lighten(v.$verde, 40%);
-        background-color: color.adjust(v.$verde, $lightness: 40%);
-        border-left: .5rem solid v.$verde;        
-        color: color.adjust(v.$verde, $lightness: 20%);
-    }
+    font-size: 1.3rem;
+    font-weight: v.$font-bold;
+    border-left: .5rem solid transparent;
+    border-radius: .4rem;
+    text-transform: uppercase;
+    transition: opacity .4s ease, transform .4s ease;
 }
-.swal2-title {
-     font-family: v.$fuente_principal;
-    font-size: 2.4rem !important;
-    // color: green !important;
+
+/* estado al desaparecer */
+.alerta--hide {
+    opacity: 0;
+    transform: translateY(-10px);
 }
-  
-//   .swal2-html-container{
-//     font-family: "Times New Roman", Times, serif;
-//     font-size: 2.6rem !important;
-//     color: blue !important;
-//   }
-  
-//   .swal2-confirm {
-//     background-color: orange !important;
-//   }

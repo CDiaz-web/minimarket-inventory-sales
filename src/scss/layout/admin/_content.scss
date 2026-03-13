@@ -1,0 +1,27 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+/* CONTENEDOR DERECHO COMPLETO */
+.content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    height: 100dvh;
+    background-color: v.$color-gris-claro;
+    flex: 1;
+}
+
+/* AREA REAL DE LAS PAGINAS */
+.content__body {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+
+    @include m.respond(tablet){
+        padding: 3rem;
+    }
+
+    @include m.respond(desktop){
+        padding: 4rem;
+    }
+}

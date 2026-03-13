@@ -1,0 +1,323 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.sidebar {
+
+    /* apariencia */
+    background-color: v.$sidebar-bg;
+    color: v.$color-blanco;
+    padding: 2rem;
+
+    height: 100vh;
+    overflow-y: auto;
+    // width: 26rem;
+    width: v.$sidebar-width;
+    transition: width .35s cubic-bezier(.4,0,.2,1);
+    overflow: hidden;
+    /* MOBILE */
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    transform: translateX(-100%);
+    transition: transform .35s cubic-bezier(.2,.8,.2,1);
+
+    z-index: 900;
+
+    /* DESKTOP */
+    @include m.respond(desktop){
+        transform: translateX(0);
+        position: static;
+    }
+
+    
+}
+
+/* ===============================
+   MENU ADMIN
+================================ */
+.menu-admin {
+    font-size: 1.3rem;
+    &__link {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        width: 100%;
+        padding: 1.2rem 1.4rem;
+
+        border-radius: .6rem;
+        color: inherit;
+        text-decoration: none;
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        transform .15s ease;
+        cursor: pointer;
+
+        i {
+            width: 2rem;
+            text-align: center;
+            font-size: 1.4rem;
+        }
+
+        &:hover {
+            background-color: rgba(255,255,255,.08);
+            transform: translateX(3px);
+        }
+    }
+}
+
+
+.menu-admin__section {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: .08rem;
+    opacity: .6;
+
+    margin: 2rem 0 .8rem;
+    padding-left: .5rem;
+}
+
+.menu-admin__link--actual {
+    background-color: rgba(255,255,255,.15);
+    font-weight: 600;
+    position: relative;
+    
+}
+/* barra activa izquierda */
+.menu-admin__link--actual::before {
+    content: "";
+    position: absolute;
+    left: -2rem;
+    top: 6px;
+    bottom: 6px;
+    width: 4px;
+    border-radius: 4px;
+    background-color: v.$primary;
+}
+.menu-admin__toggle::after {
+    content: "▸";
+    margin-left: auto;
+    font-size: 1.2rem;
+    opacity: .7;
+    transition: transform .25s ease, opacity .2s ease;
+}
+
+.menu-admin__item.activo > .menu-admin__toggle::after {
+    transform: rotate(90deg);
+    opacity: 1;
+}
+
+.menu-admin__toggle {
+    cursor: pointer;
+    transition: background-color .2s ease;
+}
+
+
+.menu-admin__submenu {
+    margin-left: 1rem;
+
+    max-height: 0;
+    overflow: hidden;
+
+    opacity: 0;
+    transform: translateY(-6px);
+
+    border-left: 2px solid rgba(255,255,255,.08);
+    padding-left: 1rem;
+
+    transition:
+        max-height .35s cubic-bezier(.4,0,.2,1),
+        opacity .25s ease,
+        transform .25s ease;
+}
+
+/* estado abierto */
+.menu-admin__item.activo > .menu-admin__submenu {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+.menu-admin__subitem .menu-admin__link {
+    font-size: 1.35rem;
+    opacity: .85;
+
+    padding-left: 2.8rem; // ← indentación visual
+
+    position: relative;
+
+    &:before {
+        content: "";
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.35);
+        transform: translateY(-50%);
+    }
+
+    &:hover {
+    background-color: rgba(255,255,255,.08);
+    transform: translateX(3px);
+    }
+}
+
+.menu-admin__list {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0 0;
+}
+
+.menu-admin__subitem {
+    list-style: none;
+}
+
+.admin.sidebar-collapsed {
+
+    .sidebar {
+        width: v.$sidebar-collapsed-width;
+    }
+
+    /* ocultar texto */
+    .menu-admin__link-texto {
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+        width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    /* centrar iconos */
+    .menu-admin__link {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+}
+.menu-admin__link-texto {
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+}
+.admin.sidebar-collapsed
+.menu-admin__link:hover
+.menu-admin__link-texto {
+
+    transform: translateY(-50%) translateX(8px);
+}
+// .menu-admin__text {
+//     transition: opacity .2s ease, transform .2s ease;
+// }
+.menu-admin__link {
+    position: relative;
+}
+// .menu-admin__link-texto {
+//     transition: opacity .2s ease;
+// }
+
+.sidebar__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1.5rem 1rem;
+}
+
+.sidebar__logo {
+    width: 36px;
+    height: 36px;
+}
+
+.sidebar__empresa {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ===============================
+   OVERLAY MOBILE
+================================= */
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+
+    z-index: 850;
+}
+
+/* sidebar visible */
+.admin.sidebar-open .sidebar {
+    transform: translateX(0);
+}
+
+/* overlay visible */
+.admin.sidebar-open .sidebar-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sidebar__close {
+    display: block;
+    margin-left: auto;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+
+    @include m.respond(desktop){
+        display: none;
+    }
+}
+
+/* oculto en desktop */
+@include m.respond(desktop){
+    .sidebar__mobile-close {
+        display: none;
+    }
+}
+
+
+/* ===============================
+   OVERLAY MOBILE
+================================ */
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity .25s ease;
+
+    z-index: 850;
+}
+
+/* visible */
+.admin.sidebar-open .sidebar-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* desktop nunca visible */
+@include m.respond(desktop){
+    .sidebar-overlay {
+        display: none;
+    }
+}

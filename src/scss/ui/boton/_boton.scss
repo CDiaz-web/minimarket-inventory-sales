@@ -1,0 +1,105 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+/* ===============================
+   BOTÓN BASE
+================================= */
+
+.boton {
+    @include m.flex(center, center);
+    @include m.transition;
+
+    border: none;
+    border-radius: .6rem;
+    font-weight: v.$font-bold;
+    cursor: pointer;
+
+    padding: 1.2rem 2.4rem;
+    font-size: 1.4rem;
+
+    background: var(--primary);
+    color: white;
+
+    &:hover {
+        filter: brightness(1.1);
+    }
+
+    &:disabled {
+        opacity: .6;
+        cursor: not-allowed;
+    }
+}
+/* ===============================
+   COLORES
+================================= */
+.boton--primary {
+    background: var(--primary);
+}
+.boton--primary-link {
+    background: var(--primary);
+    text-decoration: none;
+}
+.boton--success {
+    background: var(--success);
+}
+.boton--success-light {
+    background: var(--success-ligth);
+    text-decoration: none;
+}
+.boton--danger {
+    background: var(--danger);
+}
+.boton--filtrar {
+    background: var(--text-secondary);
+}
+.boton--danger-link {
+    background: var(--danger);
+    text-decoration: none;
+}
+
+.boton--warning {
+    background: var(--warning);
+}
+.boton--warning-link {
+    background: var(--warning);
+    text-decoration: none;
+}
+.boton--ambar {
+    background: var(--ambar);
+}
+.boton--sm {
+    padding: .6rem 1.2rem;
+    font-size: 1.2rem;
+}
+
+.boton--lg {
+    padding: 1.6rem 3rem;
+    font-size: 1.6rem;
+}
+/* ===============================
+   TAMAÑOS
+================================= */
+.boton--sm {
+    padding: .6rem 1.2rem;
+    font-size: 1.2rem;
+}
+
+.boton--lg {
+    padding: 1.6rem 3rem;
+    font-size: 1.6rem;
+}
+/* ===============================
+   BOTON MODAL
+================================= */
+.boton--modal {
+    width: 100%;
+
+    @include m.respond(tablet) {
+        width: auto;
+    }
+}
+.boton i {
+    pointer-events: none;
+}
+
+

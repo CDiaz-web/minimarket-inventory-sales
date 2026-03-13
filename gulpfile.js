@@ -1,6 +1,9 @@
-const { src, dest, watch, parallel } = require('gulp');
+const { src, dest, watch, parallel } = require('gulp');
 
-// CSS
+/* ===============================
+   CSS
+================================= */
+
 const sass = require('gulp-sass')(require('sass'));
 const plumber = require('gulp-plumber');
 const autoprefixer = require('autoprefixer');
@@ -8,96 +11,107 @@ const cssnano = require('cssnano');
 const postcss = require('gulp-postcss');
 const sourcemaps = require('gulp-sourcemaps');
 
-// Imagenes
+/* ===============================
+   IMÁGENES
+================================= */
+
 const cache = require('gulp-cache');
 const imagemin = require('gulp-imagemin');
 const webp = require('gulp-webp');
 const avif = require('gulp-avif');
 
-// Javascript
-const terser = require('gulp-terser-js');
-const concat = require('gulp-concat');
-const rename = require('gulp-rename');
-const axios = require('axios');
-const puppeteer = require('puppeteer');
+/* ===============================
+   JS
+================================= */
 
-//webpack
-const webpack = require('webpack-stream')
+const terser = require('gulp-terser');
+const rename = require('gulp-rename');
+const webpack = require('webpack-stream');
+
+/* ===============================
+   PATHS
+================================= */
 
 const paths = {
     scss: 'src/scss/**/*.scss',
-    js: 'src/js/**/*.js',
+    jsEntry: 'src/js/app.js',
+    jsWatch: 'src/js/**/*.js',
     imagenes: 'src/img/**/*'
-}
+};
+
+/* ===============================
+   CSS
+================================= */
+
 function css() {
-    return src(paths.scss)
-        .pipe( sourcemaps.init())
-        .pipe( sass({outputStyle: 'expanded'}))
-        // .pipe( postcss([autoprefixer(), cssnano()]))
-        .pipe( sourcemaps.write('.'))
-        .pipe(  dest('public/build/css') );
+    return src('src/scss/app.scss')
+        .pipe(plumber())
+        .pipe(sourcemaps.init())
+        .pipe(sass({ outputStyle: 'expanded' }))
+        .pipe(postcss([
+            autoprefixer(),
+            cssnano()
+        ]))
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest('public/build/css'));
 }
+
+/* ===============================
+   JAVASCRIPT
+================================= */
+
 function javascript() {
-    return src(paths.js)
-      .pipe( webpack({
-            module: {
-                rules: [
-                    {
-                        test:/\.css$/i,
-                        use: ['style-loader','css-loader']
-                    }
-                ]
-            },
+    return src(paths.jsEntry)
+        .pipe(plumber())
+        .pipe(webpack({
             mode: 'production',
-            watch: true,
-            entry: './src/js/app.js'
+            output: {
+                filename: 'app.js'
+            }
         }))
-      .pipe(sourcemaps.init())
-      //.pipe(concat('bundle.js')) 
-      .pipe(terser())
-      .pipe(sourcemaps.write('.'))
-      .pipe(rename({ suffix: '.min' }))
-      .pipe(dest('./public/build/js'))
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(terser())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest('public/build/js'));
 }
+
+/* ===============================
+   IMÁGENES
+================================= */
 
 function imagenes() {
     return src(paths.imagenes)
-        .pipe( cache(imagemin({ optimizationLevel: 3})))
-        .pipe( dest('public/build/img'))
+        .pipe(cache(imagemin({ optimizationLevel: 3 })))
+        .pipe(dest('public/build/img'));
 }
 
-function versionWebp( done ) {
-    const opciones = {
-        quality: 50
-    };
-    src('src/img/**/*.{png,jpg}')
-        .pipe( webp(opciones) )
-        .pipe( dest('public/build/img') )
-    done();
+function versionWebp() {
+    return src('src/img/**/*.{png,jpg}')
+        .pipe(webp({ quality: 50 }))
+        .pipe(dest('public/build/img'));
 }
 
-function versionAvif( done ) {
-    const opciones = {
-        quality: 50
-    };
-    src('src/img/**/*.{png,jpg}')
-        .pipe( avif(opciones) )
-        .pipe( dest('public/build/img') )
-    done();
+function versionAvif() {
+    return src('src/img/**/*.{png,jpg}')
+        .pipe(avif({ quality: 50 }))
+        .pipe(dest('public/build/img'));
 }
 
-function dev(done) {
-    watch( paths.scss, css );
-    watch( paths.js, javascript );
-    watch( paths.imagenes, imagenes)
-    watch( paths.imagenes, versionWebp)
-    watch( paths.imagenes, versionAvif)
-    done()
+/* ===============================
+   WATCH
+================================= */
+
+function dev() {
+    watch(paths.scss, css);
+    watch(paths.jsWatch, javascript);
+    watch(paths.imagenes, parallel(imagenes, versionWebp, versionAvif));
 }
+
+/* ===============================
+   EXPORTS
+================================= */
 
 exports.css = css;
 exports.js = javascript;
-exports.imagenes = imagenes;
-exports.versionWebp = versionWebp;
-exports.versionAvif = versionAvif;
-exports.dev = parallel( css, imagenes, versionWebp, versionAvif, javascript, dev) ;
+exports.dev = parallel(css, javascript, imagenes, versionWebp, versionAvif, dev);

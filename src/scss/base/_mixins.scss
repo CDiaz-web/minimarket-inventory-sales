@@ -1,76 +1,67 @@
 @use 'variables' as v;
 @use "sass:color";
-/** Media Queries **/
-@mixin telefono {
-    @media (min-width: v.$telefono) {
-        @content;
-    }
-}
-@mixin tablet {
-    @media (min-width: v.$tablet) {
-        @content;
-    }
-}
-@mixin desktop {
-    @media (min-width: v.$desktop) {
-        @content;
-    }
-}
-@mixin xl_desktop {
-    @media (min-width: v.$xl_desktop) {
-        @content;
-    }
-}
-@mixin xxl_desktop {
-    @media (min-width: v.$xxl_desktop) {
-        @content;
-    }
-}
-@mixin boton($bgColor, $colorTexto) {
-    background-color: $bgColor;
-    padding: 1.5rem 4rem;
-    color: $colorTexto;
-    font-size: 1.8rem;
-    font-weight: 700;
-    border: none;   
-    transition-property: background-color;
-    transition-duration: .3s;
-    text-align: center;
-    width: 100%;
-    display: inline-block;
+@use "sass:map";
 
-    &:hover {  
-        background-color: color.adjust($bgColor, $lightness: 10%);
-        cursor: pointer;
+/** =============================
+   BREAKPOINTS
+============================= */
+
+$breakpoints: (
+    telefono: v.$bp-telefono,
+    tablet: v.$bp-tablet,
+    desktop: v.$bp-desktop,
+    xl: v.$bp-xl
+);
+
+@mixin respond($bp) {
+    @media (min-width: map.get($breakpoints, $bp)) {
+        @content;
     }
 }
 
-@mixin boton_modal($bgColor, $colorTexto) {
-    background-color: $bgColor;
-    padding: 1.5rem 4rem;
-    color: $colorTexto;
-    font-size: 1.6rem;
-    display: inline-block;
-    font-weight: 700;
+@mixin scroll-y($max-height: 70vh) {
+    max-height: $max-height;
+    overflow-y: auto;
+}
+
+
+@mixin boton($bg, $color, $size: normal) {
+
+    background-color: $bg;
+    color: $color;
     border: none;
-    transition-property: background-color;
-    transition-duration: .3s;
+    font-weight: v.$font-bold;
+    transition: .3s;
+    display: inline-block;
     text-align: center;
-    display: block;
-    width: 100%;
-    @include tablet {
-        width: auto;
+
+    @if $size == normal {
+        padding: 1.5rem 4rem;
+        font-size: 1.8rem;
+        width: 100%;
     }
+
+    @if $size == modal {
+        padding: 1.5rem 4rem;
+        font-size: 1.6rem;
+        width: 100%;
+
+        @include respond(tablet){
+            width: auto;
+        }
+    }
+
     &:hover {
-        background-color: color.adjust($bgColor, $lightness: 10%);
+        background-color: color.adjust($bg, $lightness: 10%);
         cursor: pointer;
     }
 }
 
-@mixin grid($columnas, $espaciado ) {
+
+@mixin grid-auto($min, $gap: 2rem){
     display: grid;
-    gap: $espaciado;
-    grid-template-columns: repeat($columnas, 1fr);
+    gap: $gap;
+    grid-template-columns: repeat(auto-fit, minmax($min, 1fr));
 }
 
 
@@ -89,7 +80,7 @@
 
 @mixin headings{
     font-family: v.$fuente_principal;
-    font-weight: v.$black;
+    font-weight: v.$font-black;
     margin: 2rem 0;
 }
 
@@ -102,8 +93,8 @@
 @mixin descripcion-pagina{    
     text-align: center;
     font-size: 1.8rem;
-    font-weight: v.$delgada;
-    color: v.$gris-oscuro;
+    font-weight: v.$font-delgada;
+    color: v.$color-gris-oscuro;
     margin-bottom: 3rem;
 }
 
@@ -117,11 +108,11 @@
 }
 
 @mixin logo{
-    color: v.$blanco;
+    color: v.$color-blanco;
     text-align: center;
     // margin-bottom: 2rem;
     white-space: nowrap;
-    @include tablet{
+    @include respond(tablet) {
         text-align: left;
         margin: 0;
     }
@@ -136,7 +127,7 @@
             font-style: normal;
             text-rendering: auto;
             -webkit-font-smoothing: antialiased;
-            font-family: "FOnt Awesome 6 Brands";
+            font-family: "Font Awesome 6 Brands";
         }
 
         &[href*="facebook.com"]::before {
@@ -167,12 +158,12 @@
 
 @mixin enlace{
     all: unset;
-    color: v.$blanco;
+    color: v.$color-blanco;
     font-size: 1.4rem;
     text-transform: uppercase;
-    font-weight: v.$bold;    
+    font-weight: v.$font-bold;    
     &:hover{
-        color: v.$azul;
+        color: v.$color-azul;
         cursor: pointer;
     }
 }
@@ -182,9 +173,9 @@
     color: v.$black;
     font-size: 1.4rem;
     text-transform: uppercase;
-    font-weight: v.$bold;    
+    font-weight: v.$font-bold;    
     &:hover{
-        color: v.$rojo;
+        color: v.$color-rojo;
         cursor: pointer;
     }
 }
@@ -212,20 +203,20 @@
     gap: 1.5rem;
     margin-top: 1.5rem;
     >li{
-        background-color: v.$azul;
+        background-color: v.$color-azul;
         padding: 1rem;
         border-radius: .5rem;
         font-size: 1.4rem;
-        font-weight: v.$bold;
-        color: v.$blanco;
+        font-weight: v.$font-bold;
+        color: v.$color-blanco;
     }
 }
 
 @mixin card{    
-    border: 1px solid color.adjust(v.$gris, $lightness: 10%);
+    border: 1px solid color.adjust(v.$color-gris, $lightness: 10%);
     padding: 1rem;
     &__nombre{
-        font-weight: v.$black;
+        font-weight: v.$font-black;
         font-size: 2.6rem;
         margin: 1rem 0;
     }
@@ -236,36 +227,47 @@
 
 @mixin enlace_logout{
     all: unset;
-    color: color.adjust(v.$rojo, $lightness: 10%);
+    color: color.adjust(v.$color-rojo, $lightness: 10%);
     font-size: 1.1rem;
     text-transform: uppercase;
-    font-weight: v.$bold;    
+    font-weight: v.$font-bold;    
     &:hover{    
-        color: v.$rojo;
+        color: v.$color-rojo;
         cursor: pointer;
     }
 }
 @mixin enlace_empresa{
     all: unset;
-    color: v.$blanco;    
+    color: v.$color-blanco;    
     font-size: 1.1rem;
     text-transform: uppercase;
-    font-weight: v.$bold;    
+    font-weight: v.$font-bold;    
     &:hover{    
-        color: v.$verde;
+        color: v.$color-verde;
         cursor: pointer;
     }
 }
 
 @mixin enlace_menu{
     all: unset; 
-    color:  color.adjust(v.$gris-oscuro, $lightness: 40%);
+    color:  color.adjust(v.$color-gris-oscuro, $lightness: 40%);
     font-size: 1.1rem;
     text-transform: uppercase;
-    font-weight: v.$bold;    
+    font-weight: v.$font-bold;    
     padding: .5rem;
     &:hover{    
-        color: v.$azul;
+        color: v.$color-azul;
         cursor: pointer;
     }
+}
+
+@mixin flex($justify: center, $align: center, $gap: 0){
+    display: flex;
+    align-items: $align;
+    justify-content: $justify;    
+    gap: $gap;
+} 
+
+@mixin transition($prop: all){
+    transition: $prop .3s ease;
 }

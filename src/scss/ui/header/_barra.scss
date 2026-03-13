@@ -1,20 +1,25 @@
 @use 'base/variables' as v;
 @use 'base/mixins' as m;
 
-.barra{
-    background-color: v.$azul;
-    &__contenido{
+.barra {
+    background-color: v.$primary;
+    color: v.$color-blanco;
+
+    padding: 1.2rem 0;
+
+    &__contenido {
         @include m.contenedor;
-        display: flex;
+        @include m.flex(space-between, center, 1rem);
+
         flex-direction: column;
-        @include m.tablet{
+
+        @include m.respond(tablet) {
             flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
         }
     }
-    &__logo{
+
+    &__logo {
         @include m.logo;
-        @include m.texto-fluido(2rem,3rem);
+        @include m.texto-fluido(2rem, 3rem);
     }
 }
