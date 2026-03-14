@@ -7,8 +7,9 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
-    git \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    git
+
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql zip
 
 RUN a2enmod rewrite
@@ -17,4 +18,4 @@ COPY . /var/www/html/
 
 WORKDIR /var/www/html
 
-EXPOSE 80
+CMD ["apache2-foreground"]
