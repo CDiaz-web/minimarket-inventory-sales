@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     git
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql zip
+    && docker-php-ext-install gd mysqli pdo pdo_mysql zip
 
 WORKDIR /app
 
@@ -19,4 +19,6 @@ COPY . .
 EXPOSE 8080
 
 CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
+
+
 
