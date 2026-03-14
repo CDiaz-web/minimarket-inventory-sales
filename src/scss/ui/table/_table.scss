@@ -348,39 +348,11 @@ tbody tr:nth-child(even) {
 //     width:10rem;
 // }
 
-#tabla-detalle{
-    width:100%;
-    table-layout:fixed;
-}
 
-#tabla-detalle th:nth-child(1),
-#tabla-detalle td:nth-child(1){
-    width:50%;
-}
 
-#tabla-detalle th:nth-child(2),
-#tabla-detalle td:nth-child(2){
-    width:15%;
-}
-
-#tabla-detalle th:nth-child(3),
-#tabla-detalle td:nth-child(3){
-    width:15%;
-}
-
-#tabla-detalle th:nth-child(4),
-#tabla-detalle td:nth-child(4){
-    width:15%;
-}
-
-#tabla-detalle th:nth-child(5),
-#tabla-detalle td:nth-child(5){
-    width:5%;
-}
-
-.select-producto,
-.unidad,
-.cantidad,
+.select-producto1,
+.unidad1,
+.cantidad1,
 .costo-unitario{
     width:100%;
     box-sizing:border-box;

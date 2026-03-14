@@ -48,7 +48,7 @@ class UsuariosController {
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
     
        
             //leer imagen      
@@ -122,7 +122,7 @@ class UsuariosController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             
             
             $validar = $usuario->password;
@@ -157,7 +157,7 @@ class UsuariosController {
         if(!is_admin()){
             header('Location: /login');
         }
-        $valor = [$_SESSION['empresa']];  
+        $valor = [$_SESSION['idempresa']];  
         $alertas = [];    
         // $productos = Productos::all('ASC');
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);  

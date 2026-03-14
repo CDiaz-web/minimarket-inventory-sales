@@ -95,7 +95,6 @@ export function initUsuariosTiendas() {
         }
     }
 
-
     /* ==========================
        ELIMINAR TIENDA ASIGNADA
     ========================== */
@@ -112,7 +111,7 @@ export function initUsuariosTiendas() {
 
         const confirmar = confirm("¿Deseas eliminar esta tienda asignada?");
         if (!confirmar) return;
-
+        
         try {
             const res = await fetch(
                 "/admin/seguridad/usuarios/eliminartienda",

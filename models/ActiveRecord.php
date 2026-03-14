@@ -328,8 +328,7 @@ public function sanitizarAtributos(): array {
         $variables = implode(',', $parts);
 
         try {
-            $query = "CALL {$nombre}({$variables})";
-            debuguear($query);
+            $query = "CALL {$nombre}({$variables})";       
             $resultado = self::$db->query($query);
             return $resultado;
         } catch (\mysqli_sql_exception $e) {

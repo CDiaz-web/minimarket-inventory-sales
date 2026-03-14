@@ -62,11 +62,8 @@ export function initProductosVenta(){
 
 export function cargarProductosPorLista(idLista){
 
-    if(!idLista) return;
-   
-    // if(App.ventas.idlista === idLista && productosCache.length > 0){
-    //     return;
-    // }
+    if(!idLista) return;   
+
     if(App.ventas.idlista !== idLista){
         productosCache = [];
     }

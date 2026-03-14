@@ -51,16 +51,16 @@ export function initInventarios() {
 
             nuevaFila.innerHTML = `
                 <td>
-                    <select name="detalle[${index}][idproducto]" class="formulario__input select-producto" required>
+                    <select name="detalle[${index}][idproducto]" class="formulario__input select-producto1" required>
                         <option value="">-- Seleccionar --</option>
                         ${window.productosOptions}
                     </select>
                 </td>
                 <td>
-                    <input type="text" class="formulario__input unidad" readonly>
+                    <input type="text" class="formulario__input unidad1" readonly>
                 </td>
                 <td>
-                    <input type="number" class="formulario__input cantidad" step="0.01" name="detalle[${index}][cantidad]" required>
+                    <input type="number" class="formulario__input cantidad1" step="0.01" name="detalle[${index}][cantidad]" required>
                 </td>
                 <td>
                     <input type="number" step="0.01" name="detalle[${index}][costo_unitario]" class="formulario__input costo-unitario" ${esCompra ? "" : "disabled"}>
@@ -94,12 +94,12 @@ export function initInventarios() {
     // ===============================
     tablaDetalle.addEventListener("change", (e) => {
 
-        if (e.target.classList.contains("select-producto")) {
+        if (e.target.classList.contains("select-producto1")) {
 
             const selectedOption = e.target.options[e.target.selectedIndex];
-            const unidad = selectedOption.dataset.unidad || "";
+            const unidad1 = selectedOption.dataset.unidad || "";
 
-            e.target.closest("tr").querySelector(".unidad").value = unidad;
+            e.target.closest("tr").querySelector(".unidad1").value = unidad1;
 
         }
 
