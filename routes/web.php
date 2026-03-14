@@ -28,6 +28,12 @@ use Controllers\UsuariosController;
 
 
 //========== AUTENTICACION
+//===== RUTA PRINCIPAL
+$router->get('/', function(){
+    header('Location: /login');
+    exit;
+});
+
 //===== LOGIN
 $router->get('/login', [AuthController::class, 'login']);
 $router->post('/login', [AuthController::class, 'login']);
