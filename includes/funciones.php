@@ -17,14 +17,18 @@ function pagina_actual($path) : bool{
 
 function is_auth() : bool{
     if(!isset($_SESSION)){
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }    
     return isset($_SESSION['nombre']) && !empty($_SESSION);
 }
 
 function is_admin() : bool{
     if(!isset($_SESSION)){
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     } 
     return isset($_SESSION['admin']) && !empty($_SESSION['admin']);
 }

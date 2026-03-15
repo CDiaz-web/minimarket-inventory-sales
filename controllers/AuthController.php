@@ -81,7 +81,9 @@ class AuthController {
 
     public static function logout() {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
-            session_start();
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
             $_SESSION = [];
             session_destroy();
             setcookie(session_name(), '', time() - 3600, '/'); // elimina cookie            

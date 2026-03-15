@@ -35,7 +35,9 @@ class EligeTiendaController{
                 
                 
                 
-                session_start();    
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
                 $_SESSION['idtienda'] =  $idtienda ;
                 $_SESSION['tienda'] = $tienda->nombre;     
                 header('Location: /admin' . $opcion->vista);                    

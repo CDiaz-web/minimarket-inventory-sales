@@ -44,7 +44,9 @@ class OrdenVentaController {
 
     public static function validarTipoCambio() {
 
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         
         $fecha = $_POST['fecha'] ?? null;
         $idMoneda = $_POST['idMoneda'] ?? null;
