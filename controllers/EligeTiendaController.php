@@ -30,8 +30,8 @@ class EligeTiendaController{
                             
                 $idtienda = $_POST['idtienda'];         
                 $tienda = Tiendas::find($idtienda);  
-                $perfil =Perfiles::find($_SESSION['idperfil']);         
-                $opcion =Opciones::find($perfil->inicial);
+                $perfiles =Perfiles::find($_SESSION['idperfil']);         
+                $opcion =Opciones::find($perfiles->inicial);
                 
                 
                 

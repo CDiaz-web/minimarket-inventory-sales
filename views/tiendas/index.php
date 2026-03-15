@@ -12,7 +12,7 @@
             </p>
 
             <p class="user-context__meta">
-                <?= $empresa ?> · <?= $perfil->nombre ?>
+                <?= $empresa ?> · <?= $perfil ?>
             </p>
 
         </div>
