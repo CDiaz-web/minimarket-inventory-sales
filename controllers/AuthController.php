@@ -51,7 +51,9 @@ class AuthController {
 
     private static function iniciarSesion($usuario)
     {
+    if (session_status() === PHP_SESSION_NONE) {
         session_start();
+    }
         session_regenerate_id(true);
 
         $empresa = Empresa::where('id', $usuario->idempresa,true);
