@@ -11,7 +11,7 @@
             <i class="fa-solid fa-business-time sidebar__logo"></i>  
             <!-- <img src="<?= $logo ?>" class="sidebar__logo"> -->
             <span class="sidebar__empresa">
-                <?php echo $_SESSION['idempresa']; ?>
+                <?php echo $_SESSION['empresa']; ?>
             </span>
 
         </div>

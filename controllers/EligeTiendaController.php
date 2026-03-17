@@ -23,7 +23,7 @@ class EligeTiendaController{
             $valores = [$id]; 
 
             $perfil = $_SESSION['perfil']; 
-            $empresa = $_SESSION['idempresa']; 
+            $empresa = $_SESSION['empresa']; 
             $usuario = $_SESSION['nombre'] ." " . $_SESSION['apellido']  ;
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
          
