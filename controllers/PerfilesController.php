@@ -51,7 +51,7 @@ class PerfilesController {
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             //leer imagen      
             $perfil->sincronizar($_POST);
             //validar
@@ -111,7 +111,7 @@ class PerfilesController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             $perfil->sincronizar($_POST);
 
             $alertas = $perfil->validar();
@@ -162,7 +162,7 @@ class PerfilesController {
             }  
         
             $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-            $perfiles = Perfiles::where('idempresa',$_SESSION['empresa'],false);
+            $perfiles = Perfiles::where('idempresa',$_SESSION['idempresa'],false);
             $router ->render('admin/seguridad/perfiles/index',[
                 'titulo' => 'Perfiles',
                 'perfiles'=>$perfiles,

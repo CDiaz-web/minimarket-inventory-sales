@@ -50,7 +50,7 @@ class ListasController {
                 header('Location: /login');
             }     
             $busca = Listas::where('codigo', $_POST['codigo'],false);       
-            $_POST['idempresa'] = $_SESSION['empresa'];
+            $_POST['idempresa'] = $_SESSION['idempresa'];
             // //agregamos informacion de auditoria al $_post
             date_default_timezone_set('America/Lima');
             $_POST['idusercrea']=$_SESSION['id'];
@@ -160,7 +160,7 @@ class ListasController {
                 $alertas['error'][] = 'Existe clientes con la lista de precios que desea eliminar';
             }else{             
            
-            $idempresa = $_SESSION['empresa'];
+            $idempresa = $_SESSION['idempresa'];
             //eliminamos lo anterior
             $valores = [$idempresa,$id];  
                 $resultado = $lista->procedureMantenimiento('prm_elimina_lista_precios',$valores);        
@@ -169,7 +169,7 @@ class ListasController {
                 }    
             }
                 $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-                $listas = Listas::where('idempresa',$_SESSION['empresa'],false);
+                $listas = Listas::where('idempresa',$_SESSION['idempresa'],false);
                 $router ->render('admin/mantenimiento/listas/index',[
                     'titulo' => 'Lista de Precios',
                     'listas'=>$listas,
@@ -376,7 +376,7 @@ class ListasController {
         
                     $datosFila = [];
                     $index = 0;
-                    $datosFila['idempresa'] = $_SESSION['empresa'];  
+                    $datosFila['idempresa'] = $_SESSION['idempresa'];  
                     $datosFila['idlista'] = (int)$id;
                     foreach ($cellIterator as $cell) {
                         $valorCelda = $cell->getValue();
