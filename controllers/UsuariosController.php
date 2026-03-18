@@ -49,7 +49,7 @@ class UsuariosController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
-    
+            $_POST['confirmado'] = '1';
        
             //leer imagen      
             $usuario->sincronizar($_POST);
@@ -123,10 +123,10 @@ class UsuariosController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
-            
+            $_POST['confirmado'] = '1';
             
             $validar = $usuario->password;
-
+            
             $usuario->sincronizar($_POST);
             $alertas = $usuario->validar();
             $alertas = $usuario->validar_cuenta();
