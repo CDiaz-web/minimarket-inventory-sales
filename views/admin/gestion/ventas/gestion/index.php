@@ -102,7 +102,7 @@
                                     <button 
                                         class="boton boton--success-light  btn-aprobar"
                                         data-id="<?= $orden->id ?>"
-                                        data-estado="<?= $orden->idestado ?>">
+                                        data-estado="<?= $orden->estado ?>">
                                         <i class="fa-solid fa-check"></i>
                                     </button>
 

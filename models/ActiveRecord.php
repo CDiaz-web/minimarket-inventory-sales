@@ -30,11 +30,10 @@ class ActiveRecord {
     }
 
     public static function consultarSQL($query) {
-        // Ejecutar la consulta
+      
         
-        $resultado = self::$db->query($query);
-        
-        // Inicializar array para almacenar resultados
+        $resultado = self::$db->query($query);       
+      
         $array = [];
     
         // Verificar si hay resultados
@@ -67,7 +66,12 @@ class ActiveRecord {
 
         foreach($registro as $key => $value ) {
             if(property_exists( $objeto, $key  )) {
-                $objeto->$key = $value;
+                // $objeto->$key = $value;
+                if(is_null($value)) {
+                    $objeto->$key = null;
+                } else {
+                    $objeto->$key = $value;
+                }
             }
         }
         return $objeto;
@@ -279,10 +283,18 @@ public function sanitizarAtributos(): array {
 
     // Busca un registro por su id
     public static function find($id) {
-        $query = "SELECT * FROM " . static::$tabla  ." WHERE id = {$id}";   
-        
-        $resultado = self::consultarSQL($query);        
-        return array_shift( $resultado ) ;
+
+        $id = intval($id);
+
+        $query = "SELECT * FROM " . static::$tabla . " WHERE id = {$id} LIMIT 1";
+
+        $resultado = self::consultarSQL($query);
+
+        if(empty($resultado)){
+            return null;
+        }
+
+        return $resultado[0];
     }
 
 

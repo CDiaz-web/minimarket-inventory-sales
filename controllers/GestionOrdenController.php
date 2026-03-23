@@ -64,10 +64,23 @@ class GestionOrdenController {
                 throw new \Exception('Sesión no válida');
             }
 
+            
+
             $idOrden = intval($data['id']);
             $estado  = intval($data['estado']);
 
-            // 👉 Si es anulación y manejas motivo
+            $buscar = OrdenVenta::find($idOrden);
+
+            if($buscar->idestado === '2'){
+                echo json_encode([
+                    'error' => true,
+                    'mensaje' => 'No se puede modificar una orden anulada'
+                ]);
+                return;
+            }
+
+
+            // Si es anulación y manejas motivo
             $idMotivo = $data['idmotivo'] ?? null;
 
             // Llamar SP

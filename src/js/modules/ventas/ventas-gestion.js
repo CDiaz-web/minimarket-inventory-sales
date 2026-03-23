@@ -18,9 +18,16 @@ function manejarAprobacion(){
 
         const boton = e.target.closest('.btn-aprobar');
         if(!boton) return;
-
+        const estadoActual = boton.dataset.estado;
+        if(estadoActual === 'ANU'){
+            Swal.fire({
+                icon:'error',
+                title:'La Orden se encuentra anulada'
+            });
+            return;
+        }
         const idOrden = boton.dataset.id;
-
+   
         Swal.fire({
             icon:'question',
             title:'¿Aprobar orden?',
@@ -55,6 +62,14 @@ function manejarAnulacion(){
 
         const idOrden = boton.dataset.id;
         const estadoActual = boton.dataset.estado;
+
+        if(estadoActual === 'ANU'){
+            Swal.fire({
+                icon:'error',
+                title:'La Orden se encuentra anulada'
+            });
+            return;
+        }
 
         if(estadoActual === 'APR'){
 

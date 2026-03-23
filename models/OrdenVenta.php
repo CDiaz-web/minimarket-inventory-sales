@@ -7,7 +7,7 @@ class OrdenVenta extends ActiveRecord {
     protected static $columnasDB = ['id','idcarrito','numero','idcliente','idtienda','idlista','idtipopago','idmoneda','fecha','observacion','tipo_cambio','tipo_cambio_mercado','subtotal','impuesto','total','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;
-    public int $idcarrito = 0;
+    public ?int $idcarrito = null;
     public string $numero = '';
     public int $idcliente = 0;
     public int $idtienda = 0;
