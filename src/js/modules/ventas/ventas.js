@@ -30,6 +30,7 @@ export function initVentas(){
     const inputLista = document.getElementById('buscarLista');
     const inputCliente = document.getElementById('buscarCliente');
     const inputProductos = document.getElementById('buscarProducto'); 
+  
 
     // ======================
     // MODULO POS / VENTAS

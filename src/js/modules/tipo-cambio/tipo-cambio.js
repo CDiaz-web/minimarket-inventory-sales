@@ -5,7 +5,7 @@ export function initTipoCambio() {
     const fechaInput = document.getElementById("fecha");
     const btnSunat = document.getElementById("btnTraerSunat");
 
-    if (!btnSunat) return;
+   
 
     const compraInput = document.getElementById("compra_oficial");
     const ventaInput = document.getElementById("venta_oficial");
@@ -13,7 +13,7 @@ export function initTipoCambio() {
     const compraMercado = document.getElementById("compra_mercado");
     const ventaMercado = document.getElementById("venta_mercado");
 
-    
+    if (!btnSunat || !fechaInput || !compraInput || !ventaInput || !compraMercado || !ventaMercado) return;
 
     btnSunat.addEventListener("click", async () => {
 

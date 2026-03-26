@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 
 const tablaBody = () => document.querySelector('#tablaArticulos tbody');
 
+
+
 // ======================
 // AGREGAR PRODUCTO
 // ======================

@@ -6,6 +6,8 @@ use Model\Empresa;
 use Model\Monedas;
 use Model\Usuario;
 use Model\Perfiles;
+use Model\UsuariosTiendas;
+use Model\Opciones;
 use MVC\Router;
 
 class AuthController { 
@@ -24,8 +26,7 @@ class AuthController {
             $alertas = $usuarioTmp->validarLogin();
 
             if (empty($alertas)) {
-                $usuario = Usuario::where('email', $usuarioTmp->email,true);
-                // debuguear($usuario);        
+                $usuario = Usuario::where('email', $usuarioTmp->email,true);                
                 if (!$usuario || !$usuario->confirmado) {
                     Usuario::setAlerta('error', 'El Usuario no existe o no está confirmado');
                 } elseif (!password_verify($datos['password'], $usuario->password)) {
@@ -35,8 +36,22 @@ class AuthController {
                 } else {
                     // Inicia sesión
                     self::iniciarSesion($usuario);
-                    header('Location: /tiendas');
-                    exit;
+                    $valores = [$_SESSION['id']]; 
+                    $tiendas = UsuariosTiendas::procedureLista('prc_ListaTiendasUsuario',$valores);
+                    
+                    if (count($tiendas) === 0) {
+                        Usuario::setAlerta('error', 'Usuario no tiene tiendas Asignadas');
+                    } elseif (count($tiendas) === 1) {         
+                        $perfiles =Perfiles::find($_SESSION['idperfil']);            
+                        $opcion =Opciones::find($perfiles->inicial);
+                        $_SESSION['idtienda'] =  $tiendas[0]->idtienda;
+                        $_SESSION['tienda'] = $tiendas[0]->tienda;     
+                        header('Location: /admin' . $opcion->vista);    
+                    } else {
+                        header('Location: /tiendas');
+                        exit;
+                    }                    
+
                 }
             }
         }

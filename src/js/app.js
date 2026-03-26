@@ -19,6 +19,7 @@ import { initTipoCambio } from "./modules/tipo-cambio/tipo-cambio.js";
 import { initVentas } from "./modules/ventas/ventas.js";
 import { initInventarios } from "./modules/inventarios/movimientos.js";
 import { initImprimeInventario } from "./modules/inventarios/inventario-imprimir.js";
+import { initProductosTienda } from "./modules/tiendas/productos-tienda.js";
 // ==========================
 // APP BOOTSTRAP
 // ==========================
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initVentas(); 
     initInventarios();
     initImprimeInventario();
+    initProductosTienda();
     App.events = events;
     App.events.init();
 

@@ -17,7 +17,7 @@
         <select class="formulario__select" id="inicial" name ="inicial">
         <option value="" >-Seleccionar-</option>
             <?php foreach($opciones as $opcion) { ?>
-                <option <?php echo ($perfil->inicial === $opcion->id) ? 'selected' : '' ; ?> value="<?php echo $opcion->id; ?>" > <?php echo $opcion->nombre; ?> </option>
+                <option <?php echo ($perfil->inicial == $opcion->id) ? 'selected' : '' ; ?> value="<?php echo $opcion->id; ?>" > <?php echo $opcion->nombre; ?> </option>
             <?php }?> 
         </select>
     </div>

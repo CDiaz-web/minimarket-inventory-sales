@@ -36,15 +36,21 @@ async function abrirModal(button) {
 
     const modal = document.getElementById('cardModal');
 
+    if (!modal) return;
+
     // 🔥 asegura que nunca muera
     if (modal.parentElement !== document.body) {
         document.body.appendChild(modal);
     }
 
     const modalTitle = document.getElementById('cardModalTitle');
+    if (!modalTitle) return;
     const table = modal.querySelector('#cardModalTable');
+    if (!table) return;
     const thead = table.querySelector('thead');
+    if (!thead) return;
     const tbody = table.querySelector('tbody');
+    if (!tbody) return;
 
     modalTitle.textContent = button.dataset.title;
     modal.dataset.endpoint = button.dataset.endpoint;
@@ -126,6 +132,8 @@ function construirBody(tbody, data, columns) {
 function resetCardModal() {
 
     const modal = document.getElementById('cardModal');
+
+    if (!modal) return;
 
     const table = modal.querySelector('#cardModalTable');
     const thead = table.querySelector('thead');

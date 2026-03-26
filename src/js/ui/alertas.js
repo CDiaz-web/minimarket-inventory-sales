@@ -2,7 +2,7 @@
 export function iniciarAlertas() {
 
     const alertas = document.querySelectorAll(".alerta");
-
+    if (!alertas) return;
     alertas.forEach(alerta => {
 
         setTimeout(() => {

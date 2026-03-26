@@ -34,7 +34,7 @@ class UsuariosController {
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $alertas = [];
         $usuario = new Usuario;
-        $perfiles = Perfiles::all('ASC');
+        $perfiles = Perfiles::all('ASC');        
         $estados = Estados::where('idmaster','3',false);
         $usuario->idestado = 9; //  Activo por defecto 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -112,6 +112,7 @@ class UsuariosController {
             header('Location: /admin/seguridad/usuarios');
         }   
         $perfiles = Perfiles::all('ASC');
+
         $estados = Estados::where('idmaster','3',false);
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){

@@ -2,7 +2,7 @@ export function iniciarSidebar() {
 
     const admin = document.querySelector('.admin');
     const btnSidebar = document.getElementById('btnSidebarDesktop');
-     if (!admin) return;
+     if (!admin || !btnSidebar) return;
     /* ==========================
        SUBMENUS (ACORDEON)
     ========================== */
@@ -74,7 +74,7 @@ export function iniciarSidebar() {
     ========================== */
 
     const btnMobile = document.getElementById('btnSidebarMobile');
-
+    if (!btnMobile) return;
     btnMobile?.addEventListener('click', () => {
         admin.classList.add('sidebar-open');
     });
@@ -85,7 +85,7 @@ export function iniciarSidebar() {
     ========================== */
 
     const btnClose = document.getElementById('btnSidebarClose');
-
+    if (!btnClose) return;
     btnClose?.addEventListener('click', () => {
         admin.classList.remove('sidebar-open');
     });

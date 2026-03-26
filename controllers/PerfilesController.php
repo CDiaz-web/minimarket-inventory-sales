@@ -34,12 +34,14 @@ class PerfilesController {
         if(!is_admin()){
             header('Location: /login');
         }
+
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $alertas = [];
         $perfil = new Perfiles;       
            
         $estados = Estados::where('idmaster','3',false);
-        $perfil->idestado = 9; //  Activo por defecto          
+        $perfil->idestado = 9; //  Activo por defecto   
+        
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
@@ -97,6 +99,7 @@ class PerfilesController {
             header('Location: /admin/seguridad/perfiles');
         }       
         $perfil = Perfiles::find($id);
+          
         if(!$perfil){
             header('Location: /admin/seguridad/perfiles');
         }          

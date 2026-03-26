@@ -8,7 +8,7 @@ class ModalManager {
             console.warn('appModal no encontrado');
             return;
         }
-        this.title = this.modal.querySelector('.modal__title');
+        this.title = this.modal.querySelector('.modal__title');     
         this.body = this.modal.querySelector('.modal__body');
         this.footer = this.modal.querySelector('.modal__footer');
         this.btnClose = this.modal.querySelector('.modal__close');

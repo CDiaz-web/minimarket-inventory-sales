@@ -27,7 +27,7 @@ export const events = {
             return;
         }
 
-        // ⚠️ prevenir SOLO cuando realmente manejamos la acción
+        // prevenir SOLO cuando realmente manejamos la acción
         if (el.matches('a, button, input[type="submit"]')) {
             e.preventDefault();
         }

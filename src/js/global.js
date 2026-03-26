@@ -1,1 +1,0 @@
-var articulosSeleccionados = []; // Variable global para almacenar artículos
