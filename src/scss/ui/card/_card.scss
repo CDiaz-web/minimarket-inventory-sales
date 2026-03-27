@@ -73,8 +73,14 @@
 }
 
 .dashboard-card__extra {
-    font-size: 1.2rem;
-    color: v.$success;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+    margin-top: .5rem;
+    // color: v.$success;
 }
 
 /* TOP (ICONO + TITULO) */
@@ -101,25 +107,17 @@
 }
 
 
-// /* BOTON MEJORADO */
-// .dashboard-card__btn {
-//     margin-top: auto;
-//     background: none;
-//     border: none;
-//     padding: 0;
-//     font-size: 1.3rem;
-//     font-weight: v.$font-bold;
-//     color: v.$primary;
-//     cursor: pointer;
+/* POSITIVO */
+.dashboard-card__extra.positivo {
+    color: v.$success;
+}
 
-//     display: flex;
-//     align-items: center;
-//     gap: .5rem;
+/* NEGATIVO */
+.dashboard-card__extra.negativo {
+    color: v.$danger;
+}
 
-//     transition: all .2s ease;
-
-//     &:hover {
-//         gap: 1rem;
-//         text-decoration: underline;
-//     }
-// }
+/* NEUTRO */
+.dashboard-card__extra.neutro {
+    color: v.$text-secondary;
+}

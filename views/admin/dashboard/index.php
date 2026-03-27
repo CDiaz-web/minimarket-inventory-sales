@@ -1,4 +1,43 @@
+<?php
 
+function generarIndicador($actual, $anterior, $comparacion = 'vs anterior') {
+
+    if ($anterior == 0) {
+        return [
+            'clase' => 'positivo',
+            'icono' => 'fa-arrow-up',
+            'texto' => '+100% ' . $comparacion
+        ];
+    }
+
+    $variacion = (($actual - $anterior) / $anterior) * 100;
+
+    if ($variacion > 0) {
+        return [
+            'clase' => 'positivo',
+            'icono' => 'fa-arrow-up',
+            'texto' => '+' . round($variacion, 1) . '% ' . $comparacion
+        ];
+    } elseif ($variacion < 0) {
+        return [
+            'clase' => 'negativo',
+            'icono' => 'fa-arrow-down',
+            'texto' => round($variacion, 1) . '% ' . $comparacion
+        ];
+    } else {
+        return [
+            'clase' => 'neutro',
+            'icono' => 'fa-minus',
+            'texto' => '0% sin cambios'
+        ];
+    }
+}
+
+$indicadorDia = generarIndicador($cards->ventasHoy, $cards->ventasAyer, 'vs ayer');
+
+$indicadorMes = generarIndicador($cards->ventasMes, $cards->ventasMesAnterior, 'vs mes anterior');
+
+?>
 
 <h2 class="dashboard__heading"><?php echo $titulo; ?></h2>
 
@@ -22,6 +61,10 @@
             <span class="dashboard-card__valor">
                 <?php echo $simbolo_moneda ." ".  number_format($cards->ventasHoy, 2, '.', ',');?>
             </span>
+            <span class="dashboard-card__extra <?php echo $indicadorDia['clase']; ?>">
+                <i class="fa-solid <?php echo $indicadorDia['icono']; ?>"></i>
+                <?php echo $indicadorDia['texto']; ?>
+            </span>
 
         </div>
 
@@ -43,7 +86,11 @@
             </div>
 
             <span class="dashboard-card__valor">
-                <?php echo $simbolo_moneda ." ". number_format($cards->totalVentas, 2, '.', ',');?>
+                <?php echo $simbolo_moneda ." ". number_format($cards->ventasMes, 2, '.', ',');?>
+            </span>
+            <span class="dashboard-card__extra <?php echo $indicadorMes['clase']; ?>">
+                <i class="fa-solid <?php echo $indicadorMes['icono']; ?>"></i>
+                <?php echo $indicadorMes['texto']; ?>
             </span>
 
         </div>
