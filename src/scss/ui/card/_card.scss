@@ -4,10 +4,17 @@
 .ds-card {
     background-color: v.$bg-surface;
     border-radius: .8rem;
+    border: 1px solid rgba(0,0,0,0.05);
     box-shadow: 0 2px 8px rgba(0,0,0,.06);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    &:hover {
+        transform: translateY(-4px);
+    }
+    &:active {
+        transform: scale(0.98);
+    }
 }
 
 /* =========================   HEADER
@@ -41,23 +48,78 @@
    DASHBOARD
 ========================= */
 .dashboard-card {
+    // display: flex;
+    // flex-direction: column;
+    // gap: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.2rem;
+    height: 100%;
+    cursor: pointer;
 }
 
 .dashboard-card__titulo {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: v.$text-secondary;
 }
 
 .dashboard-card__valor {
-    font-size: 3rem;
+    font-size: 3.6rem;
     font-weight: v.$font-bold;
     color: v.$text-primary;
+    margin: auto 0; 
+    text-align: center; 
+    letter-spacing: .5px;
 }
 
 .dashboard-card__extra {
     font-size: 1.2rem;
     color: v.$success;
 }
+
+/* TOP (ICONO + TITULO) */
+.dashboard-card__top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dashboard-card__icono {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(0,0,0,0.05);
+
+    i {
+        font-size: 1.6rem;
+        color: v.$text-primary;
+    }
+}
+
+
+// /* BOTON MEJORADO */
+// .dashboard-card__btn {
+//     margin-top: auto;
+//     background: none;
+//     border: none;
+//     padding: 0;
+//     font-size: 1.3rem;
+//     font-weight: v.$font-bold;
+//     color: v.$primary;
+//     cursor: pointer;
+
+//     display: flex;
+//     align-items: center;
+//     gap: .5rem;
+
+//     transition: all .2s ease;
+
+//     &:hover {
+//         gap: 1rem;
+//         text-decoration: underline;
+//     }
+// }

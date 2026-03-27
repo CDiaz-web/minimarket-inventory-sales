@@ -23,25 +23,76 @@
 ========================= */
 
 .ds-card--primary {
-    border-left: .5rem solid v.$primary;
+    background-color: rgba(v.$primary, 0.08);
 }
 
 .ds-card--success {
-    border-left: .5rem solid v.$success;
+    background-color: rgba(v.$success, 0.08);
 }
 
 .ds-card--warning {
-    border-left: .5rem solid v.$warning;
+    background-color: rgba(v.$warning, 0.08);
 }
 
 .ds-card--danger {
-    border-left: .5rem solid v.$danger;
+    background-color: rgba(v.$danger, 0.08);
 }
+
 .ds-card--morado {
-    border-left: .5rem solid v.$color-morado;
+    background-color: rgba(v.$color-morado, 0.08);
 }
+
 .ds-card--amarillo {
-    border-left: .5rem solid v.$color-amarillo;
+    background-color: rgba(v.$color-amarillo, 0.08);
+}
+
+.ds-card--amarillo .dashboard-card__icono {
+    background-color: rgba(v.$color-amarillo, 0.15);
+
+    i {
+        color: v.$color-amarillo;
+    }
+}
+
+
+.ds-card--morado .dashboard-card__icono {
+    background-color: rgba(v.$color-morado, 0.15);
+
+    i {
+        color: v.$color-morado;
+    }
+}
+
+.ds-card--primary .dashboard-card__icono {
+    background-color: rgba(v.$primary, 0.15);
+
+    i {
+        color: v.$primary;
+    }
+}
+
+.ds-card--success .dashboard-card__icono {
+    background-color: rgba(v.$success, 0.15);
+
+    i {
+        color: v.$success;
+    }
+}
+
+.ds-card--warning .dashboard-card__icono {
+    background-color: rgba(v.$warning, 0.15);
+
+    i {
+        color: v.$warning;
+    }
+}
+
+.ds-card--danger .dashboard-card__icono {
+    background-color: rgba(v.$danger, 0.15);
+
+    i {
+        color: v.$danger;
+    }
 }
 /* =========================
    ESPACIADO

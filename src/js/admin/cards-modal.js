@@ -15,13 +15,13 @@ export function initCardsModal() {
     // Escucha todos los clicks en el documento
     document.addEventListener('click', async (e) => {
 
-         const button = e.target.closest('[data-modal="card"]');
-        if (!button) return;
+        const trigger = e.target.closest('[data-modal="card"]');
+        if (!trigger) return;
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
         // Llama a abrir el modal pasando el botón
-        await abrirModal(button);
+        await abrirModal(trigger);
 
     });
 

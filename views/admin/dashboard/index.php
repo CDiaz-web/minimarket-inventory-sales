@@ -5,141 +5,158 @@
 
 <div class="dashboard__grid">
 
+    <div class="ds-card ds-card--hover ds-card--morado" id="card-ventas-dia">
 
-    <div class="ds-card ds-card--hover ds-card--primary">
         <div class="ds-card__body dashboard-card">
 
-            <span class="dashboard-card__titulo">
-                Total Productos
-            </span>
+            <div class="dashboard-card__top">
+                <div class="dashboard-card__icono">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+
+                <span class="dashboard-card__titulo">
+                    Ventas del Día
+                </span>
+            </div>
 
             <span class="dashboard-card__valor">
-                <?php echo $cards->totalProductos;?>
+                <?php echo $simbolo_moneda ." ".  number_format($cards->ventasHoy, 2, '.', ',');?>
             </span>
-
-            <button 
-                class="bloque__blink" 
-                type="button" 
-                data-modal="card"
-                data-title="Total Productos"
-                data-endpoint="/api/totalproductostienda"
-                data-columns=
-                '[
-                    {"field":"codigo","label":"Código"},
-                    {"field":"nombre","label":"Producto"},
-                    {"field":"venta","label":"Precio Venta"},
-                    {"field":"stock","label":"Stock"},
-                    {"field":"stock_minimo","label":"Stock Min."},
-                    {"field":"stock_maximo","label":"Stock Max."}
-                ]'
-            >
-                More Info
-                <i class="fa-solid fa-circle-info"></i>
-            </button>
 
         </div>
-    </div>
 
-    <div class="ds-card card--hover ds-card--success">
-        <div class="ds-card__body dashboard-card">
-
-            <span class="dashboard-card__titulo">
-                Total Compras
-            </span>
-
-            <span class="dashboard-card__valor">
-                <?php echo $simbolo_moneda ." ". number_format($cards->totalCompras, 2, '.', ',') ;?>
-            </span>
-
-            <button class="bloque__blink" type="button" id="total-compra">
-                More Info
-                <i class="fa-solid fa-circle-info"></i>
-            </button>
-
-        </div>
     </div>
 
 
-    <div class="ds-card ds-card--hover ds-card--warning">
+    <div class="ds-card ds-card--hover ds-card--warning" id="card-total-ventas">
+
         <div class="ds-card__body dashboard-card">
 
-            <span class="dashboard-card__titulo">
-                Total Ventas
-            </span>
+            <div class="dashboard-card__top">
+                <div class="dashboard-card__icono">
+                    <i class="fa-solid fa-chart-column"></i>
+                </div>
+
+                <span class="dashboard-card__titulo">
+                    Total Ventas
+                </span>
+            </div>
 
             <span class="dashboard-card__valor">
                 <?php echo $simbolo_moneda ." ". number_format($cards->totalVentas, 2, '.', ',');?>
             </span>
 
-            <button class="bloque__blink" type="button" id="total-venta">
-                More Info
-                <i class="fa-solid fa-circle-info"></i>
-            </button>
-
         </div>
-    </div>
+
+    </div>    
 
 
-    <div class="ds-card ds-card--hover ds-card--danger">
+    <div class="ds-card ds-card--hover ds-card--danger" id="card-total-ganancias">
+
         <div class="ds-card__body dashboard-card">
 
-            <span class="dashboard-card__titulo">
-                Total Ganacias
-            </span>
+            <div class="dashboard-card__top">
+                <div class="dashboard-card__icono">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <span class="dashboard-card__titulo">
+                    Total Ganacias
+                </span>
+            </div>
 
             <span class="dashboard-card__valor">
                 <?php echo $simbolo_moneda ." ".  number_format($cards->totalGanancias, 2, '.', ',');?>
             </span>
 
-            <button class="bloque__blink" type="button" id="total-ganacia">
-                More Info
-                <i class="fa-solid fa-circle-info"></i>
-            </button>
-
         </div>
-    </div>
+
+    </div>  
 
 
+    <div class="ds-card ds-card--hover ds-card--primary" id="card-total-productos"
+    
+        data-modal="card"
+        data-title="Total Productos"
+        data-endpoint="/api/totalproductostienda"
+        data-columns='[
+            {"field":"codigo","label":"Código"},
+            {"field":"nombre","label":"Producto"},
+            {"field":"venta","label":"Precio Venta"},
+            {"field":"stock","label":"Stock"},
+            {"field":"stock_minimo","label":"Stock Min."},
+            {"field":"stock_maximo","label":"Stock Max."}
+        ]'     
+    
+    >
 
-    <div class="ds-card ds-card--hover ds-card--morado">
         <div class="ds-card__body dashboard-card">
 
-            <span class="dashboard-card__titulo">
-                Poco stock
+            <div class="dashboard-card__top">
+                <div class="dashboard-card__icono">
+                    <i class="fa-solid fa-box"></i>
+                </div>
+
+                <span class="dashboard-card__titulo">
+                    Total Productos
+                </span>
+            </div>
+
+            <span class="dashboard-card__valor">
+                <?php echo $cards->totalProductos;?>
             </span>
+
+        </div>
+
+    </div>  
+    
+    
+
+
+    <div class="ds-card ds-card--hover ds-card--amarillo" id="card-poco-stock">
+
+        <div class="ds-card__body dashboard-card">
+
+            <div class="dashboard-card__top">
+                <div class="dashboard-card__icono">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <span class="dashboard-card__titulo">
+                    Poco stock
+                </span>
+            </div>
 
             <span class="dashboard-card__valor">
                 <?php echo $cards->productosPocoStock;?>
             </span>
 
-            <button class="bloque__blink" type="button" id="poco-stock">
-                More Info
-                <i class="fa-solid fa-circle-info"></i>
-            </button>
-
         </div>
-    </div>
+
+    </div>  
 
 
+    <div class="ds-card card--hover ds-card--success" id="card-total-compras">
 
-    <div class="ds-card ds-card--hover ds-card--amarillo">
         <div class="ds-card__body dashboard-card">
 
-            <span class="dashboard-card__titulo">
-                Ventas del Dia
-            </span>
+            <div class="dashboard-card__top">
+                <div class="dashboard-card__icono">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+
+                <span class="dashboard-card__titulo">
+                    Compras del Mes
+                </span>
+            </div>
 
             <span class="dashboard-card__valor">
-                <?php echo $simbolo_moneda ." ".  number_format($cards->ventasHoy, 2, '.', ',');?>                 
+                <?php echo $simbolo_moneda ." ". number_format($cards->totalCompras, 2, '.', ',') ;?>
             </span>
 
-            <button class="bloque__blink" type="button" id="ventas-dia">
-                More Info
-                <i class="fa-solid fa-circle-info"></i>
-            </button>
-
         </div>
-    </div>
+
+    </div>  
 
 </div>
 <br>
