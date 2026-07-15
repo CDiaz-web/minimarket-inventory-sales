@@ -4,7 +4,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Movimiento Inventario #<?= $cabecera->id ?></title>
+<title>Movimiento #<?= $cabecera->numero ?></title>
 <style>
   body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #333; }
   h1 { text-align: center; margin-bottom: 5px; }
@@ -17,7 +17,7 @@
 </head>
 <body>
 
-  <h1>Movimiento de Inventario N° <?= $cabecera->id ?></h1>
+  <h1>Movimiento Inventario N° <?= $cabecera->numero ?></h1>
   <p>
 
       <?php
@@ -37,13 +37,12 @@
 
 
      <strong>Empresa:</strong> <?= $empresa->nombre ?><br>
-     <strong>Fecha:</strong> <?= $cabecera->fecha ?><br>
-     <strong>Tipo:</strong> <?= $cabecera->tipo_movimiento ?><br>
-     <strong>Usuario:</strong> <?= $cabecera->usuario ?><br>
+     <strong>Tipo Movimiento:</strong> <?= $cabecera->tipo_movimiento ?><br>
+     <strong>Fecha:</strong> <?= $cabecera->fecha ?><br>     
+     <strong>Tienda:</strong> <?= $cabecera->tienda_origen ?><br>
+     <strong>Tienda Destino:</strong> <?= $cabecera->tienda_destino ?><br>   
      <strong>Estado:</strong> <?= $cabecera->estado ?><br>
-     <strong>Origen:</strong> <?= $cabecera->tienda_origen ?><br>
-     <strong>Destino:</strong> <?= $cabecera->tienda_destino ?><br>
-     <strong>Observación:</strong> <?= $cabecera->observacion ?>
+   
   </p>
 
   <table>
@@ -52,9 +51,7 @@
         <th>Código</th>
         <th>Producto</th>
         <th>Unidad</th>
-        <th>Cantidad</th>
-        <th>Costo Unitario</th>
-        <th>Subtotal</th>
+        <th>Cantidad</th>        
       </tr>
     </thead>
     <tbody>
@@ -64,12 +61,15 @@
         <td><?= $d->producto ?></td>
         <td><?= $d->unidad ?></td>
         <td><?= number_format($d->cantidad, 2) ?></td>
-        <td><?= number_format($d->costo_unitario, 2) ?></td>
-        <td><?= number_format($d->subtotal_costo, 2) ?></td>
       </tr>
       <?php endforeach; ?>
     </tbody>
   </table>
+ 
+  <p>
+     <strong>Observación:</strong> <?= $cabecera->observacion ?> 
+  </p>
+
 
 </body>
 </html>

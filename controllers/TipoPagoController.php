@@ -2,17 +2,12 @@
 
 namespace Controllers;
 
-use Model\Estados;
 use Model\Opciones;
 use Model\OrdenVenta;
 use Model\TipoPago;
 use MVC\Router;
 
-
-
 require '../vendor/autoload.php';
-
-
 
 class TipoPagoController {
     
@@ -22,7 +17,7 @@ class TipoPagoController {
              return;
         }
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $tipagos = TipoPago::all('ASC');
+        $tipagos = TipoPago::where('idempresa',$_SESSION['idempresa'],false);   
         $alertas = [];
         $router ->render('admin/configuracion/tipopago/index',[
                 'titulo' => 'Tipos de Pago',
@@ -39,8 +34,6 @@ class TipoPagoController {
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $tipopago = new TipoPago;   
-        $estados = Estados::where('idmaster','3',false);
-        $tipopago->idestado = 9; //  Activo por defecto    
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
@@ -53,7 +46,10 @@ class TipoPagoController {
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            //leer imagen      
+            $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
+         
             
             $tipopago->sincronizar($_POST);
             //validar
@@ -77,7 +73,6 @@ class TipoPagoController {
             'titulo' => 'Registrar Tipo de Pago',
             'alertas' => $alertas,     
             'tipopago'=>$tipopago,
-            'estados' => $estados,
             'opciones'=>$opciones        
   
         ]);
@@ -95,7 +90,6 @@ class TipoPagoController {
             header('Location: /admin/configuracion/tipopago');
         }       
         $tipopago = TipoPago::find($id);
-        $estados = Estados::where('idmaster','3',false);
         if(!$tipopago){
             header('Location: /admin/configuracion/tipopago');
         }   
@@ -109,8 +103,15 @@ class TipoPagoController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            $tipopago->sincronizar($_POST);
+            $_POST['idempresa'] = $_SESSION['idempresa'];
 
+            $ultimo = isset($_POST['requiere_cobro']) ? 1 : 0;
+            $_POST['requiere_cobro'] = $ultimo;
+
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
+            $tipopago->sincronizar($_POST);
+            
             $alertas = $tipopago->validar();
 
             if(empty($alertas)){
@@ -128,7 +129,6 @@ class TipoPagoController {
             'titulo' => 'Actualizar Tipo de Pago',
             'alertas' => $alertas,       
             'tipopago'=>$tipopago,
-            'estados' => $estados,
             'opciones'=>$opciones        
         ]);
     }

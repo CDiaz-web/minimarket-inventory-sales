@@ -4,16 +4,16 @@ namespace Model;
 
 class OrdenVentaDetalle extends ActiveRecord {
     protected static $tabla = 'orden_venta_detalle';
-    protected static $columnasDB = ['id','idorden','idproducto','cantidad','precio_unitario','precio_unitario_igv','total','total_igv','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id','idorden','idproducto','cantidad','precio_origen','precio_igv_origen','subtotal_origen','total_origen','idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;
     public ?int $idorden = null;
     public int $idproducto = 0;
     public ?float $cantidad = null;
-    public ?float $precio_unitario = null;
-    public ?float $precio_unitario_igv = null;
-    public ?float $total = null;
-    public ?float $total_igv = null;
+    public ?float $precio_origen = null;
+    public ?float $precio_igv_origen = null;
+    public ?float $subtotal_origen = null;
+    public ?float $total_origen = null;
 
     public int $idusercrea = 0;
     public ?string $fechacrea = null;

@@ -18,10 +18,10 @@
     overflow-y: auto;
 
     @include m.respond(tablet){
-        padding: 3rem;
+        padding: 1rem;
     }
 
     @include m.respond(desktop){
-        padding: 4rem;
+        padding: 2rem;
     }
 }

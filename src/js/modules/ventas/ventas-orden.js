@@ -1,52 +1,47 @@
 import Swal from "sweetalert2";
-import { verificarTipoCambioHoy } from "./ventas-moneda.js";
+import { verificarTipoCambio } from "./ventas-moneda.js";
 import { modal } from "../../core/modal-manager.js";
-import { resetVenta } from "./ventas-main.js";
+import { resetVenta } from "./ventas-articulos.js";
 export function initOrdenVenta(){
 
-    let tipospago = [];
-
-
     const btnGenerar = document.querySelector('#btngenerar');
-    if (!btnGenerar) return;
-
-
-    // ==============================
-    // FECHA ACTUAL
-    // ==============================
-
-    const hoy = new Date();
-    const yyyy = hoy.getFullYear();
-    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
-    const dd = String(hoy.getDate()).padStart(2, '0');
-    const fechaActual = `${yyyy}-${mm}-${dd}`;
-
-
-
-    // ==============================
-    // OBTENER DATOS
-    // ==============================
-
-    async function obtenerTiposPago(){
-
-        try{
-            const res = await fetch('/api/tipopago');
-            tipospago = await res.json();
-        }catch(error){
-
-            console.error("Error obteniendo tipos de pago", error);
-            tipospago = [];
-        }
-
-    }
-
-
+    if (!btnGenerar) return; 
 
     // ==============================
     // VALIDACIONES
     // ==============================
 
     async function validarVenta(){
+
+
+        const fechaSeleccionada = document.getElementById('fecha_venta')?.value;
+
+        const selectFormaPago = document.getElementById('idtipopago');
+
+        const formaPago = selectFormaPago?.value;
+
+        if(!fechaSeleccionada){
+
+            Swal.fire({
+                icon:'warning',
+                title:'Fecha requerida',
+                text:'Seleccione una fecha'
+            });
+
+            return false;
+        }
+
+        if(!formaPago){
+
+            Swal.fire({
+                icon:'warning',
+                title:'Forma de Pago Requerido',
+                text:'Seleccione Forma de Pago'
+            });
+
+            return false;
+        }
+
 
         if(!App.ventas.idcliente){
 
@@ -109,17 +104,16 @@ export function initOrdenVenta(){
         const validarTC = window.APP.config.validar_tc;
 
 
-
         if(validarTC == 1 ){
 
-            const existeTC = await verificarTipoCambioHoy();
-
+            const existeTC = await verificarTipoCambio(fechaSeleccionada);
+            
             if(!existeTC.success){
 
                 Swal.fire({
                     icon:'warning',
                     title:'Tipo de cambio requerido',
-                    text:'Debe registrar el tipo de cambio del día.'
+                    text:'Debe registrar el tipo de cambio para la fecha seleccionada'
                 });
 
                 return false;
@@ -129,34 +123,26 @@ export function initOrdenVenta(){
 
         }
 
-        return true;
+        const opcionSeleccionada = selectFormaPago.options[selectFormaPago.selectedIndex];
 
-        
+        const requiereCobro = Number(opcionSeleccionada.dataset.requierecobro); 
+
+        return {
+            ok: true,
+            requiereCobro,
+            idtipopago: formaPago
+        };    
 
     }
-
-
 
     // ==============================
     // MODAL
     // ==============================
 
-    function mostrarFormulario(totalVenta){
+    function mostrarFormulario(totalVenta,idtipopago){
 
         const body = `
         <form class="formulario" id="formOV">
-
-        <div class="formulario__campo">
-            <label class="formulario__label">Forma de Pago</label>
-            <select class="formulario__select" id="idtipopago">
-            <option value="">-Seleccionar-</option>
-            </select>
-        </div>
-
-        <div class="formulario__campo">
-            <label class="formulario__label">Fecha</label>
-            <input type="date" class="formulario__input" id="fecha">
-        </div>
 
         <div class="formulario__campo">
             <label class="formulario__label">Total</label>
@@ -170,12 +156,6 @@ export function initOrdenVenta(){
         <div class="formulario__campo">
             <label class="formulario__label">Vuelto</label>
             <input type="number" class="formulario__input" id="vuelto" name="vuelto" disabled />
-        </div>
-
-
-        <div class="formulario__campo">
-            <label class="formulario__label">Observación</label>
-            <textarea id="observacion"></textarea>
         </div>
 
         </form>
@@ -199,31 +179,14 @@ export function initOrdenVenta(){
         // ==============================
         // ELEMENTOS
         // ==============================
+ 
 
-        const selectPago = document.querySelector("#idtipopago");
-        const inputFecha = document.querySelector("#fecha");
         const inputTotal = document.querySelector("#total");
         const inputPagar = document.querySelector("#importe");
-        const inputVuelto = document.querySelector('#vuelto');
-        const inputObservacion = document.querySelector("#observacion");
+        const inputVuelto = document.querySelector('#vuelto');   
 
 
-        // ==============================
-        // CARGAR DATOS
-        // ==============================
-
-        tipospago.forEach(tp => {
-
-            const opt = document.createElement("option");
-            opt.value = tp.id;
-            opt.textContent = tp.nombre;
-
-            selectPago.appendChild(opt);
-
-        });
-
-
-        inputFecha.value = fechaActual;
+      
         inputTotal.value = totalVenta.toFixed(2);
         inputPagar.value = totalVenta.toFixed(2);
 
@@ -236,110 +199,20 @@ export function initOrdenVenta(){
         });
       }
 
-
-        // ==============================
-        // EVENTOS MODAL
-        // ==============================
-
-
-
-        // ==============================
-        // REGISTRAR
-        // ==============================
-
         document.getElementById("registrarOV").addEventListener("click", async function(e){
 
             e.preventDefault();
-
-            if(selectPago.value === ""){
-
-                Swal.fire("Forma de pago requerida","","warning");
-                return;
-
-            }
-
-            const payload = {
-
-                cabecera:{
-
-                    fecha: inputFecha.value,
-                    idcliente: App.ventas.idcliente,
-                    idlista: App.ventas.idlista,
-                    idtipopago: selectPago.value,
-                    observacion: inputObservacion.value,
-                    idmoneda: App.ventas.moneda,
-                    total: parseFloat(inputTotal.value),
-                    tipocambio: App.ventas.tipoCambio
-
-                },
-
-                detalle: App.ventas.articulos
-
-            };
-
-
-            try{
-
-                const res = await fetch('/admin/gestion/ventas/orden/generar',{
-
-                    method:'POST',
-                    headers:{'Content-Type':'application/json'},
-                    body: JSON.stringify(payload)
-
-                });
-
-                const data = await res.json();
-
-                if(!data.ok){
-
-                    Swal.fire("Error",data.mensaje,"error");
-                    return;
-
-                }
-
-                // Swal.fire({
-
-                //     icon:'success',
-                //     title:`OV ${data.numero} generada`
-
-                //     }).then(()=>{
-
-                //     location.reload();
-
-                // });
-                modal.close();
-                Swal.fire({
-                    icon: 'success',
-                    title: `OV ${data.numero} generada`,
-                    text: '¿Desea imprimir la orden de venta?',
-                    showCancelButton: true,
-                    confirmButtonText: 'Sí, imprimir',
-                    cancelButtonText: 'No'
-                }).then(result => {
-
-                    if (result.isConfirmed) {
-                        window.open(
-                            `/admin/gestion/ventas/orden/imprimir?id=${data.idorden}`,
-                            '_blank'
-                        );
-                    }
-
-                    // Limpieza siempre                 
-                    resetVenta();
-                });
-
-            }catch(error){
-
-                console.error(error);
-
-                Swal.fire("Error","No se pudo registrar la orden","error");
-
-            }
+            
+            RegistraVenta({
+                idtipopago,
+                total: parseFloat(inputTotal.value),         
+                importe: parseFloat(inputPagar.value) || 0,
+                vuelto: parseFloat(inputVuelto.value) || 0
+            });
 
         });
 
     }
-
 
 
     // ==============================
@@ -350,16 +223,113 @@ export function initOrdenVenta(){
 
         e.preventDefault();
 
-        if(!(await validarVenta())) return;
+        const validacion = await validarVenta();
 
-        await Promise.all([
-        obtenerTiposPago(),
-        ]);
+        if(!validacion) return;
 
         const totalVenta = App.ventas.totales.total;
 
-        mostrarFormulario(totalVenta);
+        if(validacion.requiereCobro === 1){
+
+            mostrarFormulario(totalVenta, validacion.idtipopago);
+
+        }else{
+
+            RegistraVenta({
+                idtipopago: validacion.idtipopago,
+                total: totalVenta
+            });
+
+        }
 
     });
+
+    async function RegistraVenta(datos){
+    
+        const payload = {
+
+            cabecera:{
+                idorden: document.getElementById('idorden')?.value || 0,
+                fecha: document.getElementById('fecha_venta')?.value,
+                idcliente: App.ventas.idcliente,
+                idlista: App.ventas.idlista,
+                idtipopago: datos.idtipopago,
+                observacion: document.getElementById('observacion_venta')?.value || '',
+                idmoneda: App.ventas.moneda,
+                subtotal: App.ventas.totales.subtotal,
+                impuesto: App.ventas.totales.impuesto,
+                total: datos.total,
+                tipocambio: App.ventas.tipoCambio,                
+                tipocambio_oficial: App.ventas.tipoCambio_oficial
+
+            },
+
+            detalle: App.ventas.articulos
+
+        };
+
+        // ======================
+        // DEFINIR URL
+        // ======================
+        const esEdicion = !!App.ventas.idorden;
+        
+        const url = esEdicion
+            ? '/admin/gestion/ventas/orden/editar'
+            : '/admin/gestion/ventas/orden/generar';
+
+        try{
+
+            const res = await fetch(url, {
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+
+            if(!data.ok){
+
+                Swal.fire("Error",data.mensaje,"error");
+                return;
+
+            }
+
+            modal.close();
+            Swal.fire({
+                icon: 'success',
+                title: esEdicion
+                    ? `OV ${data.numero} actualizada`
+                    : `OV ${data.numero} generada`,
+                text: '¿Desea imprimir la orden de venta?',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, imprimir',
+                cancelButtonText: 'No'
+            }).then(result => {
+
+                if (result.isConfirmed) {
+                    window.open(
+                        `/admin/gestion/ventas/orden/imprimir?id=${data.idorden}`,
+                        '_blank'
+                    );
+                }
+             
+                resetVenta();
+            });
+
+        }catch(error){
+
+            console.error(error);
+
+            Swal.fire(
+                "Error",
+                esEdicion
+                    ? "No se pudo actualizar la orden"
+                    : "No se pudo registrar la orden",
+                "error"
+            );
+
+        }
+        
+    }
 
 }

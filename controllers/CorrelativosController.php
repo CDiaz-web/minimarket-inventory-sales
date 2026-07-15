@@ -44,7 +44,7 @@ class CorrelativosController {
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $correlativo = new Correlativos;    
-        $tiendas = Tiendas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
+        $tiendas = Tiendas::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             
             $busca = Correlativos::findArray(['idtienda'=> $_POST['idtienda'],'tipo_documento'=> $_POST['tipo_documento']],true) ?? [];
@@ -55,14 +55,13 @@ class CorrelativosController {
             $_POST['updated_at']=date("Y-m-d H:i:s");
             $_POST['ultimo_numero']=0;
        
-            //leer imagen      
-            
+           
             $correlativo->sincronizar($_POST);
             //validar
 
             $alertas = $correlativo->validar();
             if($busca){
-                $alertas['error'][] = 'DOCUMENTO APRA ESTA TIENDA YA HA SIDO CREADO';
+                $alertas['error'][] = 'DOCUMENTO PARA ESTA TIENDA YA HA SIDO CREADO';
             }
             //guardar el registro
             if(empty($alertas)){

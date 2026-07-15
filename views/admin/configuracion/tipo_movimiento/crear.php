@@ -17,7 +17,7 @@
     <form method="POST" action="/admin/configuracion/tipo_movimiento/crear"  enctype="multipart/form-data" class="formulario">
         <?php  include_once __DIR__ . '/formulario.php' ?>
 
-        <input class="formulario__submit formulario__submit--registrar" type="submit" value="Registrar Unidad Medida" id="btnGuardar">
+        <input class="formulario__submit formulario__submit--registrar" type="submit" value="Registrar Tipo Movimiento" id="btnGuardar">
     </form>
 
 </div>

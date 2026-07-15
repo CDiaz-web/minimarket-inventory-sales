@@ -31,8 +31,6 @@ class EmpresaController {
         }   
         $monedas = Monedas::all('ASC');
         $tipos = TipoPago::all('ASC');
-        // $tipospago = TipoPago::all('ASC');
-        // $tdocumentos = TipoDocumentos::all('ASC');
         
         $empresa->logo_actual = $empresa->logo; 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -41,7 +39,7 @@ class EmpresaController {
                 header('Location: /login');
             } 
             //agregamos informacion de auditoria al $_post
-            
+           
             if(!empty($_FILES['logo']['tmp_name'])){
                 $carpeta_imagenes = '../public/img';
                 //crear la carpeta de o exixtir               
@@ -70,6 +68,13 @@ class EmpresaController {
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $ultimo = isset($_POST['validar_tc']) ? 1 : 0;
             $_POST['validar_tc'] = $ultimo;
+
+            $ov_aprobacion = isset($_POST['ov_requiere_aprobacion']) ? 1 : 0;
+            $_POST['ov_requiere_aprobacion'] = $ov_aprobacion;
+
+            $oc_aprobacion = isset($_POST['oc_requiere_aprobacion']) ? 1 : 0;
+            $_POST['oc_requiere_aprobacion'] = $oc_aprobacion;
+
             $empresa->sincronizar($_POST);
             
             $alertas = $empresa->validar();

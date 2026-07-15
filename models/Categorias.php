@@ -4,13 +4,13 @@ namespace Model;
 
 class Categorias extends ActiveRecord {
     protected static $tabla = 'categorias';
-    protected static $columnasDB = ['id','codigo','idempresa','nombre','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id','codigo','idempresa','nombre','activo','idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;
     public ?string $codigo = null;
     public int $idempresa = 0;
     public string $nombre = '';
-    public int $idestado = 0;
+    public int $activo = 1;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
     public int $idusermodi = 0;
@@ -39,9 +39,6 @@ class Categorias extends ActiveRecord {
         }
         if(strlen($this->nombre) > 45) {
             self::$alertas['error'][] = 'El Nombre no puede tener más de 45 caracteres';
-        }
-        if(!$this->idestado) {
-            self::$alertas['error'][] = 'El estado es Obligatorio';
         }
         return self::$alertas;
     }

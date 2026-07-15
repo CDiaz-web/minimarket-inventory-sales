@@ -4,17 +4,20 @@ namespace Model;
 
 class Inventarios extends ActiveRecord {
     protected static $tabla = 'movimiento_inventario';
-    protected static $columnasDB = ['id','numero','idtienda','idtipo','fecha','observacion','idrelacion','idtienda_relacion','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id','numero','idempresa','idtienda','idtipo','fecha','observacion','idrelacion','idtienda_relacion','idestado','motivo_anulacion','idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;
     public string $numero = ''; 
     public string $codigotipo = '';  
     public string $tipo_movimiento = '';   
 
+    public int $idempresa = 0;
     public int $idtienda = 0;
     public int $idtipo = 0;
     public ?string $fecha = null;
     public string $observacion = '';  
+    public ?string $motivo_anulacion = null;
+    public int $es_generado = 0;
     // public int $idrelacion = 0;
     public ?int $idrelacion = null;
     // public int $idtienda_relacion = 0;
@@ -25,10 +28,12 @@ class Inventarios extends ActiveRecord {
     public int $idusermodi = 0;
     public ?string $fechamodi = null;
 
+    public int $idmovimiento = 0;
     public string $documento  = ''; 
     public string $tienda_origen = '';  
     public string $movimiento = '';  
     public ?string $tienda_destino = null;  
+    public ?string $codestado = null;
     public string $estado = '';  
     public string $usuario = '';  
    

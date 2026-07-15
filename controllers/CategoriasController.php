@@ -4,7 +4,6 @@ namespace Controllers;
 
 use MVC\Router;
 use Model\Categorias;
-use Model\Estados;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Calculation\TextData\Format;
 use Model\Opciones;
@@ -40,8 +39,8 @@ class CategoriasController {
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $categoria = new Categorias;
-        $estados = Estados::where('idmaster','3',false);
-        $categoria->idestado = 9; // 👈 Activo por defecto
+  
+  
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
            $busca = Categorias::where('codigo', $_POST['codigo'],false);
@@ -53,6 +52,8 @@ class CategoriasController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             //leer imagen      
             
             $categoria->sincronizar($_POST);
@@ -78,7 +79,6 @@ class CategoriasController {
             'titulo' => 'Registrar Categoria',
             'alertas' => $alertas,     
             'categoria'=>$categoria,
-            'estados'=>$estados,
             'opciones'=>$opciones       
   
         ]);
@@ -96,7 +96,7 @@ class CategoriasController {
         }    
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);    
         $categoria = Categorias::find($id);
-        $estados = Estados::where('idmaster','3',false);
+  
         if(!$categoria){
             header('Location: /admin/mantenimiento/productos/categorias');
         }   
@@ -109,6 +109,8 @@ class CategoriasController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             $categoria->sincronizar($_POST);
 
             $alertas = $categoria->validar();
@@ -129,8 +131,7 @@ class CategoriasController {
         $router ->render('admin/mantenimiento/productos/categorias/editar',[
             'titulo' => 'Actualizar Categoria',
             'alertas' => $alertas,       
-            'categoria'=>$categoria,
-            'estados'=>$estados,
+            'categoria'=>$categoria,           
             'opciones'=>$opciones
         ]);
     }

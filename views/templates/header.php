@@ -3,7 +3,7 @@
         <div class="header__contenido">           
                 <h1 class="header__logo">                    
                     <i class="fa-solid fa-business-time barra-mobile__icono"></i>
-                    Arteus
+                    Sid Negocios
                 </h1>
               
         </div>        

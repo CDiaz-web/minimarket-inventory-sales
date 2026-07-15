@@ -7,7 +7,7 @@ use Model\Productos;
 class APIProductos{
     public static function productos(){
         if(is_auth()){ 
-            $valor = [$_SESSION['idtienda'],1]; 
+            $valor = [$_SESSION['idtienda'],$_SESSION['idempresa'],1]; 
             $productos = Productos::procedureLista('prc_ListaProductosTienda',$valor);        
  
            

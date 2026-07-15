@@ -42,7 +42,7 @@
         </select>
 
     </div>
-    <div class="formulario__campo">   
+    <!-- <div class="formulario__campo">   
         <label for="costo" class="formulario__label">Costo</label>
         <input
             type = "number"
@@ -54,7 +54,7 @@
             min="0"            
             value ="<?php echo number_format($producto->costo, 2, '.', ''); ?>"   
         />
-    </div>
+    </div> -->
     <div class="formulario__campo">   
         <label for="venta" class="formulario__label">Precio Venta Sugerida</label>
         <input
@@ -68,15 +68,31 @@
             value ="<?php echo number_format($producto->venta, 2, '.', ''); ?>"        
         />
     </div>  
-    <div class="formulario__campo">
-        <label for="idestado" class="formulario__label">Estado</label>
-        <select class="formulario__select-xl" id="idestado" name ="idestado">
-        <option value="" >-Seleccionar-</option>
-            <?php foreach($estados as $estado) { ?>
-                <option <?php echo ($producto->idestado == $estado->id) ? 'selected' : '' ; ?> value="<?php echo $estado->id; ?>" > <?php echo $estado->nombre; ?> </option>
-            <?php }?> 
-        </select>
+
+    <div class="formulario__campo formulario__campo--check" data-switch-estado> 
+        
+        <span 
+            class="switch__label"
+            data-switch-label
+        >  
+            <?= (isset($producto) && $producto->id)  
+                ? ($producto->activo ? 'Activo' : 'Inactivo') 
+                : 'Activo' ?>
+        </span>
+
+        <label class="switch">
+            <input
+                type="checkbox"
+                name="activo"
+                <?= (isset($producto) && $producto->id) 
+                    ? ($producto->activo ? 'checked' : '') 
+                    : 'checked' ?>
+            >
+            <span class="slider"></span> 
+        </label>       
+
     </div>
+
     <div class="formulario__campo">
         <label for="imagen" class="formulario__label">Imagen</label>
         <input

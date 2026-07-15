@@ -27,19 +27,33 @@
                 <thead class="table thead">
                     <tr>               
                         <th scope='col' class="table__th">Codigo</th>    
-                        <th scope='col' class="table__th">Descripcion</th>                 
+                        <th scope='col' class="table__th">Descripcion</th>  
+                        <th scope='col' class="table__th">Estado</th>                  
                         <th scope='col' class="table__th">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="tabla">
                     <?php foreach($unidades as $unidad) { ?>
-                        <tr class="table__tr">
+                        <tr class="table__tr <?= !$unidad->activo ? 'fila--inactiva' : '' ?>">
                             <td class="table__td">
                                 <?php echo $unidad->codigo ;?>
                             </td>    
                             <td class="table__td">
                                 <?php echo $unidad->nombre;?>
-                            </td>                                 
+                            </td>                                
+                            <td class="table__td">
+                                <label class="switch">
+                                    <input 
+                                        type="checkbox"
+                                        class="js-switch-ajax"
+                                        data-id="<?= $unidad->id ?>"
+                                        data-modelo="Unidades"
+                                        <?= $unidad->activo ? 'checked' : '' ?>
+                                    >
+                                    <span class="slider"></span>
+                                </label>
+                            </td>                             
+
                             <td class="table__col-actions" >
 
                                 <div class="table__acciones">

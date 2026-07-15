@@ -3,7 +3,7 @@
         <div class="footer__contenido">
             <h3 class="footer__logo">                    
                 <i class="fa-solid fa-business-time barra-mobile__icono"></i>
-                Arteus
+                Sid Negocios
             </h3>
         </div>
         <nav class="social"> 

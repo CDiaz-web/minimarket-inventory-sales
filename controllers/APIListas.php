@@ -11,7 +11,7 @@ class APIListas{
         if(is_auth()){          
 
             $empresa  = $_SESSION['idempresa'];      
-            $listas = listas::findArray(['idempresa'=>$empresa,'idestado'=> 9],false) ?? [];
+            $listas = listas::findArray(['idempresa'=>$empresa,'activo'=> 1],false) ?? [];
                      
             echo json_encode($listas, JSON_UNESCAPED_SLASHES);
         }

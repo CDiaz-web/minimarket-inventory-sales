@@ -57,6 +57,8 @@ export const events = {
         const idTabla = el.dataset.table;
         const nombreArchivo = el.dataset.file || "export.xlsx";
         const nombreHoja = el.dataset.sheet || "Hoja1";
+        // nueva linea
+        if (!idTabla || !nombreArchivo || !nombreHoja ) return;
 
         exportarTablaXLSX(idTabla, nombreArchivo, nombreHoja);
     },

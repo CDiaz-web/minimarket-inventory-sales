@@ -5,7 +5,7 @@ class ModalManager {
         this.modal = document.getElementById('appModal');
 
         if (!this.modal) {
-            console.warn('appModal no encontrado');
+            // console.warn('appModal no encontrado');
             return;
         }
         this.title = this.modal.querySelector('.modal__title');     
@@ -25,11 +25,11 @@ class ModalManager {
             if (e.target === this.modal) this.close();
         });
     }
-
+   
     showLoader() {
         this.body.innerHTML = `
             <div class="modal__loader">
-                Cargando...
+                <div class="spinner"></div>
             </div>
         `;
     }

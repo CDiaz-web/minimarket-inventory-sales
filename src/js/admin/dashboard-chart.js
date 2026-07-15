@@ -21,7 +21,7 @@ async function cargarGrafico(canvas) {
 
     try {
 
-        const respuesta = await fetch('/api/ventasmes');
+        const respuesta = await fetch('/api/dashboardgrafico');
         const resultado = await respuesta.json();
 
         // 🔥 destruir si ya existe

@@ -4,6 +4,7 @@ export function initGestionOV() {
 
     manejarAprobacion();
     manejarAnulacion();
+    manejarEdicion();
 
 }
 
@@ -40,14 +41,13 @@ function manejarAprobacion(){
 
             if(!result.isConfirmed) return;
 
-            cambiarEstado(idOrden, 11);
+            cambiarEstado(idOrden, 'APR');
 
         });
 
     });
 
 }
-
 
 // ==============================
 // ANULAR ORDEN
@@ -72,42 +72,49 @@ function manejarAnulacion(){
         }
 
         if(estadoActual === 'APR'){
+            Swal.fire({
+                icon:'error',
+                title:'La Orden se encuentra Aprobada, no puede ser anulada'
+            });
+            return;
+        }        
 
-            try{
+        if(estadoActual === 'ACT'){
 
-                const response = await fetch('/admin/configuracion/devolucion/listar');
-                const motivos = await response.json();
+        //     try{
 
-                const result = await Swal.fire({
-                    title:'Motivo de devolución',
-                    input:'select',
-                    inputOptions:motivos,
-                    inputPlaceholder:'Seleccione un motivo',
-                    showCancelButton:true,
-                    confirmButtonText:'Anular',
-                    cancelButtonText:'Cancelar',
-                    inputValidator:(value)=>{
-                        if(!value){
-                            return 'Debe seleccionar un motivo';
-                        }
-                    }
-                });
+        //         const response = await fetch('/admin/configuracion/devolucion/listar');
+        //         const motivos = await response.json();
 
-                if(!result.isConfirmed) return;
+        //         const result = await Swal.fire({
+        //             title:'Motivo de devolución',
+        //             input:'select',
+        //             inputOptions:motivos,
+        //             inputPlaceholder:'Seleccione un motivo',
+        //             showCancelButton:true,
+        //             confirmButtonText:'Anular',
+        //             cancelButtonText:'Cancelar',
+        //             inputValidator:(value)=>{
+        //                 if(!value){
+        //                     return 'Debe seleccionar un motivo';
+        //                 }
+        //             }
+        //         });
 
-                cambiarEstado(idOrden, 2, result.value);
+        //         if(!result.isConfirmed) return;                
+        //         cambiarEstado(idOrden, 'ANU', result.value);
 
-            }catch(error){
+        //     }catch(error){
 
-                Swal.fire(
-                    'Error',
-                    'No se pudieron cargar los motivos',
-                    'error'
-                );
+        //         Swal.fire(
+        //             'Error',
+        //             'No se pudieron cargar los motivos',
+        //             'error'
+        //         );
 
-            }
+        //     }
 
-        }else{
+        // }else{
 
             const result = await Swal.fire({
                 icon:'warning',
@@ -119,13 +126,46 @@ function manejarAnulacion(){
 
             if(!result.isConfirmed) return;
 
-            cambiarEstado(idOrden, 2, null);
+            cambiarEstado(idOrden, 'ANU', null);
 
         }
 
     });
 
 }
+
+// ==============================
+// valida edicion solo de oc pendientes
+// ==============================
+
+function manejarEdicion() {
+
+    document.addEventListener('click', function(e) {
+
+        const boton = e.target.closest('.btn-editar-venta');
+        if (!boton) return;
+
+        const estado = boton.dataset.estado;
+
+        // Solo se pueden editar órdenes pendientes
+        if (estado !== 'ACT') {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Orden no editable',
+                text: 'Solo las órdenes en estado Activo pueden modificarse.'
+            });
+
+            return;
+        }
+
+        // Si es PEN, el enlace continúa normalmente
+    });
+
+}
+
 
 
 // ==============================

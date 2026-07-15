@@ -11,7 +11,7 @@ export function resetVenta(){
     };
 
     // limpiar tabla
-    const tbody = document.querySelector("#tablaArticulos tbody");
+    const tbody = document.querySelector("#tablaArticulosVentas tbody");
     if(tbody) tbody.innerHTML = "";
 
     // reiniciar total visual

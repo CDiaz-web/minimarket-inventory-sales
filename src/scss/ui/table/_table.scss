@@ -8,7 +8,7 @@ $table-padding-y: 1.5rem;
 .table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     background-color: transparent;
     min-width: 100%;
 
@@ -99,8 +99,8 @@ $table-padding-y: 1.5rem;
 
     .table-actions > .boton,
     .table-actions > a {
-        width: auto;       // 👈 muy importante
-        flex: 0 0 auto;    // 👈 evita que crezcan igual
+        width: auto;       
+        flex: 0 0 auto;   
     }
 }
 
@@ -176,13 +176,13 @@ $table-padding-y: 1.5rem;
         gap: 1rem 2rem;
     }
 
-    label {
+    label {    
         margin-bottom: 0;
         white-space: nowrap;
     }
 
     .formulario__campo {
-        width: 100%;
+        width: 100%;        
     }
 
 }
@@ -197,7 +197,7 @@ $table-padding-y: 1.5rem;
         border: 1px solid v.$color-gris-claro;
         border-radius: .4rem;
 
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         padding: 1rem 1.4rem;
 
         &:focus {
@@ -323,30 +323,13 @@ tbody tr:nth-child(even) {
     padding: .8rem 1rem;
     border: 1px solid v.$color-gris-claro;
     border-radius: .4rem;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
 }
 
 .table-filters button {
     height: 38px;
 }
 
-
-/* =========================
-   detalle inventario
-========================= */
-
-// .select-producto{
-//     width:45rem;
-// }
-// .unidad{
-//     width:10rem;
-// }
-// .cantidad{
-//     width:10rem;
-// }
-// .costo-unitario{
-//     width:10rem;
-// }
 
 
 
@@ -358,3 +341,132 @@ tbody tr:nth-child(even) {
     box-sizing:border-box;
 }
 
+
+.table thead {
+    background-color: rgba(0,0,0,0.03);
+}
+
+
+.table tbody tr:hover {
+    background-color: rgba(0,0,0,0.02);
+}
+.table__row {
+    transition: all 0.3s ease;
+}
+.fila--inactiva {
+    opacity: 0.6;
+    background-color: #fafafa;
+}
+
+.fila--inactiva td {
+    opacity: 0.6;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.fila--animando {
+    animation: highlightFade 0.6s ease;
+}
+
+@keyframes highlightFade {
+    0% {
+        background-color: #fff3cd; /* amarillo suave */
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+.grupo-fecha-moneda {
+    grid-column: 1 / -1;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @include m.respond(tablet) {
+        grid-template-columns: 200px 250px 200px; // 🔥 tamaños reales
+        justify-content: start; // 👈 clave
+    }
+}
+
+.campo-inline input,
+.campo-inline select {
+    width: 100%;
+}
+
+.campo-info {
+    display: inline-block;
+    padding: 1rem 1.4rem;
+    background-color: #f5f5f5;
+    border-radius: .4rem;
+    font-weight: bold;
+}
+
+
+
+
+.table-gestion {
+    padding: $table-padding-y $table-padding-x;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    padding-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: left;
+
+    @include m.respond(desktop) {
+        grid-template-columns: auto 1fr;
+        gap: 1rem 2rem;
+    }
+
+    label {
+        margin-bottom: 0;
+        white-space: nowrap;
+    }
+
+    .formulario__campo {
+        width: 100%;
+    }
+
+}
+
+.grupo-fecha-moneda-pago {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @include m.respond(tablet) {
+        grid-template-columns: 200px 250px 200px; // 🔥 tamaños reales
+        justify-content: start; // 👈 clave
+    }
+}
+
+@include m.respond(desktop) {
+    .grupo-fecha-moneda {
+        grid-template-columns: 1fr 1fr 1fr;
+        align-items: end;
+    }
+    .grupo-fecha-moneda-pago {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        align-items: end;
+    }
+
+}
+
+.grupo-cliente-lista {
+
+    grid-column: 1 / -1;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @include m.respond(tablet) {
+
+        grid-template-columns: 2fr 1fr;
+
+        align-items: end;
+    }
+}

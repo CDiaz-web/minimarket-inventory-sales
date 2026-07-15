@@ -119,6 +119,26 @@
                 value ="<?php echo number_format($empresa->variaciontc, 2, '.', ''); ?>"                                 
             />
     </div>
-    
-
+    <div class="formulario__campo formulario__campo--check"> 
+        <label for="ov_requiere_aprobacion" class="formulario__check">
+            <input
+                type = "checkbox"
+                class = "formulario__input"
+                id = "ov_requiere_aprobacion"
+                name="ov_requiere_aprobacion"   
+                <?php if ($empresa->ov_requiere_aprobacion == 1) echo 'checked="checked"'; ?> 
+            /> Ord. Venta Requiere Aprobacion
+        </label>
+    </div> 
+    <div class="formulario__campo formulario__campo--check"> 
+        <label for="oc_requiere_aprobacion" class="formulario__check">
+            <input
+                type = "checkbox"
+                class = "formulario__input"
+                id = "oc_requiere_aprobacion"
+                name="oc_requiere_aprobacion"   
+                <?php if ($empresa->oc_requiere_aprobacion == 1) echo 'checked="checked"'; ?> 
+            /> Ord. Compra Requiere Aprobacion
+        </label>
+    </div> 
 </fieldset>

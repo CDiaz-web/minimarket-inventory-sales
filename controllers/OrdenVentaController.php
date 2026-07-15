@@ -5,6 +5,7 @@ namespace Controllers;
 use Model\Monedas;
 use Model\FactorCambio;
 use Model\Opciones;
+use Model\TipoPago;
 use Model\OrdenVenta;
 use Model\OrdenVentaDetalle;
 use Model\Empresa;
@@ -19,7 +20,22 @@ class OrdenVentaController {
              header('Location: /login');
              return;
         }  
+
+        $idOrden = isset($_GET['id']) ? (int) $_GET['id'] : 0;    
+
+        $cabecera = null;
+        $detalle = [];
+        $modoEdicion = false;
+
+        $idEmpresa = $_SESSION['idempresa'];
+        $idTienda = $_SESSION['idtienda'];
+
+
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
+        $empresa = Empresa::where('id',$_SESSION['idempresa']);   
+        $impuesto= $empresa[0]->porcentaje_imp;  
+        $lista_forma_pago = TipoPago::findArray(['idempresa'=> $_SESSION['idempresa'],'activo'=> 1],false) ?? [];
+
         date_default_timezone_set('America/Lima');
         $tc = FactorCambio::where('fecha',date("Y-m-d"));
         $simbolo_moneda = $_SESSION['simbolo_moneda'];
@@ -27,21 +43,45 @@ class OrdenVentaController {
         $tpago_defecto = $_SESSION['tpago_defecto'];
         $validar_tc = $_SESSION['validar_tc'];
         $lista_monedas = Monedas::all('ASC');
+        $titulo = 'Registro Orden Compra';
+        $fecha =  date('Y-m-d');
+        if (!empty($idOrden)) {
+      
+            $cabecera = OrdenVenta::procedureLista(
+                'prc_lista_orden_venta_edicion',
+                [$idEmpresa,$idTienda,$idOrden, 1]
+            );      
+            $cabecera = $cabecera[0] ?? null;
+
+            $titulo = 'Edición Orden Venta N° ' . $cabecera->numero;
+            
+            $detalle = OrdenVentaDetalle::procedureLista(
+                'prc_lista_orden_venta_edicion',
+                [$idEmpresa,$idTienda,$idOrden, 2]
+            );    
+            
+            $modoEdicion = true;
+        }
+
         $router ->render('admin/gestion/ventas/orden/index',[
-                'titulo' => 'Orden de Ventas',
+                'titulo' => $titulo,
                 'opciones'=>$opciones,
                 'moneda'=>$moneda,
                 'tpago_defecto'=>$tpago_defecto,
                 'simbolo_moneda'=>$simbolo_moneda,
                 'lista_monedas'=>$lista_monedas,
+                'lista_forma_pago'=>$lista_forma_pago,
                 'validar_tc'=>$validar_tc,
+                'impuesto'=>$impuesto,
+                'cabecera' => $cabecera,
+                'detalle' => $detalle,
                 'opciones'=>$opciones,
+                'fecha'=>$fecha,
                 'tc' => $tc        
             ]);
     }
 
    
-
     public static function validarTipoCambio() {
 
         if (session_status() === PHP_SESSION_NONE) {
@@ -50,7 +90,7 @@ class OrdenVentaController {
         
         $fecha = $_POST['fecha'] ?? null;
         $idMoneda = $_POST['idMoneda'] ?? null;
-
+       
         $monedaBase = $_SESSION['moneda'];
         $controlTC = $_SESSION['validar_tc'];
 
@@ -70,7 +110,8 @@ class OrdenVentaController {
             echo json_encode([
                 'success' => true,
                 'requiere_tc' => true,
-                'tc' => $FactorCambio->venta_mercado
+                'tc' => $FactorCambio->venta_mercado,
+                'tc_oficial' => $FactorCambio->venta_oficial
             ]);
         } else {
             echo json_encode([
@@ -98,25 +139,98 @@ class OrdenVentaController {
                 session_start();
             }
 
+            $idEmpresa  = $_SESSION['idempresa'] ?? null;
             $idTienda  = $_SESSION['idtienda'] ?? null;
             $idUsuario = $_SESSION['id'] ?? null;
 
-            if (!$idTienda || !$idUsuario) {
+            if (!$idTienda || !$idUsuario || !$idEmpresa) {
                 throw new \Exception('Sesión no válida');
             }
 
             // 👉 completar cabecera desde backend
+            $data['cabecera']['idempresa']  = $idEmpresa;
             $data['cabecera']['idtienda']  = $idTienda;
             $data['cabecera']['idusercrea'] = $idUsuario;
 
-            $jsonVenta = json_encode($data, JSON_UNESCAPED_UNICODE);
+            $jsonVenta = json_encode($data, JSON_UNESCAPED_UNICODE);     
+
+            // header('Content-Type: application/json');
+            // echo $jsonVenta;
+            // exit;
 
             $resultado = OrdenVenta::procedureMantenimiento(
-                "prm_registrar_orden_venta",
+                "prp_venta_generar",
                 [$jsonVenta]
             );
 
             // 👇 convertir mysqli_result a array
+            $fila = $resultado->fetch_assoc();
+
+            if (!$fila) {
+                throw new \Exception('No se pudo obtener resultado del procedimiento');
+            }
+
+            echo json_encode([
+                'ok'      => true,
+                'idorden' => $fila['idorden'],
+                'numero'  => $fila['numero']
+            ]);
+
+        } catch (\Throwable $e) {
+
+            http_response_code(500);
+
+            echo json_encode([
+                'ok'      => false,
+                'mensaje' => $e->getMessage(),
+                'trace'   => $e->getLine()
+            ]);
+        }
+    }
+
+
+    public static function editar() {
+
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            if (!$data) {
+                throw new \Exception('JSON inválido o vacío');
+            }
+
+            if (empty($data['detalle'])) {
+                throw new \Exception('Detalle vacío');
+            }
+
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $idTienda  = $_SESSION['idtienda'] ?? null;
+            $idUsuario = $_SESSION['id'] ?? null;
+            $idEmpresa = $_SESSION['idempresa'] ?? null;
+
+            if (!$idTienda || !$idUsuario || !$idEmpresa) {
+                throw new \Exception('Sesión no válida');
+            }
+
+            // completa cabecera desde backend
+            $data['cabecera']['idtienda']  = $idTienda;
+            $data['cabecera']['idusercrea'] = $idUsuario;
+            $data['cabecera']['idempresa'] = $idEmpresa;
+
+            $jsonCompra = json_encode($data, JSON_UNESCAPED_UNICODE);
+
+            // header('Content-Type: application/json');
+            // echo $jsonVenta;
+            // exit;
+
+            $resultado = OrdenVenta::procedureMantenimiento(
+                "prp_venta_editar",
+                [$jsonCompra]
+            );
+
+            // convertir mysqli_result a array
             $fila = $resultado->fetch_assoc();
 
             if (!$fila) {
@@ -140,7 +254,7 @@ class OrdenVentaController {
                 'trace'   => $e->getLine()
             ]);
         }
-    }
+    } 
 
 
     public static function imprimir(Router $router)

@@ -88,22 +88,22 @@ class ActiveRecord {
     } 
 
     // Sanitizar los datos antes de guardarlos en la BD
-public function sanitizarAtributos(): array {
-    $atributos = $this->atributos();
-    $sanitizado = [];
+    public function sanitizarAtributos(): array {
+        $atributos = $this->atributos();
+        $sanitizado = [];
 
-    foreach ($atributos as $key => $value) {
-        if (is_null($value)) {
-            // Forzamos a cadena vacía si es null
-            $sanitizado[$key] = '';
-        } else {
-            // escapamos lo que sí tenga valor
-            $sanitizado[$key] = self::$db->escape_string((string)$value);
+        foreach ($atributos as $key => $value) {
+            if (is_null($value)) {
+                // Forzamos a cadena vacía si es null
+                $sanitizado[$key] = '';
+            } else {
+                // escapamos lo que sí tenga valor
+                $sanitizado[$key] = self::$db->escape_string((string)$value);
+            }
         }
-    }
 
-    return $sanitizado;
-}
+        return $sanitizado;
+    }
 
 
 
@@ -196,7 +196,7 @@ public function sanitizarAtributos(): array {
             $valor = $this->$columna ?? null;
 
             if ($valor instanceof \DateTime) {
-                // Guardar fechas en formato estándar
+                // Guardar fechas en formato estándarrequiere_cobro
                 $atributos[$columna] = $valor->format('Y-m-d H:i:s');
             } elseif (is_bool($valor)) {
                 // Convertir bool a 1 o 0
@@ -241,11 +241,10 @@ public function sanitizarAtributos(): array {
     public static function where($columna, $valor,$unico = false) {        
         $valor = self::$db->escape_string($valor);
         $query = "SELECT * FROM " . static::$tabla . " WHERE {$columna} = '{$valor}'";        
-        //debuguear($query );
+        // debuguear($query );
         $resultado = self::consultarSQL($query); 
         return $unico ? array_shift($resultado) : $resultado; 
     } 
-
 
     // Busqueda Where con multriples opciones 
     public static function findArray($array =[],$unico = false) {
@@ -308,7 +307,7 @@ public function sanitizarAtributos(): array {
         }else{
             $query = " CALL {$nombre} "; 
         }       
-        //debuguear($query);
+        // debuguear($query);
         $resultado = self::consultarSQL($query);    
          
         return $resultado  ;
@@ -381,12 +380,13 @@ public function sanitizarAtributos(): array {
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
-        //retornar los registros por un orden
-        public static function ordenarLimite($columna,$orden,$limite){
-            $query = "SELECT * FROM " . static::$tabla . " order by {$columna}  {$orden} LIMIT {$limite} ";
-            $resultado = self::consultarSQL($query);
-            return $resultado;
-        }
+
+    //retornar los registros por un orden
+    public static function ordenarLimite($columna,$orden,$limite){
+        $query = "SELECT * FROM " . static::$tabla . " order by {$columna}  {$orden} LIMIT {$limite} ";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
 
     //traer total de registros
 
@@ -455,7 +455,7 @@ public function sanitizarAtributos(): array {
         $query .=  join(', ', $valores );
         $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
         $query .= " LIMIT 1 "; 
-        // debuguear($query); // Descomentar si no te funciona algo
+        //debuguear($query); 
         // Actualizar BD
         $resultado = self::$db->query($query);
         return $resultado;
@@ -469,6 +469,7 @@ public function sanitizarAtributos(): array {
     
         return $resultado;
     }
+
     public function eliminarArray($array =[]) {
 
         $query = "DELETE FROM " . static::$tabla . " WHERE ";
@@ -503,7 +504,7 @@ public function sanitizarAtributos(): array {
             SELECT *
             FROM " . static::$tabla . "
             WHERE idempresa = {$empresaId}
-            AND idestado = 7
+            AND activo = 1
             {$whereBusqueda}
             ORDER BY nombre ASC
             LIMIT {$limit}
@@ -522,7 +523,7 @@ public function sanitizarAtributos(): array {
             SELECT COUNT(*) as total
             FROM " . static::$tabla . "
             WHERE idempresa = '{$empresaId}'
-            AND idestado = 7
+            AND activo = 1
             AND nombre LIKE '%{$q}%'
         ";
 
@@ -531,6 +532,11 @@ public function sanitizarAtributos(): array {
 
         return $fila['total'] ?? 0;
     }
+    
+    // public function cambiarEstado($activo) {
+    //     $this->activo = $activo;
+    //     return $this->guardar();
+    // }
 
 
 }

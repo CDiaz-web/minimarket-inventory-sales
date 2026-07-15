@@ -1,9 +1,10 @@
 import { modal } from './modal-manager.js';
+
 export function initModalLoader() {
 
     document.addEventListener('click', async e => {
 
-        // 🔥 FIX
+        // FIX
         if (e.target.closest('.modal')) return;
         if (e.target.closest('.swal2-container')) return;
         if (e.defaultPrevented) return;
@@ -15,6 +16,8 @@ export function initModalLoader() {
         const url = trigger.dataset.modal;
         
         if (!modal.modal) return;
+
+        if (!url) return;
         
         modal.open();
         modal.showLoader();

@@ -3,8 +3,8 @@
 namespace Model;
 
 class Empresa extends ActiveRecord {
-    protected static $tabla = 'empresa';
-    protected static $columnasDB = ['id', 'nombre','ruc','direccion', 'idmoneda','idtipo_pago','porcentaje_imp','email','logo','validar_tc','variaciontc','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $tabla = 'empresas';
+    protected static $columnasDB = ['id', 'nombre','ruc','direccion', 'idmoneda','idtipo_pago','porcentaje_imp','email','logo','validar_tc','variaciontc','ov_requiere_aprobacion','oc_requiere_aprobacion','idusercrea','fechacrea','idusermodi','fechamodi'];
 
 
     public ?int $id = null;
@@ -18,6 +18,8 @@ class Empresa extends ActiveRecord {
     public string $email = '';
     public string $logo = '';
     public int $validar_tc = 0;
+    public int $ov_requiere_aprobacion = 1;
+    public int $oc_requiere_aprobacion = 1;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
     public int $idusermodi = 0;

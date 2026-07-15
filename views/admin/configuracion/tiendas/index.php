@@ -30,13 +30,14 @@
                     <tr>               
                         <th scope='col' class="table__th">Código</th>  
                         <th scope='col' class="table__th">Nombre</th>   
-                        <th scope='col' class="table__th">Dirección</th>                  
+                        <th scope='col' class="table__th">Dirección</th>   
+                        <th scope='col' class="table__th">Estado</th>                  
                         <th scope='col' class="table__th">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="tabla">
                     <?php foreach($tiendas as $tienda) { ?>
-                        <tr class="table__tr">
+                        <tr class="table__tr <?= !$tienda->activo ? 'fila--inactiva' : '' ?>">
                             <td class="table__td">
                                 <?php echo $tienda->codigo ;?>
                             </td>          
@@ -45,7 +46,21 @@
                             </td>    
                             <td class="table__td">
                                 <?php echo $tienda->direccion ;?>
-                            </td>                                  
+                            </td>     
+                            
+                            <td class="table__td">
+                                <label class="switch">
+                                    <input 
+                                        type="checkbox"
+                                        class="js-switch-ajax"
+                                        data-id="<?= $tienda->id ?>"
+                                        data-modelo="Tiendas"
+                                        <?= $tienda->activo ? 'checked' : '' ?>
+                                    >
+                                    <span class="slider"></span>
+                                </label>
+                            </td>                              
+
                             <td class="table__col-actions" >
 
                                 <div class="table__acciones">

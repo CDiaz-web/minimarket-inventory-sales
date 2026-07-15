@@ -3,7 +3,6 @@
         include_once __DIR__ . '/../../../../templates/alertas.php';          
     ?>
 
-
 <div class="table-wrapper">    
 
     <div class="table-header">

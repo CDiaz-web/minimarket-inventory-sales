@@ -4,13 +4,13 @@ namespace Model;
 
 class Listas extends ActiveRecord {
     protected static $tabla = 'lista_precios';
-    protected static $columnasDB = ['id','idempresa','codigo','descripcion','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id','idempresa','codigo','descripcion','activo','idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;
     public int $idempresa = 0;
     public ?string $codigo = null;    
     public string $descripcion = ''; 
-    public int $idestado = 0;
+    public int $activo = 1;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
     public int $idusermodi = 0;
@@ -37,10 +37,6 @@ class Listas extends ActiveRecord {
         if(!$this->descripcion) {
             self::$alertas['error'][] = 'El Nombre es Obligatorio';
         }      
-
-        if(!$this->idestado) {
-            self::$alertas['error'][] = 'El estado es Obligatorio';
-        }
         return self::$alertas;
     }
 }

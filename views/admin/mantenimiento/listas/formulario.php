@@ -25,14 +25,29 @@
             value ="<?php echo $lista->descripcion;?>"     
         />
     </div>   
+    
+    <div class="formulario__campo formulario__campo--check" data-switch-estado> 
+        
+        <span 
+            class="switch__label"
+            data-switch-label
+        >  
+            <?= (isset($lista) && $lista->id)  
+                ? ($lista->activo ? 'Activo' : 'Inactivo') 
+                : 'Activo' ?>
+        </span>
 
-    <div class="formulario__campo">
-        <label for="idestado" class="formulario__label">Estado</label>
-        <select class="formulario__select-xl" id="idestado" name ="idestado">
-        <option value="" >-Seleccionar-</option>
-            <?php foreach($estados as $estado) { ?>
-                <option <?php echo ($lista->idestado == $estado->id) ? 'selected' : '' ; ?> value="<?php echo $estado->id; ?>" > <?php echo $estado->nombre; ?> </option>
-            <?php }?> 
-        </select>
+        <label class="switch">
+            <input
+                type="checkbox"
+                name="activo"
+                <?= (isset($lista) && $lista->id) 
+                    ? ($lista->activo ? 'checked' : '') 
+                    : 'checked' ?>
+            >
+            <span class="slider"></span> 
+        </label>       
+
     </div>
+
 </fieldset>

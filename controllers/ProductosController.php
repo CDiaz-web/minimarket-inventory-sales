@@ -22,7 +22,7 @@ class ProductosController {
         $alertas = [];
         $valor = [$_SESSION['idempresa']]; 
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $productos = Productos::procedureLista('prc_ListaProductos',$valor);
+        $productos = Productos::procedureLista('prc_productos_lista',$valor);
         $router ->render('admin/mantenimiento/productos/productos/index',[
             'titulo' => 'Productos',
             'alertas' => $alertas,
@@ -34,13 +34,14 @@ class ProductosController {
         if(!is_admin()){
             header('Location: /login');
         }
+        $valor = $_SESSION['idempresa'];  
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $producto = new Productos;
-        $categorias = Categorias::all('ASC');
-        $unidades = Unidades::all('ASC');
-        $estados = Estados::where('idmaster','1',false);
-        $producto->idestado = 7; //  Activo por defecto 
+        $categorias = Categorias::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];
+        
+        $unidades = Unidades::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];
+    
         $producto->imagen_actual = $producto->imagen; 
         
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -81,7 +82,8 @@ class ProductosController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
-       
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;       
             //leer imagen      
             $producto->sincronizar($_POST);
             //validar
@@ -112,8 +114,7 @@ class ProductosController {
             'titulo' => 'Registrar Producto',
             'alertas' => $alertas,
             'producto' => $producto,
-            'categorias'=>$categorias,
-            'estados'=>$estados,
+            'categorias'=>$categorias,     
             'unidades'=>$unidades,
             'opciones'=>$opciones
         ]);
@@ -123,6 +124,7 @@ class ProductosController {
         if(!is_admin()){
             header('Location: /login');
         }
+        $valor = $_SESSION['idempresa'];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $alertas = [];
         $id = $_GET['id'];
@@ -134,9 +136,9 @@ class ProductosController {
         if(!$producto){
             header('Location: /admin/mantenimiento/productos/productos');
         }   
-        $categorias = Categorias::all('ASC');
-        $unidades = Unidades::all('ASC');
-        $estados = Estados::where('idmaster','1',false);
+        $categorias = Categorias::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];
+        $unidades = Unidades::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];
+     
         $producto->imagen_actual = $producto->imagen; 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
@@ -180,7 +182,8 @@ class ProductosController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
-            
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;            
             $producto->sincronizar($_POST);
 
             $alertas = $producto->validar();
@@ -205,7 +208,6 @@ class ProductosController {
             'alertas' => $alertas,
             'producto' => $producto,
             'categorias'=>$categorias,
-            'estados'=>$estados,
             'unidades'=>$unidades,
             'opciones'=>$opciones
         ]);
@@ -315,12 +317,12 @@ class ProductosController {
        
     }
 
-    public static function activas() {
-        header('Content-Type: application/json');
-        $valor = $_SESSION['idempresa'];      
-        $productos = TiendProductosas::findArray(['idempresa'=> $valor,'idestado'=> 7],false) ?? [];
-        echo json_encode($productos);
-    }
+    // public static function activas() {
+    //     header('Content-Type: application/json');
+    //     $valor = $_SESSION['idempresa'];      
+    //     $productos = TiendaProductosas::findArray(['idempresa'=> $valor,'idestado'=> 7],false) ?? [];
+    //     echo json_encode($productos);
+    // }
 
   public static function buscar(){        
    

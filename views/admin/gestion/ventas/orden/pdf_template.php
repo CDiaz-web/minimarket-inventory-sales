@@ -57,7 +57,7 @@
         <th>Unidad</th>
         <th>Cantidad</th>
         <th>Precio Unitario</th>
-        <th>Subtotal</th>
+        <th>Total</th>
       </tr>
     </thead>
     <tbody>
@@ -67,17 +67,17 @@
         <td><?= $d->nombre ?></td>
         <td><?= $d->unidad ?></td>
         <td><?= number_format($d->cantidad, 2) ?></td>
-        <td><?= number_format($d->precio_unitario, 2) ?></td>
-        <td><?= number_format($d->total, 2) ?></td>
+        <td><?= number_format($d->precio_igv_origen, 2) ?></td>
+        <td><?= number_format($d->total_origen, 2) ?></td>
       </tr>
       <?php endforeach; ?>
     </tbody>
   </table>
 
   <p>     
-     <strong>Subtotal:</strong> <?= $cabecera->simbolo . " " . $cabecera->subtotal ?><br>
-     <strong>IGV:</strong> <?= $cabecera->simbolo . " " .  $cabecera->igv ?><br>
-     <strong>Total:</strong> <?= $cabecera->simbolo . " " .  $cabecera->total ?><br>
+     <strong>Subtotal:</strong> <?= $cabecera->simbolo . " " . number_format($cabecera->subtotal_origen, 2) ?><br>
+     <strong>IGV:</strong> <?= $cabecera->simbolo . " " .  number_format($cabecera->igv_origen, 2) ?><br>
+     <strong>Total:</strong> <?= $cabecera->simbolo . " " .  number_format($cabecera->total_origen, 2) ?><br>
      <strong>Observación:</strong> <?= $cabecera->observacion ?> 
   </p>
 

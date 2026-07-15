@@ -34,13 +34,28 @@
             value ="<?php echo $tienda->direccion;?>"     
         />
     </div> 
-    <div class="formulario__campo">
-        <label for="idestado" class="formulario__label">Estado</label>
-        <select class="formulario__select" id="idestado" name ="idestado">
-        <option value="" >-Seleccionar-</option>
-            <?php foreach($estados as $estado) { ?>
-                <option <?php echo ($tienda->idestado == $estado->id) ? 'selected' : '' ; ?> value="<?php echo $estado->id; ?>" > <?php echo $estado->nombre; ?> </option>
-            <?php }?> 
-        </select>
+
+    <div class="formulario__campo formulario__campo--check" data-switch-estado> 
+        
+        <span 
+            class="switch__label"
+            data-switch-label
+        >  
+            <?= (isset($tienda) && $tienda->id)  
+                ? ($tienda->activo ? 'Activo' : 'Inactivo') 
+                : 'Activo' ?>
+        </span>
+
+        <label class="switch">
+            <input
+                type="checkbox"
+                name="activo"
+                <?= (isset($tienda) && $tienda->id) 
+                    ? ($tienda->activo ? 'checked' : '') 
+                    : 'checked' ?>
+            >
+            <span class="slider"></span> 
+        </label>        
+
     </div>
 </fieldset>

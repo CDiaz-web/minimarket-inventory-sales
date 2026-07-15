@@ -1,19 +1,12 @@
-
 <h2 class="dashboard__heading"><?php echo $titulo; ?></h2>
    <?php 
-        include_once __DIR__ . '/../../../../templates/alertas.php';        
-          
+        include_once __DIR__ . '/../../../../templates/alertas.php';          
     ?>
-
 
 <div class="table-wrapper">      
 
     <div class="table-header">
         <div class="table-actions">
-            <a class="boton boton--primary-link " href="/admin/gestion/logistica/inventario/crear">
-                <i class="fa-solid fa-circle-plus"></i>
-                Añadir
-            </a>
 
             <form method="GET" class="dashboard__filtros">        
                 <label for="anio" class="sr-only">Año</label>
@@ -54,35 +47,36 @@
                 class="formulario__input"
                 type="text"
                 placeholder="Buscar..."
-                data-table-search="tablaInventario"
+                data-table-search="tablaMovimientos"
             />
         </div>
-    </div>     
+    </div>  
 
 
     <div class="table-body">
         <?php if(!empty($inventarios)) { ?>
-            <table id="tablaInventario"  class="table" data-table data-page-size="10">
+            <table id="tablaMovimientos"  class="table" data-table data-page-size="20">
                 <thead class="table thead">
                     <tr>               
-                        <th scope='col' class="table__th">Documento</th>    
-                        <th scope='col' class="table__th">Fecha</th>    
-                        <th scope='col' class="table__th">Tienda</th> 
-                        <th scope='col' class="table__th">Movimiento</th>  
-                        <th scope='col' class="table__th">Tda. Destino</th> 
-                        <th scope='col' class="table__th">Estado</th>                       
+                        <th scope='col' class="table__th">Numero</th>                           
+                        <th scope='col' class="table__th">Fecha</th>  
+                        <th scope='col' class="table__th">Tienda</th>   
+                        <th scope='col' class="table__th">Movimiento</th> 
+                        <th scope='col' class="table__th">Tienda Destino</th>  
+                        <th scope='col' class="table__th">Observacion</th> 
+                        <th scope='col' class="table__th">Estado</th>                             
                         <th scope='col' class="table__th">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="table-tbody" id="tablaInventario">
+                <tbody class="table-tbody" id="tablaMovimientos">
                     <?php foreach($inventarios as $inventario) { ?>
                         <tr class="table__tr">
                             <td class="table__td">
                                 <?php echo $inventario->documento;?>
-                            </td>    
+                            </td>                 
                             <td class="table__td">
                                 <?php echo $inventario->fecha;?>
-                            </td>
+                            </td>  
                             <td class="table__td">
                                 <?php echo $inventario->tienda_origen;?>
                             </td>  
@@ -93,35 +87,32 @@
                                 <?php echo $inventario->tienda_destino;?>
                             </td>     
                             <td class="table__td">
+                                <?php echo $inventario->observacion;?>
+                            </td>    
+                            <td class="table__td">
                                 <?php echo $inventario->estado;?>
-                            </td>                                   
+                            </td>                                
                             <td class="table__col-actions" >
+                                <div class="table__acciones"> 
 
-                                <div class="table__acciones">
+                                    <!-- Imprimir -->
                                     <a 
-                                        class="boton boton--primary"
-                                        href="/admin/gestion/logistica/inventario/editar?id=<?php echo $inventario->id ?>">
-                                        <i class="fa-solid fa-user-pen"></i>
+                                        href="/admin/gestion/inventarios/movimiento/imprimir?id=<?= $inventario->id ?>" 
+                                        target="_blank"
+                                        class="boton boton--primary" >
+                                        <i class="fa fa-print"></i>
                                     </a>
 
+                                    <!-- Anular -->
                                     <button 
-                                        class="boton boton--primary"  
-                                        data-action="imprimirMovimiento"
-                                        data-id="<?php echo $inventario->id ?>">
-                                        <i class="fa fa-print"></i> 
-                                    </button>      
-
-                                    <form id ="frEliminar<?php echo $inventario->id; ?>"  method="POST" action="/admin/gestion/logistica/inventario/anular" class="table__formulario">
-                                        <input type="hidden" name="id" value="<?php echo $inventario->id; ?>">
-                                        <button
-                                            class="boton boton--danger"
-                                            type="button"
-                                            data-action="deleteRecord"
-                                            data-id="<?php echo $inventario->id; ?>"
-                                        >
-                                            <i class="fa-solid fa-circle-xmark"></i>
-                                        </button>
-                                    </form>
+                                        class="boton boton--danger btn-anular-mov"
+                                        type="button"                                        
+                                        data-id="<?= $inventario->id ?>"
+                                        data-estado="<?= $inventario->estado ?>"
+                                        data-es_generado="<?= $inventario->es_generado ?>">
+                                        <i class="fa-solid fa-circle-xmark"></i>
+                                    </button>
+       
                                 </div>
 
                             </td>
@@ -135,10 +126,7 @@
     </div>    
 
     <div class="table-footer">
-        <div class="table-pagination" data-table-pagination="tablaInventario"></div>  
+        <div class="table-pagination" data-table-pagination="tablaMovimientos"></div>  
     </div>
     
 </div>
-
-
-

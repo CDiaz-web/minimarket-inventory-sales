@@ -65,8 +65,8 @@ class Reportes extends ActiveRecord {
     public static function Inventario($idTienda)
     {
         return self::procedureLista(
-            'prc_inventario',
-            [$idTienda]
+            'prc_reporte_inventario',
+            [$idEmpresa,$idTienda]
         );
     }
 }

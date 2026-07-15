@@ -8,11 +8,7 @@ use Model\TiposMovimientos;
 use Model\Unidades;
 use MVC\Router;
 
-
-
 require '../vendor/autoload.php';
-
-
 
 class TiposMovimientosController {
     
@@ -23,7 +19,8 @@ class TiposMovimientosController {
         }
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $tipos = TiposMovimientos::all('ASC');
+        // $tipos = TiposMovimientos::all('ASC');
+        $tipos = TiposMovimientos::where('idempresa',$_SESSION['idempresa'],false);   
         $router ->render('admin/configuracion/tipo_movimiento/index',[
             'titulo' => 'Tipos Movimientos Inventario',
             'tipos'=>$tipos,
@@ -39,22 +36,23 @@ class TiposMovimientosController {
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $tipo = new TiposMovimientos;   
-        $estados = Estados::where('idmaster','3',false);
-        $tipo->idestado = 9; //  Activo por defecto  
-        // $tipos_relacionados = TiposMovimientos::where('idestado','9',false);
+ 
+        
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
             }            
             $busca = TiposMovimientos::where('codigo', $_POST['codigo'],false);
-            // //agregamos informacion de auditoria al $_post
+
             date_default_timezone_set('America/Lima');
             $_POST['idusercrea']=$_SESSION['id'];
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            //leer imagen      
-            
+            $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;    
+            $_POST['mov_manual'] = '1';    
             $tipo->sincronizar($_POST);
             //validar
             $alertas = $tipo->validar();
@@ -76,8 +74,6 @@ class TiposMovimientosController {
             'titulo' => 'Registrar Tipo Movimiento',
             'alertas' => $alertas,     
             'tipo'=>$tipo,
-            'estados'=>$estados,
-            // 'tipos_relacionados'=>$tipos_relacionados,
             'opciones'=>$opciones        
   
         ]);
@@ -97,9 +93,8 @@ class TiposMovimientosController {
         $tipo = TiposMovimientos::find($id);
         if(!$tipo){
             header('Location: /admin/configuracion/tipo_movimiento');
-        }   
-        $estados = Estados::where('idmaster','3',false);
-        // $tipos_relacionados = TiposMovimientos::where('idestado','9',false);
+        }          
+     
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
@@ -109,6 +104,9 @@ class TiposMovimientosController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
+            $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;    
             $tipo->sincronizar($_POST);
 
             $alertas = $tipo->validar();
@@ -132,8 +130,6 @@ class TiposMovimientosController {
             'titulo' => 'Actualizar Tipo Movimiento',
             'alertas' => $alertas,       
             'tipo'=>$tipo,
-            'estados'=>$estados,
-            // 'tipos_relacionados'=>$tipos_relacionados,
             'opciones'=>$opciones        
         ]);
     }

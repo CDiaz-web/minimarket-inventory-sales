@@ -1,9 +1,116 @@
+// @use 'variables' as v;
+// @use 'mixins' as m;
+
+// /* ===============================
+//    RESET BASE
+// ================================= */
+
+// html {
+//     font-size: 62.5%;
+//     box-sizing: border-box;
+//     height: 100%;
+// }
+
+// *, *:before, *:after {
+//     box-sizing: inherit;
+// }
+
+// body {
+//     font-family: v.$fuente-principal;
+//     font-size: 1.4rem;
+//     line-height: 1.6;
+//     background-color: v.$bg-body;
+//     color: v.$text-primary;
+
+//     min-height: 100vh;
+
+//     display: flex;
+//     flex-direction: column;
+//     -webkit-font-smoothing: antialiased;
+// }
+
+// /* ===============================
+//    ELEMENTOS GENERALES
+// ================================= */
+
+// a {
+//     text-decoration: none;
+//     color: inherit;
+// }
+
+// img {
+//     max-width: 100%;
+//     height: auto;
+//     display: block;
+// }
+
+// /* ===============================
+//    FORMULARIOS (CLAVE PARA MODALES)
+// ================================= */
+
+// input,
+// select,
+// textarea,
+// button {
+//     font-family: inherit;
+//     font-size: 1.3rem;
+// }
+
+// /* elimina estilos raros nativos */
+// button {
+//     border: none;
+//     background: none;
+// }
+
+// /* ===============================
+//    TABLAS CONSISTENTES
+// ================================= */
+
+// table {
+//     width: 100%;
+//     border-collapse: collapse;
+// }
+
+// /* ===============================
+//    SWEETALERT AJUSTE GLOBAL
+// ================================= */
+
+// .swal2-popup {
+//     font-size: 1.6rem !important;
+// }
+// main {
+//     flex: 1;
+// }
+
+// .no-scroll {
+//     overflow: hidden;
+// }
 @use 'variables' as v;
 @use 'mixins' as m;
 
 /* ===============================
    RESET BASE
 ================================= */
+
+:root {
+
+    /* Tipografía */
+    --font-body: 1.4rem;
+    --font-label: 1.2rem;
+    --font-input: 1.3rem;
+    --font-button: 1.3rem;
+
+    /* Alturas */
+    --height-input: 3.4rem;
+    --height-button: 3.6rem;
+
+    /* Espaciados */
+    --padding-input-x: 1rem;
+    --padding-textarea-y: .8rem;
+
+    /* Bordes */
+    --radius-input: .8rem;
+}
 
 html {
     font-size: 62.5%;
@@ -17,8 +124,8 @@ html {
 
 body {
     font-family: v.$fuente-principal;
-    font-size: 1.4rem;
-    line-height: 1.6;
+    font-size: var(--font-body);
+    line-height: 1.5;
     background-color: v.$bg-body;
     color: v.$text-primary;
 
@@ -26,6 +133,7 @@ body {
 
     display: flex;
     flex-direction: column;
+
     -webkit-font-smoothing: antialiased;
 }
 
@@ -45,21 +153,59 @@ img {
 }
 
 /* ===============================
-   FORMULARIOS (CLAVE PARA MODALES)
+   FORMULARIOS
 ================================= */
+
+label {
+    font-size: var(--font-label);
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: .4rem;
+}
 
 input,
 select,
 textarea,
 button {
     font-family: inherit;
-    font-size: 1.4rem;
 }
 
-/* elimina estilos raros nativos */
+/* -------------------------------
+   INPUTS Y SELECTS
+-------------------------------- */
+
+input,
+select {
+    height: var(--height-input);
+    font-size: var(--font-input);
+    padding: 0 var(--padding-input-x);
+    border-radius: var(--radius-input);
+}
+
+/* -------------------------------
+   TEXTAREA
+-------------------------------- */
+
+textarea {
+    font-size: var(--font-input);
+    padding: var(--padding-textarea-y) var(--padding-input-x);
+    border-radius: var(--radius-input);
+    resize: vertical;
+}
+
+/* -------------------------------
+   BUTTONS
+-------------------------------- */
+
 button {
+    height: var(--height-button);
+    font-size: var(--font-button);
+    padding: 0 1.4rem;
+
     border: none;
     background: none;
+
+    cursor: pointer;
 }
 
 /* ===============================
@@ -76,8 +222,13 @@ table {
 ================================= */
 
 .swal2-popup {
-    font-size: 1.6rem !important;
+    font-size: 1.5rem !important;
 }
+
+/* ===============================
+   LAYOUT GENERAL
+================================= */
+
 main {
     flex: 1;
 }

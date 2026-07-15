@@ -4,12 +4,14 @@ namespace Model;
 
 class TiendaProductos extends ActiveRecord {
     protected static $tabla = 'tienda_productos';
-    protected static $columnasDB = ['id', 'idtienda','idproducto', 'stock_actual','stock_comprometido', 'stock_min','stock_max', 'idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id', 'idtienda','idempresa','idproducto', 'costo','stock_actual','stock_comprometido', 'stock_min','stock_max', 'idusercrea','fechacrea','idusermodi','fechamodi'];
 
    
     public ?int $id = null;
     public int $idtienda = 0;  
+    public int $idempresa = 0;  
     public int $idproducto = 0; 
+    public ?float $costo = null;
     public ?float $stock_actual = null;
     public ?float $stock_comprometido = null;
     public ?float $stock_min = null;

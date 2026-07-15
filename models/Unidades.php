@@ -4,12 +4,13 @@ namespace Model;
 
 class Unidades extends ActiveRecord {
     protected static $tabla = 'unidad_medida';
-    protected static $columnasDB = ['id', 'codigo', 'nombre','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id', 'idempresa','codigo', 'nombre','activo','idusercrea','fechacrea','idusermodi','fechamodi'];
  
     public ?int $id = null;
+     public int $idempresa = 0;
     public string $codigo = '';
     public string $nombre = '';
-    public int $idestado = 0;
+    public int $activo = 1;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
     public int $idusermodi = 0;
@@ -36,9 +37,6 @@ class Unidades extends ActiveRecord {
         }
         if(!$this->nombre) {
             self::$alertas['error'][] = 'El Nombre no puede ir vacio';
-        }
-        if(!$this->idestado) {
-            self::$alertas['error'][] = 'El Estado es Obligatorio';
         }
         return self::$alertas;
 

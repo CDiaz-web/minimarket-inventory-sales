@@ -67,6 +67,7 @@ export function cargarProductosPorLista(idLista){
     if(App.ventas.idlista !== idLista){
         productosCache = [];
     }
+
     $.ajax({
 
         url:'/api/productosporlista',

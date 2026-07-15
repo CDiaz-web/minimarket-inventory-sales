@@ -8,8 +8,9 @@ class APITipoPago{
 
     public static function tipopago(){
         if(is_auth()){    
-           
-            $tipospago = TipoPago::all('ASC');
+
+           $empresa  = $_SESSION['idempresa'];   
+           $tipospago = TipoPago::findArray(['idempresa'=>$empresa,'activo'=> 1],false) ?? [];
          
             echo json_encode($tipospago, JSON_UNESCAPED_SLASHES);
         }

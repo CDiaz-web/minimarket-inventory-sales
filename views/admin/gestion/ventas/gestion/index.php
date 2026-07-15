@@ -55,7 +55,7 @@
 
     <div class="table-body">
         <?php if(!empty($ordenes)) { ?>
-            <table id="tablaOrdenes"  class="table" data-table data-page-size="10">
+            <table id="tablaOrdenes"  class="table" data-table data-page-size="20">
                 <thead class="table thead">
                     <tr>               
                         <th scope='col' class="table__th">Numero</th>  
@@ -85,19 +85,29 @@
                                 <?php echo $orden->simbolo;?>
                             </td>  
                             <td class="table__td">
-                                <?php echo number_format($orden->subtotal, 2, '.', ''); ?>
+                                <?php echo number_format($orden->subtotal_origen, 2, '.', ''); ?>
                             </td>
                             <td class="table__td">
-                                <?php echo number_format($orden->impuesto, 2, '.', ''); ?>
+                                <?php echo number_format($orden->igv_origen, 2, '.', ''); ?>
                             </td>     
                             <td class="table__td">
-                                <?php echo number_format($orden->total, 2, '.', ''); ?>
+                                <?php echo number_format($orden->total_origen, 2, '.', ''); ?>
                             </td>    
                             <td class="table__td">
                                 <?php echo $orden->estado;?>
                             </td>                                
                             <td class="table__col-actions" >
                                 <div class="table__acciones">
+
+                                    <!-- Editar -->
+
+                                    <a href="/admin/gestion/ventas/orden?id=<?= $orden->id ?>"
+                                        class="boton boton--primary btn-editar-venta"
+                                        data-id="<?= $orden->id; ?>"
+                                        data-estado="<?= $orden->estado; ?>">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+
                                     <!-- Aprobar -->
                                     <button 
                                         class="boton boton--success-light  btn-aprobar"

@@ -4,17 +4,19 @@ namespace Model;
 
 class TipoPago extends ActiveRecord{
     protected static $tabla = 'tipo_pago';            
-    protected static $columnasDB = ['id','codigo', 'nombre', 'idestado', 'idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id','idempresa','codigo', 'nombre', 'requiere_cobro','activo', 'idusercrea','fechacrea','idusermodi','fechamodi'];
 
-    public $id;
-    public $codigo;
-    public $nombre;
-    public $idestado;
-    public $idusercrea;
-    public $fechacrea;
-    public $idusermodi;
-    public $fechamodi;
-
+    public ?int $id = null;
+    public int $idempresa = 0;
+    public string $codigo = '';
+    public string $nombre = '';
+    public int $activo = 1;
+    public int $requiere_cobro = 0;
+    public int $idusercrea = 0;
+    public ?string $fechacrea = null;
+    public int $idusermodi = 0;
+    public ?string $fechamodi = null;  
+     
     public function __construct(array $args = [])
     {
         foreach ($args as $key => $value) {
@@ -27,7 +29,7 @@ class TipoPago extends ActiveRecord{
             }
         }
     }
-    // Validar el Login de Usuarios
+ 
     public function validar() {
 
         if(!$this->nombre) {
@@ -35,9 +37,6 @@ class TipoPago extends ActiveRecord{
         }
         if(!$this->codigo) {
             self::$alertas['error'][] = 'El codigo es Obligatorio';
-        }
-        if(!$this->idestado) {
-            self::$alertas['error'][] = 'El Estado es Obligatorio';
         }
         return self::$alertas;
 

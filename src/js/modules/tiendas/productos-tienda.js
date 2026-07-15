@@ -38,7 +38,7 @@ export function initProductosTienda() {
         if (!formValues) return;
 
         try {
-            const res = await fetch("/admin/mantenimiento/productos/tiendaproductos/editar", {
+            const res = await fetch("/admin/gestion/inventarios/tiendaproductos/editar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -14,11 +14,11 @@ class TiendaProductosController {
 
         // $productos = Productos::all('ASC');
    
-        $valor = [$_SESSION['idtienda'] ,0]; 
+        $valor = [$_SESSION['idtienda'] ,$_SESSION['idempresa'],0]; 
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $tiendaproductos = TiendaProductos::procedureLista('prc_ListaProductosTienda',$valor);
-        $router ->render('admin/mantenimiento/productos/tiendaproductos/index',[
-            'titulo' => 'Productos Por Tienda',        
+        $tiendaproductos = TiendaProductos::procedureLista('prc_tienda_productos_lista',$valor);
+        $router ->render('admin/gestion/inventarios/tiendaproductos/index',[
+            'titulo' => 'Stock Por Tienda',        
             'tiendaproductos'=>$tiendaproductos,
             'opciones'=>$opciones            
         ]);

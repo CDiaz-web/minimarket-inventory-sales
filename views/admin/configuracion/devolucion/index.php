@@ -33,17 +33,29 @@
             <table id="tablaDevolucion"  class="table" data-table data-page-size="5">
                 <thead class="table thead">
                     <tr>               
-                        <th scope='col' class="table__th">Descripcion</th>                 
+                        <th scope='col' class="table__th">Descripcion</th>     
+                        <th scope='col' class="table__th">Estado</th>                 
                         <th scope='col' class="table__th">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="tabla">
                     <?php foreach($devoluciones as $devolucion) { ?>
-                        <tr class="table__tr">
+                        <tr class="table__tr <?= !$devolucion->activo ? 'fila--inactiva' : '' ?>">
                             <td class="table__td">
                                 <?php echo $devolucion->nombre ;?>
                             </td>          
-                                                      
+                            <td class="table__td">
+                                <label class="switch">
+                                    <input 
+                                        type="checkbox"
+                                        class="js-switch-ajax"
+                                        data-id="<?= $devolucion->id ?>"
+                                        data-modelo="Devoluciones"
+                                        <?= $devolucion->activo ? 'checked' : '' ?>
+                                    >
+                                    <span class="slider"></span>
+                                </label>
+                            </td>                                                           
                             <td class="table__col-actions" >
 
                                 <div class="table__acciones">

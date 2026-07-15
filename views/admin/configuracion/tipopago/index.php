@@ -25,23 +25,38 @@
 
         <div class="table-body">
             <?php if(!empty($tipagos)) { ?>
-                <table id="tablaPagos"  class="table" data-table data-page-size="5">
+                <table id="tablaPagos"  class="table" data-table data-page-size="10">
                     <thead class="table thead">
                         <tr>               
                             <th scope='col' class="table__th">Codigo</th>    
-                            <th scope='col' class="table__th">Descripcion</th>                   
+                            <th scope='col' class="table__th">Descripcion</th>      
+                            <th scope='col' class="table__th">Estado</th>                 
                             <th scope='col' class="table__th">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="table-tbody" id="tabla">
                         <?php foreach($tipagos as $tipago) { ?>
-                            <tr class="table__tr">
+                            <tr class="table__tr <?= !$tipago->activo ? 'fila--inactiva' : '' ?>">
                                 <td class="table__td">
                                     <?php echo $tipago->codigo ;?>
                                 </td>    
                                 <td class="table__td">
                                     <?php echo $tipago->nombre;?>
-                                </td>                               
+                                </td> 
+                                
+                            <td class="table__td">
+                                <label class="switch">
+                                    <input 
+                                        type="checkbox"
+                                        class="js-switch-ajax"
+                                        data-id="<?= $tipago->id ?>"
+                                        data-modelo="TipoPago"
+                                        <?= $tipago->activo ? 'checked' : '' ?>
+                                    >
+                                    <span class="slider"></span>
+                                </label>
+                            </td>                                             
+
                                 <td class="table__col-actions" >
 
                                     <div class="table__acciones">

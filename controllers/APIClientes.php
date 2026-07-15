@@ -11,7 +11,7 @@ class APIClientes{
         if(is_auth()){          
 
             $empresa  = $_SESSION['idempresa'];
-            $clientes = clientes::where('idempresa',$empresa);
+            $clientes = Clientes::findArray(['idempresa'=>$empresa,'activo'=> 1],false) ?? [];
          
             echo json_encode($clientes, JSON_UNESCAPED_SLASHES);
         }

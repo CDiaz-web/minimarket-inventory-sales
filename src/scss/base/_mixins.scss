@@ -36,7 +36,7 @@ $breakpoints: (
     text-align: center;
 
     @if $size == normal {
-        padding: 1.5rem 4rem;
+        // padding: 1.5rem 4rem;
         font-size: 1.8rem;
         width: 100%;
     }

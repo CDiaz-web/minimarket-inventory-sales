@@ -1,3 +1,60 @@
+// @use 'variables' as v;
+// @use 'mixins' as m;
+
+// /* ===============================
+//    HEADINGS BASE
+// ================================= */
+
+// h1, h2, h3, h4 {
+//     @include m.headings;
+//     line-height: 1.2;
+// }
+
+// /* Jerarquía correcta */
+// h1 {
+//     @include m.texto-fluido(3rem, 4rem);
+// }
+
+// h2 {
+//     @include m.texto-fluido(2.4rem, 3rem);
+// }
+
+// h3 {
+//     @include m.texto-fluido(2rem, 2.4rem);
+// }
+
+// h4 {
+//     font-size: 1.8rem;
+// }
+
+// /* ===============================
+//    UTILIDADES TIPOGRÁFICAS
+// ================================= */
+
+// .text-center {
+//     text-align: center;
+// }
+
+// .text-muted {
+//     color: v.$color-gris;
+// }
+
+// .text-bold {
+//     font-weight: v.$font-bold;
+// }
+
+// /* ===============================
+//    CONVENCIÓN APP (BEM helpers)
+// ================================= */
+
+// [class$="__heading"] {
+//     @include m.nombre-pagina;
+// }
+
+// [class$="__descripcion"] {
+//     @include m.descripcion-pagina;
+// }
+
 @use 'variables' as v;
 @use 'mixins' as m;
 
@@ -5,26 +62,42 @@
    HEADINGS BASE
 ================================= */
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     @include m.headings;
     line-height: 1.2;
+    margin: 0;
 }
 
-/* Jerarquía correcta */
+/* -------------------------------
+   JERARQUÍA TIPOGRÁFICA
+-------------------------------- */
+
 h1 {
-    @include m.texto-fluido(3rem, 4rem);
+    @include m.texto-fluido(2.8rem, 3.6rem);
 }
 
 h2 {
-    @include m.texto-fluido(2.4rem, 3rem);
+    @include m.texto-fluido(2.2rem, 2.8rem);
 }
 
 h3 {
-    @include m.texto-fluido(2rem, 2.4rem);
+    @include m.texto-fluido(1.8rem, 2.2rem);
 }
 
 h4 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+}
+
+/* ===============================
+   TEXTO GENERAL
+================================= */
+
+p {
+    margin: 0;
+    line-height: 1.5;
 }
 
 /* ===============================
@@ -49,6 +122,7 @@ h4 {
 
 [class$="__heading"] {
     @include m.nombre-pagina;
+    margin-bottom: 1rem;
 }
 
 [class$="__descripcion"] {

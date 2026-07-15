@@ -4,7 +4,7 @@ namespace Model;
 
 class Usuario extends ActiveRecord {
     protected static $tabla = 'usuarios';
-    protected static $columnasDB = ['id', 'nombre', 'apellido','idperfil','idempresa', 'email','password','telefono', 'admin','idestado','confirmado', 'token','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id', 'nombre', 'apellido','idperfil','idempresa', 'email','password','telefono', 'admin','activo','confirmado', 'token','idusercrea','fechacrea','idusermodi','fechamodi'];
   
     public ?int $id = null;
     public string $nombre = '';
@@ -16,7 +16,7 @@ class Usuario extends ActiveRecord {
     public string $password = '';
     public string $password2 = '';
     public int $admin = 0;
-    public int $idestado = 0;
+    public int $activo = 1;
     public int $confirmado = 0;
     public ?string $token = null;    
     public string $usuario = '';
@@ -71,9 +71,6 @@ class Usuario extends ActiveRecord {
         if(!$this->email) {
             self::$alertas['error'][] = 'El Email es Obligatorio';
         }
-        // if(!$this->telefono) {
-        //     self::$alertas['error'][] = 'EL telefono es Obligatorio';
-        // }
         if(!$this->password) {
             self::$alertas['error'][] = 'El Password no puede ir vacio';
         }
@@ -93,7 +90,7 @@ class Usuario extends ActiveRecord {
     // Verifica si usuario está activo
     public function estaActivo(): bool
     {
-        return (string) $this->idestado === '9';
+        return (string) $this->activo === '1';
     }
 
 

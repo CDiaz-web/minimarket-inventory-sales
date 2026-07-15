@@ -4,7 +4,7 @@ namespace Model;
 
 class Productos extends ActiveRecord {
     protected static $tabla = 'productos';
-    protected static $columnasDB = ['id', 'idempresa','codigo', 'nombre','idcategoria', 'costo','venta','idunidad_medida','imagen','idestado',  'idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id', 'idempresa','codigo', 'nombre','idcategoria', 'venta','idunidad_medida','imagen','activo',  'idusercrea','fechacrea','idusermodi','fechamodi'];
 
    
     public ?int $id = null;
@@ -15,19 +15,19 @@ class Productos extends ActiveRecord {
     public ?string $imagen = null;
     public ?string $imagen_actual = null;
     public ?int $idunidad_medida = null;
-    public ?int $idestado = null;
+    public ?int $activo = 1;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
     public int $idusermodi = 0;
     public int $tiene_stock= 0;
     
-    public ?string $fechamodi = null;    
-    public ?float $costo = null;
+    public ?string $fechamodi = null;        
     public ?float $venta = null;
     public ?float $utilidad = null;    
     public ?float $stock_actual = null;
     public ?float $stock_min = null;
     public ?float $stock_max = null;
+    public ?float $costo = null;
     public string $categoria = '';
 
     public ?float $stock_comprometido = null;
@@ -62,17 +62,11 @@ class Productos extends ActiveRecord {
         if(!$this->idcategoria) {
             self::$alertas['error'][] = 'La categoria es Obligatorio';
         }
-        if(!$this->costo) {
-            self::$alertas['error'][] = 'El Costo es Obligatorio';
-        }
         if(!$this->venta) {
             self::$alertas['error'][] = 'El Precio de venta es Obligatorio';
         }
         if(!$this->idunidad_medida) {
             self::$alertas['error'][] = 'La unidad es Obligatorio';
-        }
-        if(!$this->idestado) {
-            self::$alertas['error'][] = 'El estado es Obligatorio';
         }
         return self::$alertas;
 

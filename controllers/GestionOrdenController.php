@@ -21,9 +21,10 @@ class GestionOrdenController {
         
         $anio = $_GET['anio'] ?? date("Y");
         $mes = $_GET['mes'] ?? date("m");
+        $idempresa = $_SESSION['idempresa'];     
         $idtienda = $_SESSION['idtienda'];        
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $ordenes = OrdenVenta::procedureLista('prc_ListaOrdenes',[$idtienda, $anio, $mes]);
+        $ordenes = OrdenVenta::procedureLista('prc_venta_listar',[$idempresa,$idtienda, $anio, $mes]);
         
         $alertas = [];
         $router ->render('admin/gestion/ventas/gestion/index',[
@@ -51,6 +52,7 @@ class GestionOrdenController {
             if (empty($data['id']) || empty($data['estado'])) {
                 throw new \Exception('Datos incompletos');
             }
+            
 
             // Validar sesión
             if (session_status() === PHP_SESSION_NONE) {
@@ -67,7 +69,7 @@ class GestionOrdenController {
             
 
             $idOrden = intval($data['id']);
-            $estado  = intval($data['estado']);
+            $estado  = $data['estado'];
 
             $buscar = OrdenVenta::find($idOrden);
 
@@ -104,11 +106,7 @@ class GestionOrdenController {
             ]);
         }
     }
-
-    
-
-
-
+   
 
 
 }

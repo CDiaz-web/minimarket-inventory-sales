@@ -37,9 +37,8 @@ class PerfilesController {
 
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $alertas = [];
-        $perfil = new Perfiles;       
+        $perfil = new Perfiles;      
            
-        $estados = Estados::where('idmaster','3',false);
         $perfil->idestado = 9; //  Activo por defecto   
         
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -54,6 +53,8 @@ class PerfilesController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             //leer imagen      
             $perfil->sincronizar($_POST);
             //validar
@@ -82,7 +83,6 @@ class PerfilesController {
             'titulo' => 'Registrar Perfil',
             'alertas' => $alertas,
             'perfil' => $perfil,
-            'estados' => $estados,
             'opciones'=>$opciones
         ]);
     }
@@ -103,7 +103,7 @@ class PerfilesController {
         if(!$perfil){
             header('Location: /admin/seguridad/perfiles');
         }          
-        $estados = Estados::where('idmaster','3',false);
+    
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
@@ -115,6 +115,8 @@ class PerfilesController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             $perfil->sincronizar($_POST);
 
             $alertas = $perfil->validar();
@@ -134,7 +136,6 @@ class PerfilesController {
             'titulo' => 'Actualizar Perfil',
             'alertas' => $alertas,
             'perfil' => $perfil,
-            'estados' => $estados,
             'opciones'=>$opciones
         ]);
     }

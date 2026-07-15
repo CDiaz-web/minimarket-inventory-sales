@@ -41,9 +41,7 @@ export function initClientesVenta(){
             resetVenta();
             $("#buscarCliente").val(ui.item.label);
 
-            App.ventas.idcliente = ui.item.id;
-            // App.ventas.idlista = ui.item.idlista;
-            
+            App.ventas.idcliente = ui.item.id;            
             seleccionarListaPorId(ui.item.idlista);
             cargarProductosPorLista(ui.item.idlista);
         }

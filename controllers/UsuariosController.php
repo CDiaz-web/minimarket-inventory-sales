@@ -34,9 +34,7 @@ class UsuariosController {
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $alertas = [];
         $usuario = new Usuario;
-        $perfiles = Perfiles::all('ASC');        
-        $estados = Estados::where('idmaster','3',false);
-        $usuario->idestado = 9; //  Activo por defecto 
+        $perfiles = Perfiles::where('activo', "1");  
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
@@ -50,8 +48,9 @@ class UsuariosController {
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
             $_POST['confirmado'] = '1';
-       
-            //leer imagen      
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;       
+            
             $usuario->sincronizar($_POST);
             //validar
    
@@ -89,8 +88,7 @@ class UsuariosController {
         $router ->render('admin/seguridad/usuarios/crear',[
             'titulo' => 'Registrar Usuario',
             'alertas' => $alertas,
-            'usuario' => $usuario,
-            'estados' => $estados,
+            'usuario' => $usuario,     
             'perfiles'=>$perfiles,
             'opciones'=>$opciones
         ]);
@@ -111,9 +109,9 @@ class UsuariosController {
         if(!$usuario){
             header('Location: /admin/seguridad/usuarios');
         }   
-        $perfiles = Perfiles::all('ASC');
-
-        $estados = Estados::where('idmaster','3',false);
+        $valor = $_SESSION['idempresa'];  
+        $perfiles = Perfiles::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];
+   
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
@@ -125,9 +123,11 @@ class UsuariosController {
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
             $_POST['confirmado'] = '1';
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             
             $validar = $usuario->password;
-            
+     
             $usuario->sincronizar($_POST);
             $alertas = $usuario->validar();
             $alertas = $usuario->validar_cuenta();
@@ -138,8 +138,7 @@ class UsuariosController {
                 
                 $resultado = $usuario->guardar();            
                 if($resultado){             
-                    $alertas['exito'][] = 'REGISTRO ACTUALIZADO DE MANERA CORRECTA'; 
-                   //header('Location: /admin/logistica/productos');
+                    $alertas['exito'][] = 'REGISTRO ACTUALIZADO DE MANERA CORRECTA';            
                 }
             }
             
@@ -149,7 +148,7 @@ class UsuariosController {
             'titulo' => 'Actualizar Usuario',
             'alertas' => $alertas,
             'usuario' => $usuario,
-            'estados' => $estados,
+      
             'perfiles'=>$perfiles,         
             'opciones'=>$opciones
         ]);
@@ -301,6 +300,5 @@ class UsuariosController {
             exit;
         }
     }
-
 
 }

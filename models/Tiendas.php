@@ -4,14 +4,14 @@ namespace Model;
 
 class Tiendas extends ActiveRecord{
     protected static $tabla = 'tiendas';            
-    protected static $columnasDB = ['id','idempresa','codigo', 'nombre', 'direccion','idestado', 'idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id','idempresa','codigo', 'nombre', 'direccion','activo', 'idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;
     public string $codigo = '';
     public string $nombre = '';
     public string $direccion = '';
     public int $idempresa = 0;
-    public int $idestado = 0;
+    public int $activo = 1;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
     public int $idusermodi = 0;

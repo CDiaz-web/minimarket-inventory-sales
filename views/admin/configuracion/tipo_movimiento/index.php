@@ -25,12 +25,12 @@
 
     <div class="table-body">
         <?php if(!empty($tipos)) { ?>
-            <table id="tablaTipoMov"  class="table" data-table data-page-size="5">
+            <table id="tablaTipoMov"  class="table" data-table data-page-size="10">
                 <thead class="table thead">
                     <tr>               
                         <th scope='col' class="table__th">Código</th>   
                         <th scope='col' class="table__th">Descripcion</th>    
-                        <th scope='col' class="table__th">Accion</th>
+                        <th scope='col' class="table__th">Accion</th>        
                         <th scope='col' class="table__th">Acciones</th>
                     </tr>
                 </thead>
@@ -45,7 +45,8 @@
                             </td>    
                             <td class="table__td">
                                 <?php echo $tipo->accion;?>
-                            </td>                                  
+                            </td> 
+
                             <td class="table__col-actions" >
 
                                 <div class="table__acciones">

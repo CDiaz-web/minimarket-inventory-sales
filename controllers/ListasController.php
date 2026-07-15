@@ -2,7 +2,6 @@
 
 namespace Controllers;
 
-use Model\Estados;
 use Model\Listas;
 use Model\Monedas;
 use Model\Opciones;
@@ -43,8 +42,7 @@ class ListasController {
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $lista = new Listas;  
-        $estados = Estados::where('idmaster','3',false);
-        $lista->idestado = 9; //  Activo por defecto  
+
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
@@ -57,6 +55,8 @@ class ListasController {
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             //leer imagen      
          
             $lista->sincronizar($_POST);
@@ -79,8 +79,7 @@ class ListasController {
         $router ->render('admin/mantenimiento/listas/crear',[
             'titulo' => 'Registrar Lista de Precios',
             'alertas' => $alertas,     
-            'lista'=>$lista, 
-            'estados'=>$estados,
+            'lista'=>$lista,     
             'opciones'=>$opciones        
   
         ]);
@@ -97,9 +96,7 @@ class ListasController {
         if(!$id){
             header('Location: /admin/mantenimiento/listas');
         }       
-        $lista = listas::find($id);   
-        $estados = Estados::where('idmaster','3',false);
-         
+        $lista = listas::find($id);           
         if(!$lista){
             header('Location: /admin/mantenimiento/listas');
         }   
@@ -113,7 +110,8 @@ class ListasController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;        
             $lista->sincronizar($_POST);
 
             $alertas = $lista->validar();
@@ -132,8 +130,7 @@ class ListasController {
         $router ->render('admin/mantenimiento/listas/editar',[
             'titulo' => 'Actualizar Lista de Precio',
             'alertas' => $alertas,       
-            'lista'=>$lista,    
-            'estados'=>$estados,
+            'lista'=>$lista, 
             'opciones'=>$opciones        
         ]);
     }

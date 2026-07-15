@@ -25,13 +25,42 @@
             value ="<?php echo $tipopago->nombre;?>"     
         />
     </div>   
-    <div class="formulario__campo">
-        <label for="idestado" class="formulario__label">Estado</label>
-        <select class="formulario__select-xl" id="idestado" name ="idestado">
-        <option value="" >-Seleccionar-</option>
-            <?php foreach($estados as $estado) { ?>
-                <option <?php echo ($tipopago->idestado == $estado->id) ? 'selected' : '' ; ?> value="<?php echo $estado->id; ?>" > <?php echo $estado->nombre; ?> </option>
-            <?php }?> 
-        </select>
+
+
+    <div class="formulario__campo formulario__campo--check"> 
+        <label for="requiere_cobro" class="formulario__check">
+            <input
+                type = "checkbox"
+                class = "formulario__input"
+                id = "requiere_cobro"
+                name="requiere_cobro"   
+                <?php if ($tipopago->requiere_cobro == 1) echo 'checked="checked"'; ?> 
+            /> Requiere Cobro
+        </label>
+    </div>     
+
+    <div class="formulario__campo formulario__campo--check" data-switch-estado> 
+        
+        <span 
+            class="switch__label"
+            data-switch-label
+        >  
+            <?= (isset($tipopago) && $tipopago->id)  
+                ? ($tipopago->activo ? 'Activo' : 'Inactivo') 
+                : 'Activo' ?>
+        </span>
+
+        <label class="switch">
+            <input
+                type="checkbox"
+                name="activo"
+                <?= (isset($tipopago) && $tipopago->id) 
+                    ? ($tipopago->activo ? 'checked' : '') 
+                    : 'checked' ?>
+            >
+            <span class="slider"></span> 
+        </label>       
+
     </div>
+    
 </fieldset>

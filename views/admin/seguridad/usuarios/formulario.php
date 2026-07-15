@@ -55,35 +55,49 @@
             value ="<?php echo $usuario->email;?>"     
         />
     </div> 
-        <div class="formulario__campo">
-            <label for="password" class="formulario__label">Password</label>
+    <div class="formulario__campo">
+        <label for="password" class="formulario__label">Password</label>
+        <input
+            type="password"
+            class="formulario__input"
+            placeholder="Tu Password"
+            id="password"
+            name="password"
+            value ="<?php echo $usuario->password;?>"   
+        />
+    </div>
+    <div class="formulario__campo">
+        <label for="password2" class="formulario__label">Repetir Password</label>
+        <input
+            type="password"
+            class="formulario__input"
+            placeholder="Repite Tu Password"
+            id="password2"
+            name="password2"
+            value ="<?php echo $usuario->password;?>"  
+        />
+    </div>
+    <div class="formulario__campo formulario__campo--check" data-switch-estado> 
+        
+        <span 
+            class="switch__label"
+            data-switch-label
+        >  
+            <?= (isset($usuario) && $usuario->id)  
+                ? ($usuario->activo ? 'Activo' : 'Inactivo') 
+                : 'Activo' ?>
+        </span>
+
+        <label class="switch">
             <input
-                type="password"
-                class="formulario__input"
-                placeholder="Tu Password"
-                id="password"
-                name="password"
-                value ="<?php echo $usuario->password;?>"   
-            />
-        </div>
-        <div class="formulario__campo">
-            <label for="password2" class="formulario__label">Repetir Password</label>
-            <input
-                type="password"
-                class="formulario__input"
-                placeholder="Repite Tu Password"
-                id="password2"
-                name="password2"
-                value ="<?php echo $usuario->password;?>"  
-            />
-        </div>
-        <div class="formulario__campo">
-            <label for="idestado" class="formulario__label">Estado</label>
-            <select class="formulario__select-xl" id="idestado" name ="idestado">
-            <option value="" >-Seleccionar-</option>
-                <?php foreach($estados as $estado) { ?>
-                    <option <?php echo ($usuario->idestado == $estado->id) ? 'selected' : '' ; ?> value="<?php echo $estado->id; ?>" > <?php echo $estado->nombre; ?> </option>
-                <?php }?> 
-            </select>
-        </div>
+                type="checkbox"
+                name="activo"
+                <?= (isset($usuario) && $usuario->id) 
+                    ? ($usuario->activo ? 'checked' : '') 
+                    : 'checked' ?>
+            >
+            <span class="slider"></span> 
+        </label>        
+
+    </div>
 </fieldset>

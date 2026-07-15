@@ -41,16 +41,15 @@
                         <th scope='col' class="table__th">Codigo</th> 
                         <th scope='col' class="table__th">Categoria</th>            
                         <th scope='col' class="table__th">Nombre</th>                    
-                        <th scope='col' class="table__th">Unidad</th> 
-                        <th scope='col' class="table__th">Costo</th> 
-                        <th scope='col' class="table__th">Venta</th> 
-                        <th scope='col' class="table__th">Utilidad</th>                
+                        <th scope='col' class="table__th">Unidad</th>                         
+                        <th scope='col' class="table__th">Venta</th>                         
+                        <th scope='col' class="table__th">Estado</th>                       
                         <th scope='col' class="table__th">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="tabla">
                     <?php foreach($productos as $producto) { ?>
-                        <tr class="table__tr">
+                        <tr class="table__tr <?= !$producto->activo ? 'fila--inactiva' : '' ?>">
                             <td class="table__td">
                                 <?php echo  $producto->codigo ;?>
                             </td>   
@@ -62,16 +61,24 @@
                             </td>  
                             <td class="table__td">
                                 <?php echo $producto->unidad ;?>
-                            </td>         
-                            <td class="table__td">                            
-                                <?php echo number_format($producto->costo, 2, '.', ''); ?>
-                            </td>  
+                            </td>                                     
                             <td class="table__td">                           
                                 <?php echo number_format($producto->venta, 2, '.', ''); ?> 
-                            </td>                 
-                            <td class="table__td">                            
-                                <?php echo number_format($producto->utilidad, 2, '.', ''); ?>
+                            </td>                                               
+                            
+                            <td class="table__td">
+                                <label class="switch">
+                                    <input 
+                                        type="checkbox"
+                                        class="js-switch-ajax"
+                                        data-id="<?= $producto->id ?>"
+                                        data-modelo="Productos"
+                                        <?= $producto->activo ? 'checked' : '' ?>
+                                    >
+                                    <span class="slider"></span>
+                                </label>
                             </td>                                 
+
                             <td class="table__col-actions" >
 
                                 <div class="table__acciones">

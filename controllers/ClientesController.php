@@ -4,7 +4,6 @@ namespace Controllers;
 
 use MVC\Router;
 use Model\Clientes;
-use Model\Estados;
 use Model\Listas;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 // use PhpOffice\PhpSpreadsheet\Calculation\TextData\Format;
@@ -43,13 +42,10 @@ class ClientesController {
         $alertas = [];
         $valor = $_SESSION['idempresa'];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $cliente = new Clientes();
-        $estados = Estados::where('idmaster','3',false);
-        $cliente->idestado = 9; // 👈 Activo por defecto       
-        $tipos = TipoCliente::findArray(['idestado'=> 9],false) ?? [];
-        $tiendas = Tiendas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
-        $listas = Listas::where('idempresa',$valor,false);
-        $listas = Listas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
+        $cliente = new Clientes();            
+        $tipos = TipoCliente::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];        
+        $tiendas = Tiendas::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];         
+        $listas = Listas::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];
         $cliente->idtienda_default = $_SESSION['idtienda'];
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
@@ -68,7 +64,8 @@ class ClientesController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
-            //leer imagen      
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;  
             
             $cliente->sincronizar($_POST);
             //validar
@@ -94,8 +91,7 @@ class ClientesController {
             'alertas' => $alertas,     
             'cliente'=>$cliente,
             'tipos'=>$tipos,
-            'tiendas'=>$tiendas,
-            'estados'=>$estados,
+            'tiendas'=>$tiendas,       
             'listas'=>$listas,
             'opciones'=>$opciones       
   
@@ -114,12 +110,10 @@ class ClientesController {
         }    
         $valor = $_SESSION['idempresa'];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);    
-        $cliente = Clientes::find($id);
-        $estados = Estados::where('idmaster','3',false);
-        $tipos = TipoCliente::findArray(['idestado'=> 9],false) ?? [];
-        $tiendas = Tiendas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
-        $listas = Listas::where('idempresa',$valor,false);
-        $listas = Listas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
+        $cliente = Clientes::find($id);        
+        $tipos = TipoCliente::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];
+        $tiendas = Tiendas::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];
+        $listas = Listas::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];
         if(!$cliente){
             header('Location: /admin/mantenimiento/clientes/clientes');
         }   
@@ -136,6 +130,8 @@ class ClientesController {
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             $cliente->sincronizar($_POST);
 
             $alertas = $cliente->validar();
@@ -147,7 +143,7 @@ class ClientesController {
             
                 if($resultado){      
                    $alertas['exito'][] = 'REGISTRO ACTUALIZADO DE MANERA CORRECTA';       
-                   //header('Location: /admin/logistica/categorias');
+              
                 }
             }
             
@@ -159,8 +155,7 @@ class ClientesController {
             'cliente'=>$cliente,
             'tipos'=>$tipos,
             'tiendas'=>$tiendas,
-            'listas'=>$listas,
-            'estados'=>$estados,
+            'listas'=>$listas,   
             'opciones'=>$opciones       
         ]);
     }

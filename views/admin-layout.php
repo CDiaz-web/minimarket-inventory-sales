@@ -61,8 +61,21 @@
                     empresa_id: <?php echo $_SESSION['idempresa'] ?? 0; ?>,
                     moneda_base: <?php echo $_SESSION['moneda'] ?? 0; ?>,
                     validar_tc: <?php echo $_SESSION['validar_tc'] ?? 0 ; ?>,
-                    variacion_tc: <?php echo $variaciontc ?? 0; ?>
+                    variacion_tc: <?php echo $variaciontc ?? 0; ?>,
+                    impuesto: <?php echo $impuesto ?? 0; ?>
                 }
+            };
+        </script>
+
+        <script>
+            window.APP = window.APP || {};
+            window.APP.compraEdicion = {
+                cabecera: <?= json_encode($cabecera, JSON_UNESCAPED_UNICODE) ?>,
+                detalle: <?= json_encode($detalle, JSON_UNESCAPED_UNICODE) ?>
+            };
+            window.APP.ventaEdicion = {
+                cabecera: <?= json_encode($cabecera, JSON_UNESCAPED_UNICODE) ?>,
+                detalle: <?= json_encode($detalle, JSON_UNESCAPED_UNICODE) ?>
             };
         </script>
 
@@ -71,7 +84,7 @@
         <script>
             window.BASE_URL = "/admin";
         </script>
-        <!-- <script src="/build/js/main.min.js" defer></script>   -->
+        
         <script src="/build/js/app.min.js" defer></script>
 
 <div id="appModal" class="dashboard-modal hidden">

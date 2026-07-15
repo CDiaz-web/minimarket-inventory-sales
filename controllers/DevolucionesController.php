@@ -23,7 +23,7 @@ class DevolucionesController {
         }
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $devoluciones = Devoluciones::all('ASC');
+        $devoluciones = Devoluciones::where('idempresa',$_SESSION['idempresa'],false);   
         $router ->render('admin/configuracion/devolucion/index',[
             'titulo' => 'Motivos de Devolucion',
             'devoluciones'=>$devoluciones,
@@ -39,8 +39,8 @@ class DevolucionesController {
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $devolucion = new Devoluciones;   
-        $estados = Estados::where('idmaster','3',false);
-        $devolucion->idestado = 9; //  Activo por defecto  
+   
+
         // $tipos_relacionados = TiposMovimientos::where('idestado','9',false);
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
@@ -53,6 +53,9 @@ class DevolucionesController {
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
+            $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             //leer imagen      
             
             $devolucion->sincronizar($_POST);
@@ -73,8 +76,7 @@ class DevolucionesController {
         $router ->render('admin/configuracion/devolucion/crear',[
             'titulo' => 'Registrar Motivo Devolucion',
             'alertas' => $alertas,     
-            'devolucion'=>$devolucion,
-            'estados'=>$estados,          
+            'devolucion'=>$devolucion,   
             'opciones'=>$opciones        
   
         ]);
@@ -95,8 +97,7 @@ class DevolucionesController {
         if(!$devolucion){
             header('Location: /admin/configuracion/devolucion');
         }   
-        $estados = Estados::where('idmaster','3',false);
-        // $tipos_relacionados = TiposMovimientos::where('idestado','9',false);
+
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
@@ -106,6 +107,9 @@ class DevolucionesController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
+            $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             $devolucion->sincronizar($_POST);
 
             $alertas = $devolucion->validar();
@@ -124,8 +128,7 @@ class DevolucionesController {
         $router ->render('admin/configuracion/devolucion/editar',[
             'titulo' => 'Actualizar Motivo Devolucion',
             'alertas' => $alertas,       
-            'devolucion'=>$devolucion,
-            'estados'=>$estados,            
+            'devolucion'=>$devolucion,           
             'opciones'=>$opciones        
         ]);
     }
@@ -169,8 +172,11 @@ class DevolucionesController {
 
     public static function listar(Router $router)
 {
-
-    $motivos = Devoluciones::where('idestado','9',false);
+    // Validar sesión
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    $motivos = Devoluciones::findArray(['idempresa'=>$_SESSION['idempresa'],'activo'=> 1],false) ?? [];
     $respuesta = [];
 
     foreach ($motivos as $m) {

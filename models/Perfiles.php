@@ -4,14 +4,14 @@ namespace Model;
 
 class Perfiles extends ActiveRecord{
     protected static $tabla = 'perfiles';            
-    protected static $columnasDB = ['id', 'nombre','inicial','idempresa','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id', 'nombre','inicial','idempresa','activo','idusercrea','fechacrea','idusermodi','fechamodi'];
   
     public ?int $id = null;
     public string $codigo = '';
     public string $nombre = '';
     public int $inicial = 0;
     public int $idempresa = 0;
-    public int $idestado = 0;
+    public int $activo = 1;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
     public int $idusermodi = 0;
@@ -36,9 +36,6 @@ class Perfiles extends ActiveRecord{
         }      
         if(!$this->inicial) {
             self::$alertas['error'][] = 'Ingrese Pagina Inicial';
-        } 
-        if(!$this->idestado) {
-            self::$alertas['error'][] = 'Ingrese Estado';
         } 
         return self::$alertas;
     }

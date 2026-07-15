@@ -1,0 +1,108 @@
+<h2 class="dashboard__heading"><?php echo $titulo; ?></h2>
+   <?php 
+        include_once __DIR__ . '/../../../templates/alertas.php';    
+    ?>
+
+<div class="table-wrapper">      
+
+    <div class="table-header">
+        <div class="table-actions">
+            <a class="boton boton--primary-link" href="/admin/mantenimiento/proveedores/crear">
+                <i class="fa-solid fa-circle-plus"></i>
+                Añadir
+            </a>
+            
+            <div class="table-actions">
+                <button class="boton boton--primary"                  
+                    data-action="exportTable"
+                    data-table="tablaProveedores"
+                    data-file="proveedores.xlsx"
+                    data-sheet="Proveedores"
+                >
+                    Exportar
+                </button>
+            </div>
+
+            <!-- <a class="boton boton--primary-link"  href="/admin/mantenimiento/proveedores/cargar">
+                <i class="fa-solid fa-circle-down"></i>
+                Carga Masiva
+            </a> -->
+        </div>
+        <div class="table-search">
+            <input
+                class="formulario__input"
+                type="text"
+                placeholder="Buscar Proveedor..."
+                data-table-search="tablaProveedores"
+            />
+        </div>
+    </div>  
+
+
+    <div class="table-body">
+        <?php if(!empty($proveedores)) { ?>
+            <table id="tablaProveedores"  class="table" data-table data-page-size="10">
+                <thead class="table thead">
+                    <tr>               
+                        <th scope='col' class="table__th">Documento</th>        
+                        <th scope='col' class="table__th">Nombre</th>                    
+                        <th scope='col' class="table__th">Estado</th>              
+                        <th scope='col' class="table__th">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="table-tbody" id="tabla">
+                    <?php foreach($proveedores as $proveedor) { ?>
+                        <tr class="table__tr <?= !$proveedor->activo ? 'fila--inactiva' : '' ?>">
+                            <td class="table__td">
+                                <?php echo $proveedor->documento ;?>
+                            </td>              
+                            <td class="table__td">
+                                <?php echo $proveedor->nombre_proveedor ;?>
+                            </td> 
+                            <td class="table__td">
+                                <label class="switch">
+                                    <input 
+                                        type="checkbox"
+                                        class="js-switch-ajax"
+                                        data-id="<?= $proveedor->id ?>"
+                                        data-modelo="Proveedores"
+                                        <?= $proveedor->activo ? 'checked' : '' ?>
+                                    >
+                                    <span class="slider"></span>
+                                </label>
+                            </td>                                     
+                            <td class="table__col-actions" >
+
+                                <div class="table__acciones">
+                                    <a class="boton boton--primary" href="/admin/mantenimiento/proveedores/editar?id=<?php echo $proveedor->id ?>">
+                                        <i class="fa-solid fa-user-pen"></i>                                
+                                    </a>
+
+                                    <form id ="frEliminar<?php echo $proveedor->id; ?>"  method="POST" action="/admin/mantenimiento/proveedores/eliminar" class="table__formulario">
+                                        <input type="hidden" name="id" value="<?php echo $proveedor->id; ?>">
+                                        <button
+                                            class="boton boton--danger"
+                                            type="button"
+                                            data-action="deleteRecord"
+                                            data-id="<?php echo $proveedor->id; ?>"
+                                        >
+                                            <i class="fa-solid fa-circle-xmark"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } else { ?>
+            <p class="text-center">No hay Proveedores Registradas</p>
+        <?php } ?>
+    </div>    
+
+    <div class="table-footer">
+        <div class="table-pagination" data-table-pagination="tablaProveedores"></div>  
+    </div>
+    
+</div>

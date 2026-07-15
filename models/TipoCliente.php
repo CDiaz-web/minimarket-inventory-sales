@@ -4,13 +4,13 @@ namespace Model;
 
 class TipoCliente extends ActiveRecord {
     protected static $tabla = 'tipo_cliente';
-    protected static $columnasDB = ['id', 'codigo', 'nombre','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id', 'codigo','idempresa', 'nombre','activo','idusercrea','fechacrea','idusermodi','fechamodi'];
  
     public ?int $id = null;
     public string $codigo = '';
-    public string $nombre = '';
-    
-    public int $idestado = 0;
+    public int $idempresa = 0;
+    public string $nombre = '';    
+    public int $activo = 1;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
     public int $idusermodi = 0;
@@ -40,9 +40,6 @@ class TipoCliente extends ActiveRecord {
             self::$alertas['error'][] = 'El Nombre no puede ir vacio';
         }
 
-        if(!$this->idestado) {
-            self::$alertas['error'][] = 'El estado es Obligatorio';
-        }
         return self::$alertas;
 
     }

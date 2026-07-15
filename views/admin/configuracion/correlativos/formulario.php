@@ -17,6 +17,7 @@
             <option value="" >-Seleccionar-</option>
             <option <?php echo ($correlativo->tipo_documento === "Inventario") ? 'selected' : '' ; ?> value="Inventario">Inventario</option>
             <option <?php echo ($correlativo->tipo_documento === "Venta") ? 'selected' : '' ; ?> value="Venta">Venta</option>
+            <option <?php echo ($correlativo->tipo_documento === "Compra") ? 'selected' : '' ; ?> value="Compra">Compra</option>
         </select>
     </div>  
     

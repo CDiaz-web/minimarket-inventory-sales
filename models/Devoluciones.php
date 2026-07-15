@@ -4,11 +4,12 @@ namespace Model;
 
 class Devoluciones extends ActiveRecord {
     protected static $tabla = 'motivos_devolucion';
-    protected static $columnasDB = ['id',  'nombre','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id',  'idempresa','nombre','activo','idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;
+    public int $idempresa = 0;
     public string $nombre = ''; 
-    public int $idestado = 0;
+    public int $activo = 1;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
     public int $idusermodi = 0;

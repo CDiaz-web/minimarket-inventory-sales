@@ -3,8 +3,9 @@
 use Controllers\AuthController;
 use Controllers\CategoriasController;
 use Controllers\ClientesController;
+use Controllers\ProveedoresController;
 use Controllers\CorrelativosController;
-use Controllers\DashboardController;
+use Controllers\DashboardCarsController;
 use Controllers\DevolucionesController;
 use Controllers\EligeTiendaController;
 use Controllers\EmpresaController;
@@ -13,6 +14,10 @@ use Controllers\InventariosController;
 use Controllers\ListasController;
 use Controllers\ListaProductosController;
 use Controllers\OrdenVentaController;
+use Controllers\OrdenCompraController;
+use Controllers\GestionOCController;
+use Controllers\MovimientoController;
+
 
 use Controllers\ReportesController;
 use Controllers\GestionOrdenController;
@@ -25,7 +30,6 @@ use Controllers\TipoPagoController;
 use Controllers\TiposMovimientosController;
 use Controllers\UnidadesController;
 use Controllers\UsuariosController;
-
 
 //========== AUTENTICACION
 //===== RUTA PRINCIPAL
@@ -56,29 +60,42 @@ $router->get('/mensaje', [AuthController::class, 'mensaje']);
 $router->get('/confirmar-cuenta', [AuthController::class, 'confirmar']);
 
 
-
-
 //========== GESTION
 //===== DASHBOARD
-$router->get('/admin/dashboard', [DashboardController::class, 'index']);
+$router->get('/admin/dashboard', [DashboardCarsController::class, 'index']);
 
-//===== LOGISTICA
+//===== COMPRAS
+//== ORDEN COMPRA
+$router->get('/admin/gestion/compras/orden',[OrdenCompraController::class,'index']);
+$router->post('/admin/gestion/compras/orden/validarTipoCambio',[OrdenCompraController::class,'validarTipoCambio']);
+$router->post('/admin/gestion/compras/orden/generar',[OrdenCompraController::class,'generar']);
+$router->post('/admin/gestion/compras/orden/editar',[OrdenCompraController::class,'editar']);
+$router->get('/admin/gestion/compras/orden/imprimir', [OrdenCompraController::class, 'imprimir']);
+
+//== GESTION ORDEN COMPRA
+$router->get('/admin/gestion/compras/gestion',[GestionOCController::class,'index']);
+$router->post('/admin/gestion/compras/gestion/cambiarestado',[GestionOCController::class,'cambiarestado']);
+$router->get('/admin/gestion/compras/gestion/cambiarestado',[GestionOCController::class,'cambiarestado']);
+$router->get('/admin/gestion/compras/gestion/cambiarestado',[GestionOCController::class,'cambiarestado']);
 //== INVENTARIO
-$router->get('/admin/gestion/logistica/inventario',[InventariosController::class,'index']);
-$router->post('/admin/gestion/logistica/inventario/crear', [InventariosController::class, 'crear']);
-$router->get('/admin/gestion/logistica/inventario/crear', [InventariosController::class, 'crear']);
-$router->post('/admin/gestion/logistica/inventario/editar', [InventariosController::class, 'editar']);
-$router->get('/admin/gestion/logistica/inventario/editar', [InventariosController::class, 'editar']);
-$router->post('/admin/gestion/logistica/inventario/editar_registro', [InventariosController::class, 'editar_registro']);
-$router->get('/admin/gestion/logistica/inventario/editar_registro', [InventariosController::class, 'editar_registro']);
-$router->post('/admin/gestion/logistica/inventario/anular', [InventariosController::class, 'anular']);
-$router->get('/admin/gestion/logistica/inventario/imprimir', [InventariosController::class, 'imprimir']);
+$router->get('/admin/gestion/inventarios/movimiento',[MovimientoController::class,'index']);
+$router->post('/admin/gestion/inventarios/movimiento/generar',[MovimientoController::class,'generar']);
+$router->post('/admin/gestion/inventarios/movimiento/editar',[MovimientoController::class,'editar']);
+$router->get('/admin/gestion/inventarios/movimiento/imprimir', [MovimientoController::class, 'imprimir']);
+
+//== GESTION inventario
+
+$router->get('/admin/gestion/inventarios/gestion',[InventariosController::class,'index']);
+$router->post('/admin/gestion/inventarios/gestion/anularmovimiento',[InventariosController::class,'anularmovimiento']);
+$router->get('/admin/gestion/inventarios/gestion/anularmovimiento',[InventariosController::class,'anularmovimiento']);
+
 //===== VENTAS
 //== ORDEN VENTA
 $router->get('/admin/gestion/ventas/orden',[OrdenVentaController::class,'index']);
 $router->get('/admin/gestion/ventas/orden/validarTipoCambio',[OrdenVentaController::class,'validarTipoCambio']);
 $router->post('/admin/gestion/ventas/orden/validarTipoCambio',[OrdenVentaController::class,'validarTipoCambio']);
 $router->post('/admin/gestion/ventas/orden/generar',[OrdenVentaController::class,'generar']);
+$router->post('/admin/gestion/ventas/orden/editar',[OrdenVentaController::class,'editar']);
 $router->get('/admin/gestion/ventas/orden/imprimir', [OrdenVentaController::class, 'imprimir']);
 //====GESTION ORDENES
 $router->get('/admin/gestion/ventas/gestion',[GestionOrdenController::class,'index']);
@@ -137,8 +154,8 @@ $router->get('/admin/mantenimiento/productos/productos/activas', [ProductosContr
 $router->get('/admin/mantenimiento/productos/productos/buscar', [ProductosController::class, 'buscar']);
 
 //== PRODUCTOS TIENDA
-$router->get('/admin/mantenimiento/productos/tiendaproductos',[TiendaProductosController::class,'index']);
-$router->post('/admin/mantenimiento/productos/tiendaproductos/editar', [TiendaProductosController::class, 'editar']);
+$router->get('/admin/gestion/inventarios/tiendaproductos',[TiendaProductosController::class,'index']);
+$router->post('/admin/gestion/inventarios/tiendaproductos/editar', [TiendaProductosController::class, 'editar']);
 
 //===== LISTA DE PRECIOS
 $router->get('/admin/mantenimiento/listas',[ListasController::class,'index']);
@@ -178,6 +195,15 @@ $router->post('/admin/mantenimiento/clientes/clientes/eliminar', [ClientesContro
 $router->post('/admin/mantenimiento/clientes/clientes/cargar', [ClientesController::class, 'cargar']);
 $router->get('/admin/mantenimiento/clientes/clientes/cargar', [ClientesController::class, 'cargar']);
 $router->get('/admin/mantenimiento/clientes/clientes/traerDocumento', [ClientesController::class, 'traerDocumento']);
+
+//== PROVEEDORES
+$router->get('/admin/mantenimiento/proveedores',[ProveedoresController::class,'index']);
+$router->post('/admin/mantenimiento/proveedores/crear', [ProveedoresController::class, 'crear']);
+$router->get('/admin/mantenimiento/proveedores/crear', [ProveedoresController::class, 'crear']);
+$router->post('/admin/mantenimiento/proveedores/editar', [ProveedoresController::class, 'editar']);
+$router->get('/admin/mantenimiento/proveedores/editar', [ProveedoresController::class, 'editar']);
+$router->post('/admin/mantenimiento/proveedores/eliminar', [ProveedoresController::class, 'eliminar']);
+$router->get('/admin/mantenimiento/proveedores/traerDocumento', [ProveedoresController::class, 'traerDocumento']);
 
 //===== TIPO DE CAMBIO
 $router->get('/admin/mantenimiento/factor',[FactorCambioController::class,'index']);

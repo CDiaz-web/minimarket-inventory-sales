@@ -51,7 +51,7 @@ function activarAutocomplete(){
             $("#buscarLista").val(ui.item.label);
 
             App.ventas.idlista = ui.item.id;
-            console.log(App.ventas.idlista);
+            
             cargarProductosPorLista(ui.item.id);
 
         }

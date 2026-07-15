@@ -33,9 +33,7 @@ class TiendasController {
         }
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $tienda = new Tiendas;   
-        $estados = Estados::where('idmaster','3',false);
-        $tienda->idestado = 9; //  Activo por defecto    
+        $tienda = new Tiendas;           
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
@@ -48,7 +46,8 @@ class TiendasController {
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-      
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;     
 
             $tienda->sincronizar($_POST);
             //validar
@@ -74,7 +73,6 @@ class TiendasController {
             'titulo' => 'Registrar Tienda',
             'alertas' => $alertas,     
             'tienda'=>$tienda,
-            'estados' => $estados,
             'opciones'=>$opciones        
   
         ]);
@@ -91,8 +89,7 @@ class TiendasController {
         if(!$id){
             header('Location: /admin/configuracion/tiendas');
         }       
-        $tienda = Tiendas::find($id);
-        $estados = Estados::where('idmaster','3',false);
+        $tienda = Tiendas::find($id);       
         if(!$tienda){
             header('Location: /admin/configuracion/tiendas');
         }   
@@ -106,8 +103,10 @@ class TiendasController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;     
             $tienda->sincronizar($_POST);
-            $_POST['idempresa'] = $_SESSION['idempresa'];
+            // $_POST['idempresa'] = $_SESSION['idempresa'];
 
             $alertas = $tienda->validar();
 
@@ -125,8 +124,7 @@ class TiendasController {
         $router ->render('admin/configuracion/tiendas/editar',[
             'titulo' => 'Actualizar Tienda',
             'alertas' => $alertas,       
-            'tienda'=>$tienda,
-            'estados' => $estados,
+            'tienda'=>$tienda,        
             'opciones'=>$opciones        
         ]);
     }
@@ -170,7 +168,7 @@ class TiendasController {
     public static function activas() {
         header('Content-Type: application/json');
 
-        $tiendas = Tiendas::where('idestado', 9);
+        $tiendas = Tiendas::where('activo', 1);
 
         echo json_encode($tiendas);
     }

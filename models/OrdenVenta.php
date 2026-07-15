@@ -18,9 +18,9 @@ class OrdenVenta extends ActiveRecord {
     public string $observacion = ''; 
     public ?float $tipo_cambio = null;
     public ?float $tipo_cambio_mercado = null;
-    public ?float $subtotal = null;
-    public ?float $impuesto = null;
-    public ?float $total = null;
+    public ?float $subtotal_origen = null;
+    public ?float $igv_origen = null;
+    public ?float $total_origen = null;
     public int $idestado = 0;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
@@ -50,6 +50,7 @@ class OrdenVenta extends ActiveRecord {
 
     public string $moneda = '';  
     public string $simbolo = '';  
+    public string $lista = ''; 
   
     public ?string $femision = null;
     public ?float $total_ventas = null;

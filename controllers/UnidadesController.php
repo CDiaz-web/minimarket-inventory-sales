@@ -8,11 +8,7 @@ use Model\Productos;
 use Model\Unidades;
 use MVC\Router;
 
-
-
 require '../vendor/autoload.php';
-
-
 
 class UnidadesController {
     
@@ -22,7 +18,7 @@ class UnidadesController {
              return;
         }
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $unidades = Unidades::all('ASC');
+        $unidades = Unidades::where('idempresa',$_SESSION['idempresa'],false);   
         $alertas = [];
         $router ->render('admin/configuracion/unidad/index',[
                 'titulo' => 'Unidad de Medida',
@@ -38,22 +34,21 @@ class UnidadesController {
         }
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $unidad = new Unidades;   
-        $estados = Estados::where('idmaster','3',false);
-        $unidad->idestado = 9; //  Activo por defecto    
+        $unidad = new Unidades; 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
             }            
      
-            // //agregamos informacion de auditoria al $_post
             $busca = Unidades::where('codigo', $_POST['codigo'],false);
             date_default_timezone_set('America/Lima');
             $_POST['idusercrea']=$_SESSION['id'];
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
-            //leer imagen      
+            $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             
             $unidad->sincronizar($_POST);
             //validar
@@ -77,7 +72,6 @@ class UnidadesController {
             'titulo' => 'Registrar Unidad de Medida',
             'alertas' => $alertas,     
             'unidad'=>$unidad,
-            'estados' => $estados,
             'opciones'=>$opciones        
   
         ]);
@@ -95,7 +89,6 @@ class UnidadesController {
             header('Location: /admin/configuracion/unidad');
         }       
         $unidad = Unidades::find($id);
-        $estados = Estados::where('idmaster','3',false);
         if(!$unidad){
             header('Location: /admin/configuracion/unidad');
         }   
@@ -109,6 +102,9 @@ class UnidadesController {
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
+            $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             $unidad->sincronizar($_POST);
 
             $alertas = $unidad->validar();
@@ -128,7 +124,6 @@ class UnidadesController {
             'titulo' => 'Actualizar Unidad de Medida',
             'alertas' => $alertas,       
             'unidad'=>$unidad,
-            'estados' => $estados,
             'opciones'=>$opciones        
         ]);
     }

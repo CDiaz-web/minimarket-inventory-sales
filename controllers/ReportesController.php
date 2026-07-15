@@ -116,9 +116,7 @@ class ReportesController {
             $idTienda,
             $fechaInicio,
             $fechaFin            
-        );
-
-        
+        );        
 
         $router->render(
             'admin/gestion/reportes/cliente/index',
@@ -243,6 +241,7 @@ class ReportesController {
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $alertas = [];
 
+        $idEmpresa = $_SESSION['idempresa'];
         $idTienda = $_SESSION['idtienda'];
 
         // Fechas por defecto
@@ -258,6 +257,7 @@ class ReportesController {
 
         // detalle
         $ventas = Reportes::Inventario(
+            $idEmpresa,
             $idTienda            
         );
 

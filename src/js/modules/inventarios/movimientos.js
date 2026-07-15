@@ -1,125 +1,136 @@
+import { initProductosMovimientos, cargarProductos } from './movimientos-productos.js';
+import { initTablaMovimientos, resetMovimientos } from './movimientos-articulos.js';
+import {initMovimientoInventario} from './movimientos-inventario.js';
+import { initInventariosMov } from "./movimientos-gestion.js";
+import Swal from "sweetalert2";
 
-export function initInventarios() {
+// ======================
+// ESTADO DEL MODULO
+// ======================
 
-    const tablaDetalle = document.querySelector("#tabla-detalle tbody");
-    const btnAgregar = document.querySelector("#btn-agregar-detalle");                                            
-    const selectTipo = document.querySelector("#codigotipo");
-    const campoTiendaDestino = document.querySelector("#campo-tienda-destino");
-    const form = document.querySelector("#form-inventario");
+window.App = window.App || {};
 
-    if (!tablaDetalle || !btnAgregar || !selectTipo || !campoTiendaDestino || !form) return;
+App.movimientos = {
+    idmovimiento:null,
+    idtipo:null,
+    idtienda_relacion:0,
+    fecha:null,
+    observacion:'',
+    accion:null,
+    esTransferencia:0,
+    articulos:[]
+};
 
-    let esCompra = false;
+export function initMovimientos(){
 
-    // ===============================
-    // CAMBIO TIPO MOVIMIENTO
-    // ===============================
-    selectTipo.addEventListener("change", (e) => {
+    const inputProductos = document.getElementById('buscarProductoMov');
 
-        const codigotipo = e.target.value;
+    if(inputProductos){
 
-        esCompra = (codigotipo === "COMPRA");
+        const inputIdMov = document.getElementById('idmovimiento');
 
-        tablaDetalle.querySelectorAll(".costo-unitario").forEach(input => {
-            input.disabled = !esCompra;
-        });
+        initProductosMovimientos();
+        cargarProductos();
+        initTablaMovimientos();
+        initMovimientoInventario();
+        // ======================
+        // TIPO MOVIMIENTO
+        // ======================
 
-        if (codigotipo === "TRANS_SAL") {
+        const selectTipo = document.getElementById('idtipo');
+        const selectTienda = document.getElementById('idtienda');
+        const inputObservacion = document.getElementById('observacion_movimiento');
 
-            campoTiendaDestino.style.display = "block";
+        // Tipo movimiento
+        selectTipo?.addEventListener('change', () => {
 
-        } else {
+            const opcion =
+                selectTipo.options[selectTipo.selectedIndex];
 
-            campoTiendaDestino.style.display = "none";
-            document.querySelector("#idtienda_relacion").value = "";
-
-        }
-
-    });
-
-
-    // ===============================
-    // AGREGAR PRODUCTO
-    // ===============================
-
-        
-        btnAgregar.addEventListener("click", () => {
-
-            const index = tablaDetalle.querySelectorAll("tr").length;
-
-            const nuevaFila = document.createElement("tr");
-
-            nuevaFila.innerHTML = `
-                <td>
-                    <select name="detalle[${index}][idproducto]" class="formulario__input select-producto1" required>
-                        <option value="">-- Seleccionar --</option>
-                        ${window.productosOptions}
-                    </select>
-                </td>
-                <td>
-                    <input type="text" class="formulario__input unidad1" readonly>
-                </td>
-                <td>
-                    <input type="number" class="formulario__input cantidad1" step="0.01" name="detalle[${index}][cantidad]" required>
-                </td>
-                <td>
-                    <input type="number" step="0.01" name="detalle[${index}][costo_unitario]" class="formulario__input costo-unitario" ${esCompra ? "" : "disabled"}>
-                </td>
-                <td>
-                    <div class="table__acciones">
-                        <button type="button" class="boton boton--danger"><i class="fa-solid fa-circle-xmark"></i></button>
-                    </div>
-                </td>
-            `;
-
-            tablaDetalle.appendChild(nuevaFila);
+            App.movimientos.idtipo = selectTipo.value || null;
+            App.movimientos.accion = opcion.dataset.accion || null;
+            App.movimientos.esTransferencia =
+                parseInt(opcion.dataset.transferencia || 0);
 
         });
 
-    
-    // ===============================
-    // ELIMINAR FILA
-    // ===============================
-    tablaDetalle.addEventListener("click", (e) => {
+        // Tienda destino
+        selectTienda?.addEventListener('change', () => {
 
-        if (e.target.classList.contains("boton--danger")) {
-            e.target.closest("tr").remove();
+            App.movimientos.idtienda_relacion =
+                selectTienda.value || null;
+
+        });
+ 
+        // Observación
+        inputObservacion?.addEventListener('input', () => {
+
+            App.movimientos.observacion =
+                inputObservacion.value;
+
+        });
+
+
+        if(selectTipo && selectTienda){
+            // al cambiar
+            selectTipo.addEventListener(
+                'change',
+                () => actualizarTransferencia(true)
+            );
+
+            // al cargar pantalla
+            actualizarTransferencia(false);            
         }
 
-    });
-
-
-    // ===============================
-    // CAMBIAR UNIDAD
-    // ===============================
-    tablaDetalle.addEventListener("change", (e) => {
-
-        if (e.target.classList.contains("select-producto1")) {
-
-            const selectedOption = e.target.options[e.target.selectedIndex];
-            const unidad1 = selectedOption.dataset.unidad || "";
-
-            e.target.closest("tr").querySelector(".unidad1").value = unidad1;
-
+        if(inputIdMov?.value){
+            App.movimientos.idmovimiento =
+                parseInt(inputIdMov.value);
         }
 
-    });
-
-
-    // ===============================
-    // VALIDAR FORM
-    // ===============================
-    form.addEventListener("submit", (e) => {
-
-        const filas = tablaDetalle.querySelectorAll("tr");
-
-        if (filas.length === 0) {
-
-            e.preventDefault();
-            alert("Debe agregar al menos un producto.");
-
-        }
-
-    });
+    }
 
 }
+
+function actualizarTransferencia(mostrarMensaje = true){
+
+    const selectTipo = document.getElementById('idtipo');
+    const selectTienda = document.getElementById('idtienda');
+
+    if(!selectTipo || !selectTienda) return;
+
+    if(
+        mostrarMensaje &&
+        App.movimientos.articulos.length > 0
+    ){
+
+        resetMovimientos();
+
+        Swal.fire({
+            icon:'info',
+            title:'Detalle reiniciado',
+            text:'El cambio de tipo de movimiento eliminó los artículos registrados.',
+            timer:1500,
+            showConfirmButton:false
+        });
+    }
+
+    const opcion =
+        selectTipo.options[selectTipo.selectedIndex];
+
+    const esTransferencia =
+        parseInt(opcion.dataset.transferencia);
+
+    selectTienda.disabled = !esTransferencia;
+
+    if(!esTransferencia){
+        selectTienda.value = '';
+    }
+}
+
+    // ======================
+    // MODULO GESTION OV
+    // ======================
+
+    if(document.querySelector('.btn-anular-mov')){
+        initInventariosMov();
+    }

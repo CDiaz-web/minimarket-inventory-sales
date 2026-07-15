@@ -22,7 +22,7 @@ class TipoClientesController{
              return;
         }
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $tipos = TipoCliente::all('ASC');
+        $tipos = TipoCliente::where('idempresa',$_SESSION['idempresa'],false);   
         
         $router ->render('admin/mantenimiento/clientes/clasificacion/index',[
                 'titulo' => 'Clasificacion de Clientes',
@@ -38,11 +38,7 @@ class TipoClientesController{
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $tipo = new TipoCliente; 
-        $valor = $_SESSION['idempresa'];   
-        // $listas = Listas::where('idempresa',$valor,false);
-        // $listas = Listas::findArray(['idempresa'=> $valor,'idestado'=> 9],false) ?? [];
-        $estados = Estados::where('idmaster','3',false);
-        $tipo->idestado = 9; //  Activo por defecto  
+        $valor = $_SESSION['idempresa'];  
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
@@ -54,6 +50,9 @@ class TipoClientesController{
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
+            $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             //leer imagen      
             
             $tipo->sincronizar($_POST);
@@ -77,7 +76,6 @@ class TipoClientesController{
             'titulo' => 'Registrar Clasificacion',
             'alertas' => $alertas,     
             'tipo'=>$tipo, 
-            'estados'=>$estados,
             'opciones'=>$opciones        
   
         ]);
@@ -95,9 +93,7 @@ class TipoClientesController{
             header('Location: /admin/mantenimiento/clientes/clasificacion');
         }       
         $tipo = TipoCliente::find($id);
-        $valor = $_SESSION['idempresa'];   
-        // $listas = Listas::where('idempresa',$valor,false);
-        $estados = Estados::where('idmaster','3',false);
+        $valor = $_SESSION['idempresa'];  
         if(!$tipo){
             header('Location: /admin/mantenimiento/clientes/clasificacion');
         }   
@@ -111,6 +107,9 @@ class TipoClientesController{
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
+            $_POST['idempresa'] = $_SESSION['idempresa'];
+            $activo = isset($_POST['activo']) ? 1 : 0;
+            $_POST['activo'] = $activo;
             $tipo->sincronizar($_POST);
 
             $alertas = $tipo->validar();
@@ -129,8 +128,7 @@ class TipoClientesController{
         $router ->render('admin/mantenimiento/clientes/clasificacion/editar',[
             'titulo' => 'Actualizar Clasificacion',
             'alertas' => $alertas,       
-            'tipo'=>$tipo,      
-            'estados'=>$estados,
+            'tipo'=>$tipo, 
             'opciones'=>$opciones        
         ]);
     }
