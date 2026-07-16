@@ -66,7 +66,7 @@
                                 <?php echo number_format($orden->subtotal_origen, 2, '.', ''); ?>
                             </td>
                             <td class="table__td">
-                                <?php echo number_format($orden->igv_oriegn, 2, '.', ''); ?>
+                                <?php echo number_format($orden->igv_origen, 2, '.', ''); ?>
                             </td>     
                             <td class="table__td">
                                 <?php echo number_format($orden->total_origen, 2, '.', ''); ?>
