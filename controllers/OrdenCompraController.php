@@ -275,7 +275,7 @@ class OrdenCompraController {
                 [1,$idEmpresa,$idTienda,$idorden]
             );
             $cabecera = $cabecera[0] ?? null;
-
+            debuguear($cabecera);
             // Detalle
             $detalle = OrdenCompraDetalle::procedureLista(
                 'prc_compra_imprimir',

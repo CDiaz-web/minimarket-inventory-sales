@@ -35,13 +35,12 @@
           </div>
       <?php endif;?>
 
-
      <strong>Empresa:</strong> <?= $empresa->nombre ?><br>
      <strong>Tienda:</strong> <?= $cabecera->tienda ?><br>
      <strong>Direccion:</strong> <?= $cabecera->direccion ?><br>
      <strong>Señores:</strong> <?= $cabecera->proveedor ?><br>
      <strong>Fecha:</strong> <?= $cabecera->fecha ?><br>
-     <strong>Direccion:</strong> <?= $cabecera->$direccion_proveedor ?><br>
+     <strong>Direccion:</strong> <?= $cabecera->direccion_proveedor ?><br>
      <strong>Ruc:</strong> <?= $cabecera->documento ?><br>
      <strong>Usuario:</strong> <?= $cabecera->usuario ?><br>
      <strong>Estado:</strong> <?= $cabecera->estado ?><br>
