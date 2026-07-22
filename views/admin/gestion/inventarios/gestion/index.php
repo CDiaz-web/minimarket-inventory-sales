@@ -8,38 +8,16 @@
     <div class="table-header">
         <div class="table-actions">
 
-            <form method="GET" class="dashboard__filtros">        
-                <label for="anio" class="sr-only">Año</label>
-                <input 
-                    type="number" 
-                    id="anio" 
-                    name="anio" 
-                    value="<?php echo $anio; ?>" 
-                    min="2000" 
-                    max="<?php echo date('Y')+1; ?>" 
-                />
-
-                <label for="mes">Mes:</label>
-                <select id="mes" name="mes">
-                
-                    <?php 
-                        $meses = [
-                            1 => "Enero", 2 => "Febrero", 3 => "Marzo", 4 => "Abril",
-                            5 => "Mayo", 6 => "Junio", 7 => "Julio", 8 => "Agosto",
-                            9 => "Septiembre", 10 => "Octubre", 11 => "Noviembre", 12 => "Diciembre"
-                        ];
-                        foreach($meses as $num => $nombre): 
-                    ?>
-                        <option value="<?php echo $num; ?>" <?php echo ($mes == $num) ? 'selected' : ''; ?>>
-                            <?php echo $nombre; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+            <form method="GET" class="dashboard__filtros"> 
+                <label class="formulario__label">Desde</label>
+                <input type="date" name="fecha_inicial"  value="<?= $filtros['fecha_inicial'] ?>" class="formulario__input">
+                <label class="formulario__label">Hasta</label>
+                <input type="date" name="fecha_final" value="<?= $filtros['fecha_final'] ?>" class="formulario__input">
 
                 <button type="submit" class="boton boton--primary">
                     <i class="fa-solid fa-magnifying-glass"></i> Filtrar
                 </button>
-            </form>
+            </form>      
 
         </div>
         <div class="table-search">

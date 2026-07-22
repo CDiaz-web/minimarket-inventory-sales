@@ -16,23 +16,26 @@ class GestionOrdenController {
         if(!is_auth()){
              header('Location: /login');
              return;
-        }
-        // Año y mes actuales por defecto
-        
-        $anio = $_GET['anio'] ?? date("Y");
-        $mes = $_GET['mes'] ?? date("m");
+        }        
+
         $idempresa = $_SESSION['idempresa'];     
-        $idtienda = $_SESSION['idtienda'];        
+        $idtienda = $_SESSION['idtienda'];      
+
+        $fechaInicio = $_GET['fecha_inicial'] ?? date('Y-m-d');
+        $fechaFin    = $_GET['fecha_final'] ?? date('Y-m-d');
+        $filtros = [
+            'fecha_inicial' => $fechaInicio,
+            'fecha_final'   => $fechaFin
+        ];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $ordenes = OrdenVenta::procedureLista('prc_venta_listar',[$idempresa,$idtienda, $anio, $mes]);
+        $ordenes = OrdenVenta::procedureLista('prc_venta_listar',[$idempresa,$idtienda, $fechaInicio, $fechaFin]);
         
         $alertas = [];
         $router ->render('admin/gestion/ventas/gestion/index',[
                 'titulo' => 'Gestión de Ordenes de Venta',
                 'ordenes'=>$ordenes,
                 'alertas'=>$alertas,
-                'anio' =>$anio,
-                'mes' =>$mes,              
+                'filtros' => $filtros,                
                 'opciones'=>$opciones        
             ]);
     }
