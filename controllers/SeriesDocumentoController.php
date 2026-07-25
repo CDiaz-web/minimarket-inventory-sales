@@ -6,23 +6,25 @@ use Model\Estados;
 use Model\Opciones;
 use Model\Productos;
 use Model\Unidades;
+use Model\SeriesDocumento;
 use MVC\Router;
 
 require '../vendor/autoload.php';
 
-class UnidadesController {
+class SeriesDocumentoController {
     
     public static function index(Router $router){
         if(!is_auth()){
              header('Location: /login');
              return;
         }
-        $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $unidades = Unidades::where('idempresa',$_SESSION['idempresa'],false);   
+        $valor = [$_SESSION['idempresa']]; 
+        $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);         
+        $series = SeriesDocumento::procedureLista('prc_series_listar',$valor); 
         $alertas = [];
-        $router ->render('admin/configuracion/unidad/index',[
-                'titulo' => 'Unidad de Medida',
-                'unidades'=>$unidades,
+        $router ->render('admin/configuracion/series/index',[
+                'titulo' => 'Series',
+                'series'=>$series,
                 'alertas'=>$alertas,
                 'opciones'=>$opciones        
             ]);

@@ -14,6 +14,7 @@ use Model\Listas;
 use Model\Categorias;
 use Model\Proveedores;
 use Model\Devoluciones;
+use Model\SeriesDocumento;
 
 class APIEstados{
 
@@ -51,6 +52,7 @@ class APIEstados{
                 'Proveedores' => Proveedores::class,
                 'Clientes' => Clientes::class,
                 'Devoluciones' => Devoluciones::class,
+                'Series' => SeriesDocumento::class,
             ];
 
             if (!array_key_exists($modelo, $modelosPermitidos)) {

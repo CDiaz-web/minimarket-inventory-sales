@@ -17,7 +17,7 @@ use Controllers\OrdenVentaController;
 use Controllers\OrdenCompraController;
 use Controllers\GestionOCController;
 use Controllers\MovimientoController;
-
+use Controllers\SeriesDocumentoController;
 
 use Controllers\ReportesController;
 use Controllers\GestionOrdenController;
@@ -246,10 +246,10 @@ $router->get('/admin/configuracion/tipo_movimiento/editar', [TiposMovimientosCon
 $router->post('/admin/configuracion/tipo_movimiento/eliminar', [TiposMovimientosController::class, 'eliminar']);
 
 //===== CORRELATIVOS
-$router->get('/admin/configuracion/correlativos', [CorrelativosController::class, 'index']);
-$router->post('/admin/configuracion/correlativos/crear', [CorrelativosController::class, 'crear']);
-$router->get('/admin/configuracion/correlativos/crear', [CorrelativosController::class, 'crear']);
-$router->post('/admin/configuracion/correlativos/eliminar', [CorrelativosController::class, 'eliminar']);
+$router->get('/admin/configuracion/series', [SeriesDocumentoController::class, 'index']);
+$router->post('/admin/configuracion/series/crear', [SeriesDocumentoController::class, 'crear']);
+$router->get('/admin/configuracion/series/crear', [SeriesDocumentoController::class, 'crear']);
+$router->post('/admin/configuracion/series/eliminar', [SeriesDocumentoController::class, 'eliminar']);
 
 //===== MOTIVO DEVOLUCION
 $router->get('/admin/configuracion/devolucion', [DevolucionesController::class, 'index']);
