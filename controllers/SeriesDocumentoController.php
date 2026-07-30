@@ -8,6 +8,8 @@ use Model\Productos;
 use Model\Unidades;
 use Model\SeriesDocumento;
 use MVC\Router;
+use Model\Tiendas;
+use Model\TipoDocumentos;
 
 require '../vendor/autoload.php';
 
@@ -34,15 +36,19 @@ class SeriesDocumentoController {
         if(!is_admin()){
             header('Location: /login');
         }
+        $valor = $_SESSION['idempresa'];  
         $alertas = [];
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $unidad = new Unidades; 
+        $tiendas = Tiendas::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];   
+        $documentos = TipoDocumentos::where('activo',1,false);
+        $serie = new SeriesDocumento(); 
+
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
             }            
      
-            $busca = Unidades::where('codigo', $_POST['codigo'],false);
+            $busca = SeriesDocumento::findArray(['idempresa'=> $_SESSION['idempresa'],'serie'=> $_POST['serie'],'idtipodocumento'=> $_POST['idtipodocumento']],false) ?? [];   
             date_default_timezone_set('America/Lima');
             $_POST['idusercrea']=$_SESSION['id'];
             $_POST['fechacrea']=date("Y-m-d H:i:s");
@@ -52,28 +58,30 @@ class SeriesDocumentoController {
             $activo = isset($_POST['activo']) ? 1 : 0;
             $_POST['activo'] = $activo;
             
-            $unidad->sincronizar($_POST);
+            $serie->sincronizar($_POST);
             //validar
-            $alertas = $unidad->validar();
+            $alertas = $serie->validar();
 
             if($busca){
-                $alertas['error'][] = 'CODIGO YA REGISTRADO';
+                $alertas['error'][] = 'SERIE YA REGISTRADO';
             }
             //guardar el registro
             if(empty($alertas)){
                 //guardar en la base de datos
-                $resultado = $unidad->guardar();
+                $resultado = $serie->guardar();
                 if($resultado){
-                    header('Location: /admin/configuracion/unidad');
+                    header('Location: /admin/configuracion/series');
                 }
             }
         }
         
       
-        $router ->render('admin/configuracion/unidad/crear',[
-            'titulo' => 'Registrar Unidad de Medida',
-            'alertas' => $alertas,     
-            'unidad'=>$unidad,
+        $router ->render('admin/configuracion/series/crear',[
+            'titulo' => 'Registrar Serie',
+            'alertas' => $alertas, 
+            'tiendas' => $tiendas,     
+            'documentos' => $documentos, 
+            'serie'=>$serie,
             'opciones'=>$opciones        
   
         ]);
@@ -83,16 +91,19 @@ class SeriesDocumentoController {
         if(!is_admin()){
             header('Location: /login');
         }
+         $valor = $_SESSION['idempresa'];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
+        $tiendas = Tiendas::findArray(['idempresa'=> $valor,'activo'=> 1],false) ?? [];   
+        $documentos = TipoDocumentos::where('activo',1,false);
         $alertas = [];
         $id = $_GET['id'];
         $id = filter_var($id,FILTER_VALIDATE_INT);
         if(!$id){
-            header('Location: /admin/configuracion/unidad');
+            header('Location: /admin/configuracion/series');
         }       
-        $unidad = Unidades::find($id);
-        if(!$unidad){
-            header('Location: /admin/configuracion/unidad');
+        $serie = SeriesDocumento::find($id);
+        if(!$serie){
+            header('Location: /admin/configuracion/series');
         }   
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -107,12 +118,12 @@ class SeriesDocumentoController {
             $_POST['idempresa'] = $_SESSION['idempresa'];
             $activo = isset($_POST['activo']) ? 1 : 0;
             $_POST['activo'] = $activo;
-            $unidad->sincronizar($_POST);
+            $serie->sincronizar($_POST);
 
-            $alertas = $unidad->validar();
+            $alertas = $serie->validar();
 
             if(empty($alertas)){
-                $resultado = $unidad->guardar();
+                $resultado = $serie->guardar();
             
                 if($resultado){      
                    $alertas['exito'][] = 'REGISTRO ACTUALIZADO DE MANERA CORRECTA';       
@@ -122,10 +133,12 @@ class SeriesDocumentoController {
             
         }
 
-        $router ->render('admin/configuracion/unidad/editar',[
-            'titulo' => 'Actualizar Unidad de Medida',
-            'alertas' => $alertas,       
-            'unidad'=>$unidad,
+        $router ->render('admin/configuracion/series/editar',[
+            'titulo' => 'Actualizar Serie',
+            'alertas' => $alertas, 
+            'tiendas' => $tiendas,     
+            'documentos' => $documentos, 
+            'serie'=>$serie,
             'opciones'=>$opciones        
         ]);
     }
@@ -134,34 +147,35 @@ class SeriesDocumentoController {
             header('Location: /login');
         }
         $alertas = [];
+        $valor = [$_SESSION['idempresa']]; 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
             $id = $_POST['id'];   
             
-            $unidad = Unidades::find($id);      
+            $serie = SeriesDocumento::find($id);      
             $busca = Productos::where('idunidad_medida', $id);
-            if(!isset($unidad)){
-                header('Location: /admin/configuracion/unidad');
+            if(!isset($serie)){
+                header('Location: /admin/configuracion/series');
             }
 
-            if($busca){
-                $alertas['error'][] = 'Unidad de medida en uso';
-            }else{            
-                $resultado = $unidad->eliminar();
+            // if($busca){
+            //     $alertas['error'][] = 'Serie en uso';
+            // }else{            
+                $resultado = $serie->eliminar();
             
                 if($resultado){
-                    header('Location: /admin/configuracion/unidad'); 
+                    header('Location: /admin/configuracion/series'); 
                 }   
-            }             
+            // }             
 
             $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-            $unidades = Unidades::all('ASC');
+            $series = SeriesDocumento::procedureLista('prc_series_listar',$valor); 
             
-            $router ->render('admin/configuracion/unidad/index',[
-                    'titulo' => 'Unidad de Medida',
-                    'unidades'=>$unidades,
-                    'alertas'=>$alertas,
-                    'opciones'=>$opciones        
+            $router ->render('admin/configuracion/series/index',[
+                'titulo' => 'Series',
+                'series'=>$series,
+                'alertas'=>$alertas,
+                'opciones'=>$opciones       
                 ]);
 
         }

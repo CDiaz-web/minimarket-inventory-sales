@@ -1,43 +1,62 @@
 <fieldset class="formulario__fieldset">
-    <legend class="formulario__legend">Informacion Tipo Pago</legend> 
+    <legend class="formulario__legend">Informacion Series</legend> 
+
+    <div class="formulario__campo">
+        <label for="idtienda" class="formulario__label">Tienda</label>
+        <select class="formulario__select-xl" id="idtienda" name ="idtienda">
+        <option value="" >-Seleccionar-</option>
+            <?php foreach($tiendas as $tienda) { ?>
+                <option <?php echo ((int)$serie->idtienda === (int)$tienda->id) ? 'selected' : '' ; ?> value="<?php echo $tienda->id; ?>" > <?php echo $tienda->nombre; ?> </option>
+            <?php }?> 
+        </select>
+    </div>
+
+    <div class="formulario__campo">
+        <label for="idtipodocumento" class="formulario__label">Tipo Documento</label>
+        <select class="formulario__select-xl" id="idtipodocumento" name ="idtipodocumento">
+        <option value="" >-Seleccionar-</option>
+            <?php foreach($documentos as $documento) { ?>
+                <option <?php echo ((int)$serie->idtipodocumento === (int)$documento->id) ? 'selected' : '' ; ?> value="<?php echo $documento->id; ?>" > <?php echo $documento->nombre; ?> </option>
+            <?php }?> 
+        </select>
+    </div>
 
     <div class="formulario__campo">    
-        <label for="codigo" class="formulario__label">Código</label>
+        <label for="serie" class="formulario__label">Serie</label>
         <input
             type = "text"
             class = "formulario__input"
-            id = "codigo"
-            name="codigo"
-            placeholder="Código"   
-            maxlength="3"
-            value ="<?php echo $tipopago->codigo;?>"     
+            id = "serie"
+            name="serie"
+            placeholder="Series"   
+            maxlength="4"
+            value ="<?php echo $serie->serie;?>"     
         />
     </div>  
-    <div class="formulario__campo">    
-        <label for="nombre" class="formulario__label">Nombre</label>
+
+    <div class="formulario__campo">   
+        <label for="cantidad_digitos" class="formulario__label">Digitos Correlativo</label>
         <input
-            type = "text"
+            type="number" 
             class = "formulario__input"
-            id = "nombre"
-            name="nombre"
-            placeholder="Descripcion"   
-            maxlength="45"
-            value ="<?php echo $tipopago->nombre;?>"     
+            id = "cantidad_digitos"
+            name="cantidad_digitos"  
+            placeholder="0"   
+            value ="<?php echo $serie->cantidad_digitos;?>"                                   
         />
-    </div>   
+    </div>
 
-
-    <div class="formulario__campo formulario__campo--check"> 
-        <label for="requiere_cobro" class="formulario__check">
-            <input
-                type = "checkbox"
-                class = "formulario__input"
-                id = "requiere_cobro"
-                name="requiere_cobro"   
-                <?php if ($tipopago->requiere_cobro == 1) echo 'checked="checked"'; ?> 
-            /> Requiere Cobro
-        </label>
-    </div>     
+    <div class="formulario__campo">   
+        <label for="ultimo_correlativo" class="formulario__label">Último Correlativo</label>
+        <input
+            type="number" 
+            class = "formulario__input"
+            id = "ultimo_correlativo"
+            name="ultimo_correlativo"  
+            placeholder="0"   
+            value ="<?php echo $serie->ultimo_correlativo ?? 0 ;?>"                                            
+        />
+    </div>
 
     <div class="formulario__campo formulario__campo--check" data-switch-estado> 
         
@@ -45,8 +64,8 @@
             class="switch__label"
             data-switch-label
         >  
-            <?= (isset($tipopago) && $tipopago->id)  
-                ? ($tipopago->activo ? 'Activo' : 'Inactivo') 
+            <?= (isset($serie) && $serie->id)  
+                ? ($serie->activo ? 'Activo' : 'Inactivo') 
                 : 'Activo' ?>
         </span>
 
@@ -54,8 +73,8 @@
             <input
                 type="checkbox"
                 name="activo"
-                <?= (isset($tipopago) && $tipopago->id) 
-                    ? ($tipopago->activo ? 'checked' : '') 
+                <?= (isset($serie) && $serie->id) 
+                    ? ($serie->activo ? 'checked' : '') 
                     : 'checked' ?>
             >
             <span class="slider"></span> 

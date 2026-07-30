@@ -245,10 +245,12 @@ $router->post('/admin/configuracion/tipo_movimiento/editar', [TiposMovimientosCo
 $router->get('/admin/configuracion/tipo_movimiento/editar', [TiposMovimientosController::class, 'editar']);
 $router->post('/admin/configuracion/tipo_movimiento/eliminar', [TiposMovimientosController::class, 'eliminar']);
 
-//===== CORRELATIVOS
+//===== SERIES
 $router->get('/admin/configuracion/series', [SeriesDocumentoController::class, 'index']);
 $router->post('/admin/configuracion/series/crear', [SeriesDocumentoController::class, 'crear']);
 $router->get('/admin/configuracion/series/crear', [SeriesDocumentoController::class, 'crear']);
+$router->post('/admin/configuracion/series/editar', [SeriesDocumentoController::class, 'editar']);
+$router->get('/admin/configuracion/series/editar', [SeriesDocumentoController::class, 'editar']);
 $router->post('/admin/configuracion/series/eliminar', [SeriesDocumentoController::class, 'eliminar']);
 
 //===== MOTIVO DEVOLUCION

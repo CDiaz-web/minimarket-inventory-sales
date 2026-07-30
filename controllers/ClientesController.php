@@ -8,7 +8,7 @@ use Model\Listas;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 // use PhpOffice\PhpSpreadsheet\Calculation\TextData\Format;
 use Model\Opciones;
-use Model\Productos;
+// use Model\Productos;
 use Model\Tiendas;
 use Model\TipoCliente;
 
@@ -34,7 +34,6 @@ class ClientesController {
                 'opciones'=>$opciones        
             ]);
     }
-
     public static function crear(Router $router){
         if(!is_admin()){
             header('Location: /login');

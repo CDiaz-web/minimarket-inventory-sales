@@ -1,7 +1,7 @@
 <h2 class="dashboard__heading"><?php echo $titulo; ?></h2>
 
 <div class="table-header">
-    <a class="boton boton--primary-link"  href="/admin/configuracion/tipopago">
+    <a class="boton boton--primary-link"  href="/admin/configuracion/series">
         <i class="fa-solid fa-circle-arrow-left"></i>
         Volver
     </a>

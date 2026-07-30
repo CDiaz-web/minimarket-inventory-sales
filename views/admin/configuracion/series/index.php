@@ -45,6 +45,9 @@
                                 <td class="table__td">
                                     <?php echo $serie->codigo ;?>
                                 </td>    
+                             <td class="table__td">
+                                    <?php echo $serie->serie ;?>
+                                </td>   
                                 <td class="table__td">
                                     <?php echo $serie->ultimo_correlativo ;?>
                                 </td>    
@@ -55,7 +58,7 @@
                                         type="checkbox"
                                         class="js-switch-ajax"
                                         data-id="<?= $serie->id ?>"
-                                        data-modelo="Serie"
+                                        data-modelo="Series"
                                         <?= $serie->activo ? 'checked' : '' ?>
                                     >
                                     <span class="slider"></span>

@@ -1,7 +1,7 @@
 <h2 class="dashboard__heading"><?php echo $titulo; ?></h2>
 
 <div class="table-header">
-    <a class="boton boton--primary-link" href="/admin/configuracion/tipopago">
+    <a class="boton boton--primary-link" href="/admin/configuracion/series">
         <i class="fa-solid fa-circle-arrow-left"></i>
         Volver
     </a>
@@ -13,10 +13,10 @@
         include_once __DIR__ . '/../../../templates/alertas.php';          
     ?>
 
-    <form method="POST" action="/admin/configuracion/tipopago/crear"  enctype="multipart/form-data" class="formulario">
+    <form method="POST" action="/admin/configuracion/series/crear"  enctype="multipart/form-data" class="formulario">
         <?php  include_once __DIR__ . '/formulario.php' ?>
 
-        <input class="formulario__submit formulario__submit--registrar" type="submit" value="Registrar Tipo Pago" id="btnGuardar">
+        <input class="formulario__submit formulario__submit--registrar" type="submit" value="Registrar Serie" id="btnGuardar">
     </form>
 </div>
 
