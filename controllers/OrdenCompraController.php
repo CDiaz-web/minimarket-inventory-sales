@@ -9,6 +9,7 @@ use Model\OrdenCompra;
 use Model\OrdenCompraDetalle;
 use Model\Empresa;
 use Model\Estados;
+use Model\SeriesDocumento;
 use MVC\Router;
 
 require '../vendor/autoload.php';
@@ -39,6 +40,14 @@ class OrdenCompraController {
         $moneda = $_SESSION['moneda'];
         $validar_tc = $_SESSION['validar_tc'];
         $lista_monedas = Monedas::all('ASC');
+
+        $lista_series = SeriesDocumento::procedureLista(
+                'prc_lista_series',
+                [$idEmpresa,$idTienda,'OCO']
+        );      
+        
+
+
         $fecha =  date('Y-m-d');
         $titulo = 'Registro Orden Compra';
         if (!empty($idOrden)) {
@@ -66,6 +75,7 @@ class OrdenCompraController {
                 'moneda'=>$moneda,      
                 'simbolo_moneda'=>$simbolo_moneda,
                 'lista_monedas'=>$lista_monedas,
+                'lista_series'=>$lista_series,
                 'fecha'=>$fecha,
                 'validar_tc'=>$validar_tc,
                 'impuesto'=>$impuesto,

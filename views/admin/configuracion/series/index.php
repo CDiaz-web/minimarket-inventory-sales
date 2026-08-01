@@ -31,7 +31,8 @@
                             <th scope='col' class="table__th">Tienda</th>    
                             <th scope='col' class="table__th">Doc.</th>      
                             <th scope='col' class="table__th">Serie</th>      
-                            <th scope='col' class="table__th">Ult. Corr.</th>      
+                            <th scope='col' class="table__th">Ult. Corr.</th>    
+                            <th scope='col' class="table__th">Predet.</th>     
                             <th scope='col' class="table__th">Estado</th>                 
                             <th scope='col' class="table__th">Acciones</th>
                         </tr>
@@ -51,7 +52,11 @@
                                 <td class="table__td">
                                     <?php echo $serie->ultimo_correlativo ;?>
                                 </td>    
-                                
+                                <td class="table__td">
+                                    <?php if ($serie->predeterminado == 1): ?>
+                                        <i class="fa-solid fa-check"></i>
+                                    <?php endif; ?>
+                                </td>    
                             <td class="table__td">
                                 <label class="switch">
                                     <input 

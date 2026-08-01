@@ -49,12 +49,17 @@ class SeriesDocumentoController {
             }            
      
             $busca = SeriesDocumento::findArray(['idempresa'=> $_SESSION['idempresa'],'serie'=> $_POST['serie'],'idtipodocumento'=> $_POST['idtipodocumento']],false) ?? [];   
+
+            $existe_predeterminado = SeriesDocumento::findArray(['idempresa'=> $_SESSION['idempresa'],'idtienda'=> $_SESSION['idtienda'],'idtipodocumento'=> $_POST['idtipodocumento'],'predeterminado'=> '1'],false) ?? [];   
+
             date_default_timezone_set('America/Lima');
             $_POST['idusercrea']=$_SESSION['id'];
             $_POST['fechacrea']=date("Y-m-d H:i:s");
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
+            $predeterminado = isset($_POST['predeterminado']) ? 1 : 0;
+            $_POST['predeterminado'] = $predeterminado;
             $activo = isset($_POST['activo']) ? 1 : 0;
             $_POST['activo'] = $activo;
             
@@ -64,6 +69,9 @@ class SeriesDocumentoController {
 
             if($busca){
                 $alertas['error'][] = 'SERIE YA REGISTRADO';
+            }
+            if($existe_predeterminado && $_POST['predeterminado'] =='1' ){
+                $alertas['error'][] = 'EXISTE UNA SERIE POR DEFECTO PARA ESTE TIPO DE DOCUMENTO EN ESTA TIENDA';
             }
             //guardar el registro
             if(empty($alertas)){
@@ -111,16 +119,24 @@ class SeriesDocumentoController {
                 header('Location: /login');
             } 
             //agregamos informacion de auditoria al $_post
+
+            $existe_predeterminado = SeriesDocumento::findArray(['idempresa'=> $_SESSION['idempresa'],'idtienda'=> $_SESSION['idtienda'],'idtipodocumento'=> $_POST['idtipodocumento'],'predeterminado'=> '1'],false) ?? [];   
   
             date_default_timezone_set('America/Lima');
             $_POST['idusermodi']=$_SESSION['id'];
             $_POST['fechamodi']=date("Y-m-d H:i:s");
             $_POST['idempresa'] = $_SESSION['idempresa'];
+            $predeterminado = isset($_POST['predeterminado']) ? 1 : 0;
+            $_POST['predeterminado'] = $predeterminado;
             $activo = isset($_POST['activo']) ? 1 : 0;
             $_POST['activo'] = $activo;
             $serie->sincronizar($_POST);
 
             $alertas = $serie->validar();
+
+            if($existe_predeterminado && $_POST['predeterminado'] =='1' ){
+                $alertas['error'][] = 'EXISTE UNA SERIE POR DEFECTO PARA ESTE TIPO DE DOCUMENTO EN ESTA TIENDA';
+            }
 
             if(empty($alertas)){
                 $resultado = $serie->guardar();

@@ -36,7 +36,47 @@
         </div>
 
         <!-- boque de una sola fila -->
-        <div class="grupo-fecha-moneda">
+        <div class="grupo-datos-documento">
+
+            <!-- Serie -->
+            <div class="campo-inline">
+                <label class="formulario__label">
+                    <i class="fa-solid fa-layer-group"></i>
+                    Serie
+                </label>
+                <select class="formulario__select" id="idserie" name="idserie">
+                    <option value="">-Seleccionar-</option>
+
+                    <?php foreach ($lista_series as $lista_serie) { ?>
+                        <option
+                            value="<?= $lista_serie->id ?>"
+                            <?= ($idMonedaSeleccionada == $lista_serie->id) ? 'selected' : '' ?>
+                        >
+                            <?= $lista_serie->serie ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <!-- Numero -->
+            <div class="campo-inline">
+                <label class="formulario__label">
+                    <i class="fa-solid fa-hashtag"></i>
+                    Número
+                </label>
+                <input 
+                    type="text"
+                    class="formulario__input"
+                    id="numero"
+                    value="<?= $cabecera->numero ?? '(Automático)' ?>" 
+                    disabled                   
+                />
+            </div>       
+            
+
+
+
+
 
             <!-- Fecha -->
             <div class="campo-inline">

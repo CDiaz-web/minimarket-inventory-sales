@@ -379,7 +379,6 @@ tbody tr:nth-child(even) {
 
 .grupo-fecha-moneda {
     grid-column: 1 / -1;
-
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -389,6 +388,19 @@ tbody tr:nth-child(even) {
         justify-content: start; // 👈 clave
     }
 }
+
+.grupo-datos-documento {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @include m.respond(tablet) {
+        grid-template-columns: 200px 250px 200px; // 🔥 tamaños reales
+        justify-content: start; // 👈 clave
+    }
+}
+
 
 .campo-inline input,
 .campo-inline select {
@@ -446,6 +458,11 @@ tbody tr:nth-child(even) {
 @include m.respond(desktop) {
     .grupo-fecha-moneda {
         grid-template-columns: 1fr 1fr 1fr;
+        align-items: end;
+    }
+
+    .grupo-datos-documento{
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
         align-items: end;
     }
     .grupo-fecha-moneda-pago {

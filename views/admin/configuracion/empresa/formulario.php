@@ -106,18 +106,18 @@
             /> Valida Tipo de Cambio
         </label>
     </div> 
-      <div class="formulario__campo">   
-            <label for="variaciontc" class="formulario__label">Variacion TC Mer.</label>
-            <input
-                type="number" 
-                class = "formulario__input"
-                id = "variaciontc"
-                name="variaciontc"  
-                placeholder="0.00"   
-                step="0.01"
-                min="0"                    
-                value ="<?php echo number_format($empresa->variaciontc, 2, '.', ''); ?>"                                 
-            />
+    <div class="formulario__campo">   
+        <label for="variaciontc" class="formulario__label">Variacion TC Mer.</label>
+        <input
+            type="number" 
+            class = "formulario__input"
+            id = "variaciontc"
+            name="variaciontc"  
+            placeholder="0.00"   
+            step="0.01"
+            min="0"                    
+            value ="<?php echo number_format($empresa->variaciontc, 2, '.', ''); ?>"                                 
+        />
     </div>
     <div class="formulario__campo formulario__campo--check"> 
         <label for="ov_requiere_aprobacion" class="formulario__check">

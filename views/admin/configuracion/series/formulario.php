@@ -58,6 +58,18 @@
         />
     </div>
 
+    <div class="formulario__campo formulario__campo--check"> 
+        <label for="predeterminado" class="formulario__check">
+            <input
+                type = "checkbox"
+                class = "formulario__input"
+                id = "predeterminado"
+                name="predeterminado"   
+                <?php if ($serie->predeterminado == 1) echo 'checked="checked"'; ?> 
+            /> Serie Predeterminada
+        </label>
+    </div> 
+
     <div class="formulario__campo formulario__campo--check" data-switch-estado> 
         
         <span 
