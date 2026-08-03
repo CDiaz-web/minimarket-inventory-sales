@@ -4,7 +4,7 @@ namespace Model;
 
 class SeriesDocumento extends ActiveRecord{
     protected static $tabla = 'series_documento';            
-    protected static $columnasDB = ['id','idempresa','idtienda', 'idtipodocumento','serie','cantidad_digitos','ultimo_correlativo','predeterminado','activo','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id','idempresa','idtienda', 'idtipodocumento','serie','cantidad_digitos','ultimo_numero','predeterminado','activo','idusercrea','fechacrea','idusermodi','fechamodi'];
   
     public ?int $id = null;
     public int $idempresa = 0;
@@ -12,7 +12,7 @@ class SeriesDocumento extends ActiveRecord{
     public int $idtipodocumento = 0;
     public string $serie = '';
     public int $cantidad_digitos = 0;
-    public int $ultimo_correlativo = 0;    
+    public int $ultimo_numero = 0;    
     public int $predeterminado = 0;
     public int $activo = 1;
     public int $idusercrea = 0;

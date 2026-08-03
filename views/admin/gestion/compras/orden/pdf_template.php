@@ -17,7 +17,7 @@
 </head>
 <body>
 
-  <h1>Orden de Compra N° <?= $cabecera->numero ?></h1>
+  <h1>Orden de Compra N° <?= $cabecera->numero_documento ?></h1>
   <p>
 
       <?php

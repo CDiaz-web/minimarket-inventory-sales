@@ -47,14 +47,14 @@
     </div>
 
     <div class="formulario__campo">   
-        <label for="ultimo_correlativo" class="formulario__label">Último Correlativo</label>
+        <label for="ultimo_numero" class="formulario__label">Último Número</label>
         <input
             type="number" 
             class = "formulario__input"
-            id = "ultimo_correlativo"
-            name="ultimo_correlativo"  
+            id = "ultimo_numero"
+            name="ultimo_numero"  
             placeholder="0"   
-            value ="<?php echo $serie->ultimo_correlativo ?? 0 ;?>"                                            
+            value ="<?php echo $serie->ultimo_numero ?? 0 ;?>"                                            
         />
     </div>
 

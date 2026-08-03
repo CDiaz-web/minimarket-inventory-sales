@@ -50,7 +50,7 @@
                                     <?php echo $serie->serie ;?>
                                 </td>   
                                 <td class="table__td">
-                                    <?php echo $serie->ultimo_correlativo ;?>
+                                    <?php echo $serie->ultimo_numero ;?>
                                 </td>    
                                 <td class="table__td">
                                     <?php if ($serie->predeterminado == 1): ?>

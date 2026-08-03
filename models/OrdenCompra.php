@@ -37,6 +37,7 @@ class OrdenCompra extends ActiveRecord {
     
     public string $proveedor = ''; 
     public string $documento  = ''; 
+    public string $numero_documento = '';
     public string $direccion_proveedor = ''; 
                   
     public string $tienda = ''; 
