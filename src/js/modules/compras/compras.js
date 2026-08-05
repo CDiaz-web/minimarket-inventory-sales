@@ -9,13 +9,16 @@ import {
 } from './compras-articulos.js';
 import { initOrdenCompra } from './compras-orden.js';
 import { initGestionOC } from "./compras-gestion.js";
+import { initCompraSerie } from "./compras-serie.js";
 // ======================
 // ESTADO DEL MODULO
 // ======================
 
 App.compras = {
     idorden: null,
+    numero: null,
     idproveedor: null,   
+    idserie: null,
     tipoCambio: 2,
     tipoCambio_oficial: 2,
     articulos: [],
@@ -52,7 +55,7 @@ export function initCompras(){
         initTablaCompras();
         initFechaCompra();
         initOrdenCompra();
-
+        initCompraSerie();
 
         if (inputIdOrden?.value) {
             App.compras.idorden = parseInt(inputIdOrden.value);

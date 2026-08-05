@@ -62,6 +62,7 @@
                     moneda_base: <?php echo $_SESSION['moneda'] ?? 0; ?>,
                     validar_tc: <?php echo $_SESSION['validar_tc'] ?? 0 ; ?>,
                     variacion_tc: <?php echo $variaciontc ?? 0; ?>,
+                    serie: <?php echo $serie_defecto ?? 0; ?>,
                     impuesto: <?php echo $impuesto ?? 0; ?>
                 }
             };

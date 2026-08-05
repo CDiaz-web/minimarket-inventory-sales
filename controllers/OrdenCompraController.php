@@ -24,6 +24,8 @@ class OrdenCompraController {
         
         $idOrden = isset($_GET['id']) ? (int) $_GET['id'] : 0;    
 
+
+
         $cabecera = null;
         $detalle = [];
         $modoEdicion = false;
@@ -33,6 +35,14 @@ class OrdenCompraController {
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']);   
         $empresa = Empresa::where('id',$_SESSION['idempresa']);   
         $impuesto= $empresa[0]->porcentaje_imp;       
+        
+        /*serie por defecto*/
+        $datos_series =SeriesDocumento::procedure(
+                'prc_serie_defecto',
+                [$idEmpresa,$idTienda,'OCO']
+        );      
+
+        $serie_defecto = $datos_series->id;
         
         date_default_timezone_set('America/Lima');
         $tc = FactorCambio::where('fecha',date("Y-m-d"));
@@ -58,7 +68,7 @@ class OrdenCompraController {
             );      
             $cabecera = $cabecera[0] ?? null;
 
-            $titulo = 'Edición Orden Compra N° ' . $cabecera->numero;
+            $titulo = 'Edición Orden Compra' ;
             
             $detalle = OrdenCompraDetalle::procedureLista(
                 'prc_compra_editar',
@@ -72,7 +82,8 @@ class OrdenCompraController {
         $router ->render('admin/gestion/compras/orden/index',[
                 'titulo' => $titulo,
                 'opciones'=>$opciones,
-                'moneda'=>$moneda,      
+                'moneda'=>$moneda,   
+                'serie_defecto'=>$serie_defecto,   
                 'simbolo_moneda'=>$simbolo_moneda,
                 'lista_monedas'=>$lista_monedas,
                 'lista_series'=>$lista_series,
@@ -82,6 +93,7 @@ class OrdenCompraController {
                 'opciones'=>$opciones,
                 'cabecera' => $cabecera,
                 'detalle' => $detalle,
+                'modoEdicion' => $modoEdicion,
                 'tc' => $tc        
             ]);
     }
@@ -175,6 +187,7 @@ class OrdenCompraController {
             echo json_encode([
                 'ok'      => true,
                 'idorden' => $fila['idorden'],
+                'numero_formateado' => $fila['numero_formateado'],
                 'numero'  => $fila['numero']
             ]);
 
@@ -238,8 +251,9 @@ class OrdenCompraController {
             echo json_encode([
                 'ok'      => true,
                 'idorden' => $fila['idorden'],
+                'numero_formateado' => $fila['numero_formateado'],
                 'numero'  => $fila['numero']
-            ]);
+            ]);            
 
 
         } catch (\Throwable $e) {

@@ -1,7 +1,8 @@
 <?php
-    $idMonedaSeleccionada = $cabecera->idmoneda ?? $moneda;    
+    $idMonedaSeleccionada = $cabecera->idmoneda ?? $moneda;   
+    $idSerieSeleccionada = $cabecera->idserie ?? $serie_defecto;    
 ?>
-<h2 class="dashboard__heading--izquierda"><?php echo $titulo; ?></h2> 
+<h2 class="dashboard__heading--izquierda" id="idditulooc"><?php echo $titulo; ?></h2> 
 
 <div class="table-wrapper">      
 
@@ -35,7 +36,7 @@
             /> 
         </div>
 
-        <!-- boque de una sola fila -->
+        <!-- bloque de una sola fila -->
         <div class="grupo-datos-documento">
 
             <!-- Serie -->
@@ -50,7 +51,7 @@
                     <?php foreach ($lista_series as $lista_serie) { ?>
                         <option
                             value="<?= $lista_serie->id ?>"
-                            <?= ($idMonedaSeleccionada == $lista_serie->id) ? 'selected' : '' ?>
+                            <?= ($idSerieSeleccionada == $lista_serie->id) ? 'selected' : '' ?>
                         >
                             <?= $lista_serie->serie ?>
                         </option>
@@ -170,7 +171,12 @@
             <button class="boton boton--primary-link" id = "btngenerarOC">
                 <i class="fa-solid fa-pen-to-square"></i> Guardar O.C.
             </button> 
-
+            <button 
+                class="boton boton--success" 
+                id="ImprimirOC"
+                <?= $modoEdicion ? '' : 'disabled' ?>>
+                <i class="fa-solid fa-print"></i> Imprimir
+            </button>
             <button class="boton boton--danger-link" id="LimpiarOC">
                 <i class="fa-solid fa-trash"></i> Limpiar
             </button>            

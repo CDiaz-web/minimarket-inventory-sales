@@ -281,6 +281,9 @@ function manejarCambioCantidad(e){
 
 export function resetCompras(){
 
+    App.compras.idorden = null;
+    App.compras.numero = null;
+
     App.compras.articulos = [];
 
     App.compras.totales = {
@@ -302,6 +305,21 @@ export function resetCompras(){
 
     const subtotalCompra = document.getElementById('subtotalCompra');
     if(subtotalCompra) subtotalCompra.textContent = "0.00";
+
+    const numeroOrden = document.getElementById('numero');
+    if (numeroOrden) {
+        numeroOrden.value = '(Automático)';
+    }
+
+    const tituloOC = document.getElementById('idditulooc');
+    if (tituloOC) {
+        tituloOC.value = 'Registro Orden Compra';
+    }
+
+    const btnImprimir = document.getElementById('ImprimirOC');
+    if (btnImprimir) {
+        btnImprimir.disabled = true;
+    }
 
     document.getElementById('buscarProveedor').value = '';
 

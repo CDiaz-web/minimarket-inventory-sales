@@ -8,11 +8,12 @@ export function initOrdenCompra(){
 
     const btnGenerar = document.querySelector('#btngenerarOC');
     const btnLimpiar = document.querySelector('#LimpiarOC');
+    const inputObservacion = document.getElementById("observacion_compra");
+    
     if (!btnGenerar) return;
     if (!btnLimpiar) return;
-     
-    const inputObservacion = document.getElementById("observacion_compra");
-     if(!inputObservacion) return;
+    if(!inputObservacion) return;
+    
     // ==============================
     // CLICK BOTON
     // ==============================
@@ -21,9 +22,21 @@ export function initOrdenCompra(){
 
         e.preventDefault();
     
-        if(!(await validarCompra())) return;
-    
-        RegistraCompra();
+        if(!(await validarCompra())) return;     
+        
+        Swal.fire({
+            icon: 'warning',
+            title: 'Gurdar Orden de Compra',
+            text: 'Se Guardaran los Cambios realizados',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, Guardar',
+            cancelButtonText: 'Cancelar'
+        }).then((result)=>{
+
+            if(result.isConfirmed){
+                RegistraCompra();
+            }
+        });  
 
     });  
 
@@ -31,9 +44,9 @@ export function initOrdenCompra(){
 
         e.preventDefault();
     
-            if(App.compras.articulos.length === 0) return;
-            $("#buscarProducto").autocomplete("close"); // cerrar autocomplete
-            document.activeElement.blur(); // 👈 quitar focus
+            // if(App.compras.articulos.length === 0) return;
+            $("#buscarProducto").autocomplete("close"); 
+            document.activeElement.blur(); 
             Swal.fire({
                 icon: 'warning',
                 title: 'Limpiar orden',
@@ -76,6 +89,17 @@ export function initOrdenCompra(){
                 icon:'warning',
                 title:'Proveedor requerido',
                 text:'Seleccione un Proveedor'
+            });
+
+            return false;
+        }
+
+        if(!App.compras.idserie){
+
+            Swal.fire({
+                icon:'warning',
+                title:'Serie requerida',
+                text:'Seleccione una Serie'
             });
 
             return false;
@@ -137,6 +161,7 @@ export function initOrdenCompra(){
                 idproveedor: App.compras.idproveedor,
                 observacion: inputObservacion.value,
                 idmoneda: App.compras.moneda,
+                idserie: App.compras.idserie,
                 porcentaje_impuesto: App.compras.impuesto,
                 subtotal: parseFloat(App.compras.totales.subtotal),
                 igv: parseFloat(App.compras.totales.impuesto),
@@ -174,26 +199,33 @@ export function initOrdenCompra(){
                 return;
             }
 
-            modal.close();
+            modal.close();         
+
             Swal.fire({
                 icon: 'success',
                 title: esEdicion
                     ? `OC ${data.numero} actualizada`
                     : `OC ${data.numero} generada`,
-                text: '¿Desea imprimir la orden de Compra?',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, imprimir',
-                cancelButtonText: 'No'
-            }).then(result => {
+                text: 'La Orden de Compra se registró correctamente.',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
 
-                if (result.isConfirmed) {
-                    window.open(
-                        `/admin/gestion/compras/orden/imprimir?id=${data.idorden}`,
-                        '_blank'
-                    );
+                // Guardamos la orden actualmente registrada
+                App.compras.idorden = data.idorden;
+                App.compras.numero = data.numero_formateado;
+                
+                const numeroOrden = document.getElementById('numero');
+
+                if (numeroOrden) {
+                    numeroOrden.value = data.numero_formateado;               
                 }
 
-                resetCompras();
+                const btnImprimir = document.getElementById('ImprimirOC');
+
+                if (btnImprimir) {
+                    btnImprimir.disabled = false;
+                }
+
             });
 
         } catch(error){
@@ -209,5 +241,27 @@ export function initOrdenCompra(){
             );
         }
     }
+
+    const btnImprimir = document.getElementById('ImprimirOC');
+
+    if (btnImprimir) {
+
+        btnImprimir.addEventListener('click', function () {
+
+            const idorden = App.compras.idorden;
+
+            if (!idorden) {
+                return;
+            }
+
+            window.open(
+                `/admin/gestion/compras/orden/imprimir?id=${idorden}`,
+                '_blank'
+            );
+
+        });
+
+    }
+
 
 }
