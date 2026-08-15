@@ -95,7 +95,7 @@ class GestionOCController {
 
             // Llamar SP
             $resultado = OrdenVenta::procedureMantenimiento(
-                "prp_compra_cambia_estado",
+                "prp_compra_modifica_estado",
                 [$idOrden,$idEmpresa, $idTienda, $estado, $idUsuario]
             );
 

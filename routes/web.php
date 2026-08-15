@@ -21,6 +21,7 @@ use Controllers\SeriesDocumentoController;
 
 use Controllers\ReportesController;
 use Controllers\GestionOrdenController;
+use Controllers\RecepcionOCController;
 use Controllers\PerfilesController;
 use Controllers\ProductosController;
 use Controllers\TiendaProductosController;
@@ -77,6 +78,14 @@ $router->get('/admin/gestion/compras/gestion',[GestionOCController::class,'index
 $router->post('/admin/gestion/compras/gestion/cambiarestado',[GestionOCController::class,'cambiarestado']);
 $router->get('/admin/gestion/compras/gestion/cambiarestado',[GestionOCController::class,'cambiarestado']);
 $router->get('/admin/gestion/compras/gestion/cambiarestado',[GestionOCController::class,'cambiarestado']);
+
+//== RECEPCION COMPRAS
+$router->get('/admin/gestion/compras/recepcion',[RecepcionOCController::class,'index']);
+$router->post('/admin/gestion/compras/orden/validarTipoCambio',[OrdenCompraController::class,'validarTipoCambio']);
+$router->post('/admin/gestion/compras/orden/generar',[OrdenCompraController::class,'generar']);
+$router->post('/admin/gestion/compras/orden/editar',[OrdenCompraController::class,'editar']);
+$router->get('/admin/gestion/compras/orden/imprimir', [OrdenCompraController::class, 'imprimir']);
+
 //== INVENTARIO
 $router->get('/admin/gestion/inventarios/movimiento',[MovimientoController::class,'index']);
 $router->post('/admin/gestion/inventarios/movimiento/generar',[MovimientoController::class,'generar']);

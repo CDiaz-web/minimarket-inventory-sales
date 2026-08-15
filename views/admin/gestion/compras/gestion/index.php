@@ -1,3 +1,5 @@
+
+
 <h2 class="dashboard__heading"><?php echo $titulo; ?></h2>
    <?php 
         include_once __DIR__ . '/../../../../templates/alertas.php';          
@@ -29,7 +31,6 @@
             />
         </div>
     </div>  
-
 
     <div class="table-body">
         <?php if(!empty($ordenes)) { ?>
@@ -85,11 +86,18 @@
                                     </a>
 
                                     <!-- Aprobar -->
+
+                                    <?php
+                                        $esAprobada = $orden->estado === 'APR';
+                                    ?>
+
                                     <button 
-                                        class="boton boton--success-light  btn-aprobar-compra"
+                                        class="boton <?= $esAprobada ? 'boton--warning-light' : 'boton--success-light' ?> btn-aprobar-compra"
                                         data-id="<?= $orden->id ?>"
-                                        data-estado="<?= $orden->estado ?>">
-                                        <i class="fa-solid fa-check"></i>
+                                        data-estado="<?= $orden->estado ?>"
+                                        title="<?= $esAprobada ? 'Reabrir orden' : 'Aprobar orden' ?>"
+                                    >
+                                        <i class="fa-solid <?= $esAprobada ? 'fa-lock-open' : 'fa-check' ?>"></i>
                                     </button>
 
                                     <!-- Imprimir -->

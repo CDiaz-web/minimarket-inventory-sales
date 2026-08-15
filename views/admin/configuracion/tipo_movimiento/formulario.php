@@ -37,6 +37,7 @@
         <select class="formulario__select-xl" id="tipo_documento" name ="tipo_documento">
             <option value="" >-Seleccionar-</option>
             <option <?php echo ($tipo->tipo_documento === "Inventario") ? 'selected' : '' ; ?> value="Inventario">Inventario</option>
+            <option <?php echo ($tipo->tipo_documento === "Compra") ? 'selected' : '' ; ?> value="Venta">Compra</option>
             <option <?php echo ($tipo->tipo_documento === "Venta") ? 'selected' : '' ; ?> value="Venta">Venta</option>
         </select>
     </div>  

@@ -4,12 +4,13 @@ namespace Model;
 
 class TipoDocumentos extends ActiveRecord {
     protected static $tabla = 'tipo_documento';
-    protected static $columnasDB = ['id','idempresa', 'codigo', 'nombre','abreviatura','activo'];
+    protected static $columnasDB = ['id','idempresa', 'codigo', 'nombre','abreviatura','comprobante_pago','activo'];
  
     public ?int $id = null;
     public int $idempresa = 0;
     public string $codigo = '';    
     public string $nombre = '';    
+    public int $comprobante_pago = 0;
     public int $activo = 1;
     public string $abreviatura = '';     
     public function __construct(array $args = [])

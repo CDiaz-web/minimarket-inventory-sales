@@ -72,12 +72,7 @@
                     value="<?= $cabecera->numero ?? '(Automático)' ?>" 
                     disabled                   
                 />
-            </div>       
-            
-
-
-
-
+            </div>      
 
             <!-- Fecha -->
             <div class="campo-inline">

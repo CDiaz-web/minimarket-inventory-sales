@@ -4,9 +4,9 @@ export function initGestionOC() {
 
     manejarAprobacion();
     manejarAnulacion(); 
+    manejarReabrir();
     manejarEdicion();
 }
-
 
 // ==============================
 // APROBAR ORDEN
@@ -35,12 +35,26 @@ function manejarAprobacion(){
             return;
         }
 
+        if(estadoActual === 'REC'){
+            Swal.fire({
+                icon:'error',
+                title:'La Orden se encuentra Recepcionada'
+            });
+            return;
+        }        
+        if(estadoActual === 'RCP'){
+            Swal.fire({
+                icon:'error',
+                title:'La Orden cuenta con Ingresos Parciales'
+            });
+            return;
+        }        
         const idOrden = boton.dataset.id;
    
         Swal.fire({
             icon:'question',
             title:'¿Aprobar orden?',
-            text:'Se generará movimiento de inventario por Ingreso de Compra',
+            text:'Se cambiara el estado de la Orden de Compra a Aprobado',
             showCancelButton:true,
             confirmButtonText:'Sí, aprobar',
             cancelButtonText:'Cancelar'
@@ -82,11 +96,24 @@ function manejarAnulacion(){
         if(estadoActual === 'APR'){
             Swal.fire({
                 icon:'error',
-                title:'La Orden esta Aprobada, hay un ingreso por inventario registrado'
+                title:'La Orden esta Aprobada, es necesario reabrir Orden'
             });
             return;
         }
-
+        if(estadoActual === 'REC'){
+            Swal.fire({
+                icon:'error',
+                title:'La Orden se encuentra Recepcionada'
+            });
+            return;
+        }        
+        if(estadoActual === 'RCP'){
+            Swal.fire({
+                icon:'error',
+                title:'La Orden cuenta con Ingresos Parciales'
+            });
+            return;
+        }  
 
         if(estadoActual === 'PEN'){
 
@@ -109,6 +136,63 @@ function manejarAnulacion(){
                 Swal.fire(
                     'Error',
                     'Error al anular Orden',
+                    'error'
+                );
+
+            }
+
+        }
+
+    });
+
+}
+
+
+// ==============================
+// ANULAR ORDEN
+// ==============================
+
+function manejarReabrir(){
+
+    document.addEventListener('click', async function(e){
+
+        const boton = e.target.closest('.btn-aprobar-compra');
+        if(!boton) return;
+
+        const idOrden = boton.dataset.id;
+        const estadoActual = boton.dataset.estado;
+
+        if(estadoActual === 'ANU'){
+            Swal.fire({
+                icon:'error',
+                title:'La Orden se encuentra anulada'
+            });
+            return;
+        }
+        
+
+
+        if(estadoActual === 'APR'){
+
+            try{
+
+            const result = await Swal.fire({
+                icon:'warning',
+                title:'¿Reabrir orden?',
+                showCancelButton:true,
+                confirmButtonText:'Sí, Reabrir',
+                cancelButtonText:'Cancelar'
+            });
+
+            if(!result.isConfirmed) return;
+
+            cambiarEstado(idOrden, 'PEN');
+
+            }catch(error){
+
+                Swal.fire(
+                    'Error',
+                    'Error al reabrir Orden',
                     'error'
                 );
 
@@ -147,7 +231,7 @@ function manejarEdicion() {
             return;
         }
 
-        // Si es PEN, el enlace continúa normalmente
+   
     });
 
 }
