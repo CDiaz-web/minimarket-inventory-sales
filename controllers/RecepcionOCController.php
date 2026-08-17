@@ -65,8 +65,8 @@ class RecepcionOCController {
                 'serie_defecto'=>$serie_defecto,  
                 'lista_series'=>$lista_series,
                 'tipodocumentos'=>$tipodocumentos,
-                'fecha'=>$fecha,                                
-                'opciones'=>$opciones
+                'modoEdicion'=>$modoEdicion,
+                'fecha'=>$fecha
             ]);
     }
    

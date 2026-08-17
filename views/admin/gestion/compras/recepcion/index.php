@@ -1,4 +1,6 @@
-
+<?php   
+    $idSerieSeleccionada = $cabecera->idserie ?? $serie_defecto;    
+?>
 <h2 class="dashboard__heading--izquierda" id="idditulooc"><?php echo $titulo; ?></h2> 
 
 <div class="table-wrapper">      
@@ -133,7 +135,7 @@
                 <select class="formulario__select-xl" id="idtipo_documento" name ="idtipo_documento">
                 <option value="" >-Seleccionar-</option>
                     <?php foreach($tipodocumentos as $tipodocumento) { ?>
-                        <option value="<?php echo $tipodocumento->id; ?>" > <?php echo $tipo->nombre; ?> </option>
+                        <option value="<?php echo $tipodocumento->id; ?>" > <?php echo $tipodocumento->nombre; ?> </option>
                     <?php }?> 
                 </select>
 
