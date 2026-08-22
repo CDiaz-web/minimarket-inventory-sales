@@ -10,6 +10,7 @@ import {
 import { initOrdenCompra } from './compras-orden.js';
 import { initGestionOC } from "./compras-gestion.js";
 import { initCompraSerie } from "./compras-serie.js";
+import { initRecepcionCompra } from './compras-recepcion.js';
 // ======================
 // ESTADO DEL MODULO
 // ======================
@@ -97,5 +98,11 @@ export function initCompras(){
     if(document.querySelector('.btn-aprobar-compra') || document.querySelector('.btn-anular-compra')){
         initGestionOC();
     }
+    // ======================
+    // MODULO RECEPCION OC
+    // ======================
 
+    if (document.getElementById('btnbuscaOC')) {
+        initRecepcionCompra();
+    }
 }

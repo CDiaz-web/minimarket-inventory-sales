@@ -117,7 +117,17 @@
                                        
                                         <i class="fa-solid fa-circle-xmark"></i>
                                     </button>
-       
+
+                                    <!-- Culminar -->
+                                    <button 
+                                        class="boton boton--naranja btn-culminar-compra"
+                                        type="button"                                        
+                                        data-id="<?= $orden->id ?>"
+                                        data-estado="<?= $orden->estado ?>">
+                                       
+                                        <i class="fa-solid fa-flag-checkered"></i>
+                                    </button>                                    
+                                    
                                 </div>
 
                             </td>

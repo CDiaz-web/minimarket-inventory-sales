@@ -1,5 +1,4 @@
 
-
 export function initTables() {
 
     const tables = document.querySelectorAll('[data-table]');

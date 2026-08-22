@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 export function initGestionOC() {
 
     manejarAprobacion();
+    manejarCulminacion();
     manejarAnulacion(); 
     manejarReabrir();
     manejarEdicion();
@@ -71,6 +72,43 @@ function manejarAprobacion(){
 
 }
 
+
+function manejarCulminacion(){
+
+    document.addEventListener('click', function(e){
+
+        const boton = e.target.closest('.btn-culminar-compra');
+        if(!boton) return;
+        const estadoActual = boton.dataset.estado;
+        if(estadoActual !== 'RCP'){
+            Swal.fire({
+                icon:'error',
+                title:'La Orden debe econtrarse en estado de Recepcion Parcial'
+            });
+            return;
+        }
+ 
+        const idOrden = boton.dataset.id;
+   
+        Swal.fire({
+            icon:'question',
+            title:'¿Culminar Orden?',
+            text:'Se cambiara el estado de la Orden de Compra a Culminada',
+            showCancelButton:true,
+            confirmButtonText:'Sí, culminar',
+            cancelButtonText:'Cancelar'
+        })
+        .then(result => {
+
+            if(!result.isConfirmed) return;
+
+            cambiarEstado(idOrden, 'CUL');
+
+        });
+
+    });
+
+}
 
 // ==============================
 // ANULAR ORDEN

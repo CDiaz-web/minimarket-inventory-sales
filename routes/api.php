@@ -17,7 +17,7 @@ use Controllers\APIEstados;
 
 use Controllers\APIDashboardDetalleCards;
 use Controllers\APIDashboardGrafico;
-
+use Controllers\APIOrdenCompraRecepcion;
 // =====================
 // API Opciones
 // =====================
@@ -44,3 +44,6 @@ $router->get('/api/listapocostock',[APIDashboardDetalleCards::class,'listapocost
 $router->get('/api/listacomprasmes',[APIDashboardDetalleCards::class,'listacomprasmes']);
 
 $router->get('/api/dashboardgrafico',[APIDashboardGrafico::class,'dashboardgrafico']);
+
+$router->get('/api/compras/ordenes-por-recibir',[APIOrdenCompraRecepcion::class, 'listarPorRecibir']
+);
