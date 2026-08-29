@@ -3,8 +3,9 @@
 namespace Controllers;
 
 use Model\OrdenCompra;
+use Model\OrdenCompraDetalle;
 
-class APIOptenerOrdenCompra {
+class APIObtenerOrdenCompra {
 
     public static function obtenerRecepcion() {
 

@@ -240,7 +240,7 @@
 
     <div class="table-header">
         <div class="table-actions">
-            <button class="boton boton--primary-link" id = "btngenerarIng">
+            <button class="boton boton--primary-link" id = "btnGuardarRecepcion">
                 <i class="fa-solid fa-pen-to-square"></i> Generar Ingreso
             </button> 
             <button 

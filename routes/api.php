@@ -9,6 +9,7 @@ use Controllers\APIProductos;
 use Controllers\APITipoPago;
 
 use Controllers\APIproductosTiendaLista;
+use Controllers\APIObtenerOrdenCompra;
 use Controllers\APIProductosCompra;
 use Controllers\APITotalProductosTienda;
 use Controllers\APIProductosTienda;
@@ -45,5 +46,6 @@ $router->get('/api/listacomprasmes',[APIDashboardDetalleCards::class,'listacompr
 
 $router->get('/api/dashboardgrafico',[APIDashboardGrafico::class,'dashboardgrafico']);
 
-$router->get('/api/compras/ordenes-por-recibir',[APIOrdenCompraRecepcion::class, 'listarPorRecibir']
-);
+$router->get('/api/compras/ordenes-por-recibir',[APIOrdenCompraRecepcion::class, 'listarPorRecibir']);
+
+$router->get('/api/compras/obtenerRecepcion',[APIObtenerOrdenCompra::class, 'obtenerRecepcion']);

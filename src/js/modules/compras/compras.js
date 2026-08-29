@@ -25,6 +25,12 @@ App.compras = {
     articulos: [],
     moneda:2,
     impuesto:parseFloat(window.APP?.config?.impuesto || 0),   
+
+    recepcion: {
+        cabecera: null,
+        detalle: []
+    },
+
     totales: {
         subtotal: 0,
         impuesto: 0,

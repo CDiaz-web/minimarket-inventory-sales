@@ -25,9 +25,15 @@ class OrdenCompraDetalle extends ActiveRecord {
     public int $idusermodi = 0;
     public ?string $fechamodi = null;
 
+    public ?int $iddetalle = null;
+    public ?int $idarticulo = null;
+
     public string $unidad = '';
     public string $nombre = '';
     public string $codigo = '';
+    public ?float $cantidad_recibida = null;
+    public ?float $porrecibir = null;
+    public ?float $arecibir = null;
 
     
     // Constructor opcional (sobreescribe valores si se pasan en $args)

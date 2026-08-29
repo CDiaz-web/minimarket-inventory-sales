@@ -25,8 +25,6 @@ class RecepcionOCController {
         
         $idOrden = isset($_GET['id']) ? (int) $_GET['id'] : 0;    
 
-
-
         $cabecera = null;
         $detalle = [];
         $modoEdicion = false;
@@ -70,8 +68,88 @@ class RecepcionOCController {
             ]);
     }
    
+public static function generar() {
 
-    
+    header('Content-Type: application/json; charset=utf-8');
+
+    try {
+
+        $data = json_decode(
+            file_get_contents('php://input'),
+            true
+        );
+
+        if (!$data) {
+            throw new \Exception('JSON inválido o vacío');
+        }
+
+        if (empty($data['detalle'])) {
+            throw new \Exception('Detalle vacío');
+        }
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $idTienda  = $_SESSION['idtienda'] ?? null;
+        $idUsuario = $_SESSION['id'] ?? null;
+        $idEmpresa = $_SESSION['idempresa'] ?? null;
+
+        if (!$idTienda || !$idUsuario || !$idEmpresa) {
+            throw new \Exception('Sesión no válida');
+        }
+
+        // ==========================================
+        // COMPLETAR CABECERA DESDE BACKEND
+        // ==========================================
+
+        $data['cabecera']['idtienda']  = $idTienda;
+        $data['cabecera']['idusercrea'] = $idUsuario;
+        $data['cabecera']['idempresa'] = $idEmpresa;
+
+        $jsonCompra = json_encode(
+            $data,
+            JSON_UNESCAPED_UNICODE
+        );
+
+        // ==========================================
+        // EJECUTAR PROCEDIMIENTO
+        // ==========================================
+
+        $resultado = OrdenCompra::procedureMantenimiento(
+            'prp_inventario_compra',
+            [$jsonCompra]
+        );
+
+        $fila = $resultado->fetch_assoc();
+
+        if (!$fila) {
+            throw new \Exception(
+                'No se pudo obtener resultado del procedimiento'
+            );
+        }
+
+        // ==========================================
+        // RESPUESTA
+        // ==========================================
+
+        echo json_encode([
+            'ok' => true,
+            'idinvent' => $fila['idinvent'],
+            'numero_formateado' => $fila['numero_formateado'],
+            'numero' => $fila['numero']
+        ], JSON_UNESCAPED_UNICODE);
+
+    } catch (\Throwable $e) {
+
+        http_response_code(500);
+
+        echo json_encode([
+            'ok' => false,
+            'mensaje' => $e->getMessage()
+        ], JSON_UNESCAPED_UNICODE);
+    }
+}
     
     
    
