@@ -78,6 +78,9 @@
                 cabecera: <?= json_encode($cabecera, JSON_UNESCAPED_UNICODE) ?>,
                 detalle: <?= json_encode($detalle, JSON_UNESCAPED_UNICODE) ?>
             };
+            window.APP.recepcion = {
+                idSerieDefecto: <?= (int) $serie_defecto ?>
+            };
         </script>
 
         <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>        

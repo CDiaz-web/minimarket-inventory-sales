@@ -1,5 +1,5 @@
 <?php   
-    $idSerieSeleccionada = $cabecera->idserie ?? $serie_defecto;    
+    $idSerieSeleccionada = $serie_defecto;    
 ?>
 <h2 class="dashboard__heading--izquierda" id="idditulooc"><?php echo $titulo; ?></h2> 
 
@@ -39,9 +39,9 @@
                 <input 
                     type="text"
                     class="formulario__input"
-                    id="numero"
-                    value="<?= $cabecera->numero ?? '(Automático)' ?>" 
-                    disabled                   
+                    id="numero_recepcion"
+                    value="(Automático)"
+                    readonly                   
                 />
             </div>       
             
@@ -56,7 +56,7 @@
                     class="formulario__input"
                     id="fecha_recepcion"
                     name="fecha"                    
-                    value="<?= $cabecera->fecha ?? $fecha ?>"  
+                    value="<?= $fecha ?>"  
                     required
                 >
             </div>
@@ -81,7 +81,7 @@
                     type="text"
                     class="formulario__input"
                     id="proveedor"
-                    value="<?= $cabecera->numero ?? '' ?>" 
+                    value="" 
                     disabled                   
                 />
             </div>   
@@ -96,7 +96,7 @@
                     type="text"
                     class="formulario__input"
                     id="numerooc"
-                    value="<?= $cabecera->numero ?? '' ?>" 
+                    value="" 
                     disabled                   
                 />
             </div>       
@@ -112,7 +112,7 @@
                     class="formulario__input"
                     id="fecha_compra"
                     name="fecha"                    
-                    value="<?= $cabecera->fecha ?? $fecha ?>"  
+                    value=""  
                     required
                     disabled
                 >
@@ -128,7 +128,7 @@
                     type="text"
                     class="formulario__input"
                     id="estado"
-                    value="<?= $cabecera->numero ?? '' ?>" 
+                    value="" 
                     disabled                   
                 />
             </div>     
@@ -181,7 +181,7 @@
                     class="formulario__input"
                     id="fecha_doc_referencial"
                     name="fecha"                    
-                    value="<?= $cabecera->fecha ?? $fecha ?>"  
+                    value=""  
                     required
                 >
             </div>
@@ -211,7 +211,7 @@
                     class="formulario__input"
                     id="fecha_guia_referencial"
                     name="fecha"                    
-                    value="<?= $cabecera->fecha ?? $fecha ?>"  
+                    value=""  
                     required
                 >
             </div>
@@ -222,7 +222,7 @@
 
         <!-- Observacion -->
         <div>
-            <label for="observacion" class="formulario__label">
+            <label for="observacion_recepcion" class="formulario__label">
                 <i class="fa-solid a fa-book"></i>
                 Observacion
             </label>
@@ -232,7 +232,7 @@
                 type = "text"
                 class = "formulario__input"
                 id="observacion_recepcion"
-                value="<?= $cabecera->observacion ?? '' ?>"  
+                value=""  
             /> 
         </div>  
 
@@ -245,11 +245,11 @@
             </button> 
             <button 
                 class="boton boton--success" 
-                id="ImprimirIng"
-                <?= $modoEdicion ? '' : 'disabled' ?>>
+                id="btnImprimirRecepcion"
+                disabled>
                 <i class="fa-solid fa-print"></i> Imprimir
             </button>
-            <button class="boton boton--danger-link" id="LimpiarIng">
+            <button class="boton boton--danger-link" id="btnLimpiarRecepcion">
                 <i class="fa-solid fa-trash"></i> Limpiar
             </button>            
         </div>

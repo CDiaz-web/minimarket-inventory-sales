@@ -68,88 +68,159 @@ class RecepcionOCController {
             ]);
     }
    
-public static function generar() {
+    public static function generar() {
 
-    header('Content-Type: application/json; charset=utf-8');
+        header('Content-Type: application/json; charset=utf-8');
 
-    try {
+        try {
 
-        $data = json_decode(
-            file_get_contents('php://input'),
-            true
-        );
-
-        if (!$data) {
-            throw new \Exception('JSON inválido o vacío');
-        }
-
-        if (empty($data['detalle'])) {
-            throw new \Exception('Detalle vacío');
-        }
-
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $idTienda  = $_SESSION['idtienda'] ?? null;
-        $idUsuario = $_SESSION['id'] ?? null;
-        $idEmpresa = $_SESSION['idempresa'] ?? null;
-
-        if (!$idTienda || !$idUsuario || !$idEmpresa) {
-            throw new \Exception('Sesión no válida');
-        }
-
-        // ==========================================
-        // COMPLETAR CABECERA DESDE BACKEND
-        // ==========================================
-
-        $data['cabecera']['idtienda']  = $idTienda;
-        $data['cabecera']['idusercrea'] = $idUsuario;
-        $data['cabecera']['idempresa'] = $idEmpresa;
-
-        $jsonCompra = json_encode(
-            $data,
-            JSON_UNESCAPED_UNICODE
-        );
-
-        // ==========================================
-        // EJECUTAR PROCEDIMIENTO
-        // ==========================================
-
-        $resultado = OrdenCompra::procedureMantenimiento(
-            'prp_inventario_compra',
-            [$jsonCompra]
-        );
-
-        $fila = $resultado->fetch_assoc();
-
-        if (!$fila) {
-            throw new \Exception(
-                'No se pudo obtener resultado del procedimiento'
+            $data = json_decode(
+                file_get_contents('php://input'),
+                true
             );
+
+            if (!$data) {
+                throw new \Exception('JSON inválido o vacío');
+            }
+
+            if (empty($data['detalle'])) {
+                throw new \Exception('Detalle vacío');
+            }
+
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $idTienda  = $_SESSION['idtienda'] ?? null;
+            $idUsuario = $_SESSION['id'] ?? null;
+            $idEmpresa = $_SESSION['idempresa'] ?? null;
+
+            if (!$idTienda || !$idUsuario || !$idEmpresa) {
+                throw new \Exception('Sesión no válida');
+            }
+
+            // ==========================================
+            // COMPLETAR CABECERA DESDE BACKEND
+            // ==========================================
+
+            $data['cabecera']['idtienda']  = $idTienda;
+            $data['cabecera']['idusercrea'] = $idUsuario;
+            $data['cabecera']['idempresa'] = $idEmpresa;
+
+            $jsonCompra = json_encode(
+                $data,
+                JSON_UNESCAPED_UNICODE
+            );
+
+            // ==========================================
+            // EJECUTAR PROCEDIMIENTO
+            // ==========================================
+
+            $resultado = OrdenCompra::procedureMantenimiento(
+                'prp_inventario_compra',
+                [$jsonCompra]
+            );
+
+            $fila = $resultado->fetch_assoc();
+
+            if (!$fila) {
+                throw new \Exception(
+                    'No se pudo obtener resultado del procedimiento'
+                );
+            }
+
+            // ==========================================
+            // RESPUESTA
+            // ==========================================
+
+            echo json_encode([
+                'ok' => true,
+                'idinvent' => $fila['idinvent'],
+                'numero_formateado' => $fila['numero_formateado'],
+                'numero' => $fila['numero']
+            ], JSON_UNESCAPED_UNICODE);
+
+        } catch (\Throwable $e) {
+
+            http_response_code(500);
+
+            echo json_encode([
+                'ok' => false,
+                'mensaje' => $e->getMessage()
+            ], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+public static function imprimir(Router $router)
+    {
+        if (!is_auth()) {
+            header('Location: /login');
+            return;
         }
 
-        // ==========================================
-        // RESPUESTA
-        // ==========================================
+        if (empty($_GET['id'])) {
+            echo "<h4>Error: No se especificó el ID del Movimiento</h4>";
+            exit;
+        }
 
-        echo json_encode([
-            'ok' => true,
-            'idinvent' => $fila['idinvent'],
-            'numero_formateado' => $fila['numero_formateado'],
-            'numero' => $fila['numero']
-        ], JSON_UNESCAPED_UNICODE);
+        $idorden = (int) $_GET['id'];
 
-    } catch (\Throwable $e) {
+        try {
 
-        http_response_code(500);
+            // Empresa
+            $empresa = Empresa::find($_SESSION['idempresa']);
 
-        echo json_encode([
-            'ok' => false,
-            'mensaje' => $e->getMessage()
-        ], JSON_UNESCAPED_UNICODE);
+            $idEmpresa = $_SESSION['idempresa'];
+            $idTienda = $_SESSION['idtienda'];
+
+            // Cabecera
+            $cabecera = OrdenCompra::procedureLista(
+                'prc_recepcion_imprimir',
+                [1,$idEmpresa,$idTienda,$idorden]
+            );
+            $cabecera = $cabecera[0] ?? null;
+           
+            // Detalle
+            $detalle = OrdenCompraDetalle::procedureLista(
+                'prc_recepcion_imprimir',
+                [2,$idEmpresa,$idTienda,$idorden]
+            );
+
+            if (!$cabecera) {
+                echo "<h4>No se encontró el movimiento solicitado.</h4>";
+                exit;
+            }
+
+            if (empty($detalle)) {
+                echo "<h4>El Movimiento no tiene detalle.</h4>";
+                exit;
+            }
+
+            // Renderizar plantilla
+            ob_start();
+            include __DIR__ . '/../views/admin/gestion/compras/recepcion/pdf_template.php';
+            $html = ob_get_clean();
+
+            // DOMPDF
+            $options = new \Dompdf\Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isRemoteEnabled', true);
+
+            $dompdf = new \Dompdf\Dompdf($options);
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            $dompdf->stream(
+                "Movimiento_Inventario_{$cabecera->numero}.pdf",
+                ['Attachment' => false]
+            );
+
+        } catch (\Throwable $e) {
+            echo "<h3>Error al generar PDF</h3>";
+            echo "<pre>{$e->getMessage()}</pre>";
+        }
     }
-}
     
     
    

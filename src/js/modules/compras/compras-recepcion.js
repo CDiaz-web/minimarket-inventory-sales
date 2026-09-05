@@ -1,11 +1,12 @@
 import { initTables } from '../../ui/table.js';
-
+import Swal from "sweetalert2";
 export function initRecepcionCompra() {
 
     const btnBuscaOC = document.getElementById('btnbuscaOC');
+    const btnLimpiar = document.querySelector('#btnLimpiarRecepcion');
 
     if (!btnBuscaOC) return;
-
+    if (!btnLimpiar) return;
     btnBuscaOC.addEventListener('click', abrirModalOC);
 
     initValidacionCantidadRecepcion();
@@ -21,8 +22,199 @@ export function initRecepcionCompra() {
         );
 
     }    
+
+
+    btnLimpiar.addEventListener("click", async function(e){
+
+        e.preventDefault();
+    
+            // if(App.compras.articulos.length === 0) return;
+            $("#buscarProducto").autocomplete("close"); 
+            document.activeElement.blur(); 
+            Swal.fire({
+                icon: 'warning',
+                title: 'Limpiar orden',
+                text: 'Se eliminarán todos los artículos de la orden.',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, limpiar',
+                cancelButtonText: 'Cancelar'
+            }).then((result)=>{
+
+                if (result.isConfirmed) {
+
+                    // ==========================================
+                    // LIMPIAR ESTADO DE LA RECEPCIÓN
+                    // ==========================================
+
+                    App.compras.recepcion = null;
+                    App.compras.idorden = null;
+                    App.compras.numero = null;
+
+                    // ==========================================
+                    // LIMPIAR DETALLE
+                    // ==========================================
+
+                    const tbody =
+                        document.querySelector('#tablaArticulosRecepcion tbody');
+
+                    if (tbody) {
+                        tbody.innerHTML = '';
+                    }
+
+                    // ==========================================
+                    // RESTAURAR SERIE POR DEFECTO
+                    // ==========================================
+
+                    const serie =
+                        document.getElementById('idserie');
+
+                    if (serie) {
+                        serie.value = window.APP.recepcion.idSerieDefecto;
+                    }
+
+                    // ==========================================
+                    // RESTAURAR FECHA ACTUAL
+                    // ==========================================
+
+                    const fechaRecepcion =
+                        document.getElementById('fecha_recepcion');
+
+                    if (fechaRecepcion) {
+                        fechaRecepcion.value = obtenerFechaActual();
+                    }
+
+                    // ==========================================
+                    // NUMERO DE RECEPCIÓN
+                    // ==========================================
+
+                    const numeroRecepcion =
+                        document.getElementById('numero_recepcion');
+
+                    if (numeroRecepcion) {
+                        numeroRecepcion.value = '(Automático)';
+                    }
+
+                    // ==========================================
+                    // DATOS DE LA ORDEN
+                    // ==========================================
+
+                    const proveedor =
+                        document.getElementById('proveedor');
+
+                    if (proveedor) {
+                        proveedor.value = '';
+                    }
+
+                    const numeroOC =
+                        document.getElementById('numerooc');
+
+                    if (numeroOC) {
+                        numeroOC.value = '';
+                    }
+
+                    const estadoOC =
+                        document.getElementById('estado');
+
+                    if (estadoOC) {
+                        estadoOC.value = '';
+                    }
+
+                    const fechaOC =
+                        document.getElementById('fecha_compra');
+
+                    if (fechaOC) {
+                        fechaOC.value = '';
+                    }
+
+                    // ==========================================
+                    // DOCUMENTO DEL PROVEEDOR
+                    // ==========================================
+
+                    const tipoDocumento =
+                        document.getElementById('idtipo_documento');
+
+                    if (tipoDocumento) {
+                        tipoDocumento.value = '';
+                    }
+
+                    const numeroDocumento =
+                        document.getElementById('numero_doc_referencial');
+
+                    if (numeroDocumento) {
+                        numeroDocumento.value = '';
+                    }
+
+                    const fechaDocumento =
+                        document.getElementById('fecha_doc_referencial');
+
+                    if (fechaDocumento) {
+                        fechaDocumento.value = '';
+                    }
+
+                    // ==========================================
+                    // GUIA
+                    // ==========================================
+
+                    const guia =
+                        document.getElementById('guia_referencial');
+
+                    if (guia) {
+                        guia.value = '';
+                    }
+
+                    const fechaGuia =
+                        document.getElementById('fecha_guia_referencial');
+
+                    if (fechaGuia) {
+                        fechaGuia.value = '';
+                    }
+
+                    // ==========================================
+                    // OBSERVACIÓN
+                    // ==========================================
+
+                    const observacion =
+                        document.getElementById('observacion_recepcion');
+
+                    if (observacion) {
+                        observacion.value = '';
+                    }
+
+                    // ==========================================
+                    // BOTONES
+                    // ==========================================
+
+                    const btnGuardar =
+                        document.getElementById('btnGuardarRecepcion');
+
+                    if (btnGuardar) {
+                        btnGuardar.disabled = false;
+                    }
+
+                    const btnImprimir =
+                        document.getElementById('btnImprimirRecepcion');
+
+                    if (btnImprimir) {
+                        btnImprimir.disabled = true;
+                    }
+                }
+
+            });
+
+    });  
+
 }
 
+function obtenerFechaActual() {
+
+    const hoy = new Date();
+
+    const anio = hoy.getFullYear();
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoy.getDate()).padStart(2, '0');
+
+    return `${anio}-${mes}-${dia}`;
+}
 
 // ============================
 // ABRIR MODAL
@@ -52,8 +244,6 @@ async function abrirModalOC() {
     await cargarOrdenesPorRecibir(thead, tbody);
 
 }
-
-
 // ============================
 // CARGAR ORDENES
 // ============================
@@ -89,7 +279,6 @@ async function cargarOrdenesPorRecibir(thead, tbody) {
 
 }
 
-
 // ============================
 // HEADER
 // ============================
@@ -123,7 +312,6 @@ function construirHeader(thead) {
 
 }
 
-
 // ============================
 // BODY
 // ============================
@@ -137,15 +325,12 @@ function construirBody(tbody, data) {
         const tr = document.createElement('tr');
 
         tr.dataset.id = row.id;
-
         agregarCelda(tr, row.numero);
         agregarCelda(tr, row.fecha);
         agregarCelda(tr, row.proveedor);
         agregarCelda(tr, row.estado);
         agregarCelda(tr, row.observacion);
-
         const tdAccion = document.createElement('td');
-
         const btn = document.createElement('button');
 
         btn.type = 'button';
@@ -157,15 +342,12 @@ function construirBody(tbody, data) {
         });
 
         tdAccion.appendChild(btn);
-
         tr.appendChild(tdAccion);
-
         tbody.appendChild(tr);
 
     });
 
 }
-
 
 // ============================
 // CELDA
@@ -516,15 +698,10 @@ async function guardarRecepcion() {
         const detalle = App.compras.recepcion.detalle
             .filter(item => parseFloat(item.arecibir || 0) > 0)
             .map(item => ({
-
                 iddetalle: parseInt(item.iddetalle),
-
                 idproducto: parseInt(item.idarticulo),
-
                 cantidad: parseFloat(item.arecibir)
-
             }));
-
 
         // ==========================================
         // VALIDAR DETALLE
@@ -569,6 +746,15 @@ async function guardarRecepcion() {
            CONSTRUIR JSON
         ========================================== */
 
+        const tipoDocumento =
+            parseInt(document.getElementById('idtipo_documento')?.value) || null;
+
+        const numeroDocumento =
+            document.getElementById('numero_doc_referencial')?.value.trim() || null;
+
+        const guia =
+            document.getElementById('guia_referencial')?.value.trim() || null;        
+
         const data = {
 
             cabecera: {
@@ -576,11 +762,11 @@ async function guardarRecepcion() {
                 idorden: App.compras.idorden,
 
                 fecha:
-                    document.getElementById('fecha_compra')?.value
+                    document.getElementById('fecha_recepcion')?.value
                     || new Date().toISOString().slice(0, 10),
 
                 observacion:
-                    document.getElementById('observacion')?.value
+                    document.getElementById('observacion_recepcion')?.value
                     || '',
 
                 idserie:
@@ -588,32 +774,21 @@ async function guardarRecepcion() {
                         document.getElementById('idserie')?.value
                     ) || 0,
 
-                idtipo_doc_referencial:
-                    parseInt(
-                        document.getElementById(
-                            'idtipo_doc_referencial'
-                        )?.value
-                    ) || null,
+                idtipo_doc_referencial:tipoDocumento,
 
-                numero_doc_referencial:
-                    document.getElementById(
-                        'numero_doc_referencial'
-                    )?.value || null,
+                numero_doc_referencial:numeroDocumento,
 
                 fecha_doc_referencial:
-                    document.getElementById(
-                        'fecha_doc_referencial'
-                    )?.value || null,
+                    tipoDocumento && numeroDocumento
+                        ? document.getElementById('fecha_doc_referencial')?.value || null
+                        : null,
 
-                guia_referencial:
-                    document.getElementById(
-                        'guia_referencial'
-                    )?.value || null,
+                guia_referencial:guia,
 
                 fecha_guia_referencial:
-                    document.getElementById(
-                        'fecha_guia_referencial'
-                    )?.value || null
+                    guia
+                        ? document.getElementById('fecha_guia_referencial')?.value || null
+                        : null
 
             },
 
@@ -621,10 +796,7 @@ async function guardarRecepcion() {
         };
 
 
-        console.log(
-            'JSON recepción:',
-            data
-        );
+
 
 
         /* ==========================================
@@ -632,7 +804,7 @@ async function guardarRecepcion() {
         ========================================== */
 
         const response = await fetch(
-            '/api/compras/generarRecepcion',
+            '/admin/gestion/compras/recepcion/generar',
             {
                 method: 'POST',
 
@@ -678,11 +850,18 @@ async function guardarRecepcion() {
 
         });
 
+        document.getElementById('numero_recepcion').value =
+            resultado.numero_formateado;
 
-        console.log(
-            'Movimiento generado:',
-            resultado
-        );
+        App.compras.recepcion.idinvent = resultado.idinvent;    
+
+        document.getElementById('btnGuardarRecepcion').disabled = true;
+        document.getElementById('btnImprimirRecepcion').disabled = false;
+
+        // console.log(
+        //     'Movimiento generado:',
+        //     resultado
+        // );
 
 
         /* ==========================================
@@ -714,5 +893,34 @@ async function guardarRecepcion() {
         });
 
     }
+
+    const btnImprimir = document.getElementById('btnImprimirRecepcion');
+
+    if (btnImprimir) {
+
+        btnImprimir.addEventListener('click', function () {
+
+            const idorden = App.compras.recepcion.idinvent ;
+            
+            if (!idorden) {
+                return;
+            }
+
+            window.open(
+                `/admin/gestion/compras/recepcion/imprimir?id=${idorden}`,
+                '_blank'
+            );
+
+        });
+
+    }
+
+
+  
+
+
+
+
+  
 
 }

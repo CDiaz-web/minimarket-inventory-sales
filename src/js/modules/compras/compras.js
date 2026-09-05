@@ -27,6 +27,7 @@ App.compras = {
     impuesto:parseFloat(window.APP?.config?.impuesto || 0),   
 
     recepcion: {
+        idinvent:null,
         cabecera: null,
         detalle: []
     },

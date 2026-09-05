@@ -81,7 +81,8 @@ $router->get('/admin/gestion/compras/gestion/cambiarestado',[GestionOCController
 
 //== RECEPCION COMPRAS
 $router->get('/admin/gestion/compras/recepcion',[RecepcionOCController::class,'index']);
-$router->post('/admin/gestion/compras/orden/generar',[RecepcionOCController::class,'generar']);
+$router->post('/admin/gestion/compras/recepcion/generar',[RecepcionOCController::class,'generar']);
+$router->get('/admin/gestion/compras/recepcion/imprimir', [RecepcionOCController::class, 'imprimir']);
 
 $router->post('/admin/gestion/compras/orden/editar',[OrdenCompraController::class,'editar']);
 $router->get('/admin/gestion/compras/orden/imprimir', [OrdenCompraController::class, 'imprimir']);
@@ -97,6 +98,7 @@ $router->get('/admin/gestion/inventarios/movimiento/imprimir', [MovimientoContro
 $router->get('/admin/gestion/inventarios/gestion',[InventariosController::class,'index']);
 $router->post('/admin/gestion/inventarios/gestion/anularmovimiento',[InventariosController::class,'anularmovimiento']);
 $router->get('/admin/gestion/inventarios/gestion/anularmovimiento',[InventariosController::class,'anularmovimiento']);
+
 
 //===== VENTAS
 //== ORDEN VENTA

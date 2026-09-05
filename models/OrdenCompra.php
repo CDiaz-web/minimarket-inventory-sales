@@ -35,6 +35,7 @@ class OrdenCompra extends ActiveRecord {
 
     public ?int $idorden = null;
     
+    public string $ruc = ''; 
     public string $proveedor = ''; 
     public string $documento  = ''; 
     public string $numero_documento = '';
@@ -47,6 +48,8 @@ class OrdenCompra extends ActiveRecord {
     public string $estado = '';  
     public string $moneda = '';  
     public string $simbolo = '';  
+    public string $documento_entrada = '';  
+    public string $orden_compra = '';  
  
     public function __construct(array $args = [])
     {
