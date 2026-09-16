@@ -8,7 +8,40 @@
 <div class="table-wrapper">      
 
     <div class="table-gestion">       
-         <div class="grupo-fecha-moneda">
+        <div class="grupo-datos-documento">
+
+
+            <!-- Numero -->
+            <div class="campo-inline">
+                <label class="formulario__label">
+                    <i class="fa-solid fa-layer-group"></i>
+                    Serie
+                </label>
+                <input 
+                    type="text"
+                    class="formulario__input"
+                    id="serie_inventario"
+                    value="<?= $cabecera->serie ?? '----' ?>" 
+                    disabled                   
+                />
+            </div> 
+
+
+            <!-- Numero -->
+            <div class="campo-inline">
+                <label class="formulario__label">
+                    <i class="fa-solid fa-hashtag"></i>
+                    Número
+                </label>
+                <input 
+                    type="text"
+                    class="formulario__input"
+                    id="numero_inventario"
+                    value="<?= $cabecera->numero ?? '(Automático)' ?>" 
+                    disabled                   
+                />
+            </div> 
+
 
             <div class="campo-inline">
                 <label class="formulario__label">
@@ -110,7 +143,12 @@
             <button class="boton boton--primary-link" id = "btngenera_mov">
                 <i class="fa-solid fa-pen-to-square"></i> Guardar Mov.
             </button> 
-
+            <button 
+                class="boton boton--success" 
+                id="Imprimir_mov"
+                <?= $modoEdicion ? '' : 'disabled' ?>>
+                <i class="fa-solid fa-print"></i> Imprimir
+            </button>
             <button class="boton boton--danger-link" id="eliminarTodo">
                 <i class="fa-solid fa-trash"></i> Limpiar
             </button>            

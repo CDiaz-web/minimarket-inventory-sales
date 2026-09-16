@@ -18,8 +18,7 @@ export function initMovimientoInventario(){
     btnGenerar.addEventListener("click", async function(e){
 
         e.preventDefault();    
-        if(!(await validarMovimiento())) return;
-        //console.log(App.movimientos);
+        if(!(await validarMovimiento())) return;                
         RegistraMovimiento();
 
     });     
@@ -84,70 +83,106 @@ export function initMovimientoInventario(){
     }
 
 
-    async function RegistraMovimiento(){
+    async function RegistraMovimiento() {
+
+
+       /* ==========================================
+           CONFIRMACION
+        ========================================== */
+
+        const confirmacion = await Swal.fire({
+
+            icon: 'question',
+            title: '¿Registrar Movimiento?',
+            text: 'Se generará el movimiento de inventario correspondiente.',
+
+            showCancelButton: true,
+
+            confirmButtonText: 'Sí, registrar',
+            cancelButtonText: 'Cancelar'
+
+        });
+
+
+        if (!confirmacion.isConfirmed) {
+            return;
+        }
+
 
         const payload = {
 
-            cabecera:{
-
-                idmovimiento: App.movimientos.idmovimiento,
+            cabecera: {
                 idtipo: App.movimientos.idtipo,
-                fecha: App.movimientos.fecha,           
-                observacion: inputObservacion.value,
-                idtienda_relacion:App.movimientos.idtienda_relacion
+                fecha: App.movimientos.fecha,
+                observacion: inputObservacion.value.trim() || null,
+                idtienda_relacion:
+                    App.movimientos.esTransferencia
+                        ? App.movimientos.idtienda_relacion
+                        : null
             },
 
-            detalle: App.movimientos.articulos
-
+            detalle: App.movimientos.articulos.map(articulo => ({
+                idproducto: articulo.idproducto,
+                cantidad: articulo.cantidad
+            }))
         };
 
-        // ======================
-        // DEFINIR URL
-        // ======================
         const esEdicion = !!App.movimientos.idmovimiento;
 
         const url = esEdicion
             ? '/admin/gestion/inventarios/movimiento/editar'
             : '/admin/gestion/inventarios/movimiento/generar';
 
-        try{
+        try {
 
             const res = await fetch(url, {
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(payload)
             });
 
             const data = await res.json();
 
-            if(!data.ok){
+            if (!data.ok) {
                 Swal.fire("Error", data.mensaje, "error");
                 return;
             }
+          
 
-            modal.close();
-            Swal.fire({
-                icon: 'success',
-                title: esEdicion
-                    ? `Mov. ${data.numero} actualizada`
-                    : `Mov. ${data.numero} generada`,
-                text: '¿Desea imprimir el Movimiento?',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, imprimir',
-                cancelButtonText: 'No'
-            }).then(result => {
-                
-                if (result.isConfirmed) {
-                    window.open(
-                        `/admin/gestion/inventarios/movimiento/imprimir?id=${data.idmovimiento}`,
-                        '_blank'
-                    );
-                }
-               
-                resetMovimientos();
-            });
+        /* ==========================================
+           EXITO
+        ========================================== */
 
-        } catch(error){
+        await Swal.fire({
+
+            icon: 'success',
+
+            title: 'Recepción registrada',
+
+            text:
+                `Movimiento ${data.numero_formateado} generado correctamente.`,
+
+            confirmButtonText: 'Aceptar'
+
+        });
+
+        document.getElementById('serie_inventario').value = data.serie;
+        document.getElementById('numero_inventario').value = data.solo_numero_formateado;
+
+        document.getElementById('btngenera_mov').disabled = true;
+        document.getElementById('Imprimir_mov').disabled = false;
+        document.getElementById('idtipo').disabled = true;
+        document.getElementById('idtipo').disabled = true;
+        document.getElementById('fecha_movimiento').disabled = true;
+        document.getElementById('idtienda').disabled = true;
+        document.getElementById('observacion_movimiento').disabled = true;
+        document.getElementById('buscarProductoMov').disabled = true;
+        
+        
+
+        } catch (error) {
 
             console.error(error);
 
@@ -159,6 +194,31 @@ export function initMovimientoInventario(){
                 "error"
             );
         }
+
+
+        const btnImprimir = document.getElementById('Imprimir_mov');
+
+        if (btnImprimir) {
+
+            btnImprimir.addEventListener('click', function () {
+
+                const idorden = App.compras.recepcion.idinvent ;
+                
+                if (!idorden) {
+                    return;
+                }
+
+                window.open(
+                    `/admin/gestion/inventarios/movimiento/imprimir?id=${idorden}`,
+                    '_blank'
+                );
+
+            });
+
+        }
+
+
+
     }
 
 }

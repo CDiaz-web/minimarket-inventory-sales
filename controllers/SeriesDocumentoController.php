@@ -48,9 +48,9 @@ class SeriesDocumentoController {
                 header('Location: /login');
             }            
      
-            $busca = SeriesDocumento::findArray(['idempresa'=> $_SESSION['idempresa'],'serie'=> $_POST['serie'],'idtipodocumento'=> $_POST['idtipodocumento']],false) ?? [];   
+            $busca = SeriesDocumento::findArray(['idempresa'=> $_SESSION['idempresa'],'idtienda'=> $_POST['idtienda'],'serie'=> $_POST['serie'],'idtipodocumento'=> $_POST['idtipodocumento']],false) ?? [];   
 
-            $existe_predeterminado = SeriesDocumento::findArray(['idempresa'=> $_SESSION['idempresa'],'idtienda'=> $_SESSION['idtienda'],'idtipodocumento'=> $_POST['idtipodocumento'],'predeterminado'=> '1'],false) ?? [];   
+            $existe_predeterminado = SeriesDocumento::findArray(['idempresa'=> $_SESSION['idempresa'],'idtienda'=> $_POST['idtienda'],'idtipodocumento'=> $_POST['idtipodocumento'],'predeterminado'=> '1'],false) ?? [];   
 
             date_default_timezone_set('America/Lima');
             $_POST['idusercrea']=$_SESSION['id'];

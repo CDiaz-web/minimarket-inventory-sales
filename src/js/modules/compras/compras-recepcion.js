@@ -857,13 +857,7 @@ async function guardarRecepcion() {
 
         document.getElementById('btnGuardarRecepcion').disabled = true;
         document.getElementById('btnImprimirRecepcion').disabled = false;
-
-        // console.log(
-        //     'Movimiento generado:',
-        //     resultado
-        // );
-
-
+ 
         /* ==========================================
            SIGUIENTE PASO
         ========================================== */

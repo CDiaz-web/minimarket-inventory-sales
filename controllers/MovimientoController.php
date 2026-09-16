@@ -84,13 +84,21 @@ class MovimientoController {
             ]);
     }
    
-    public static function generar() {
-
+    public static function generar()
+    {
         try {
-            $data = json_decode(file_get_contents('php://input'), true);
+
+            $data = json_decode(
+                file_get_contents('php://input'),
+                true
+            );
 
             if (!$data) {
                 throw new \Exception('JSON inválido o vacío');
+            }
+
+            if (empty($data['cabecera'])) {
+                throw new \Exception('Cabecera inválida');
             }
 
             if (empty($data['detalle'])) {
@@ -109,31 +117,45 @@ class MovimientoController {
                 throw new \Exception('Sesión no válida');
             }
 
-            // completa cabecera desde backend
-            $data['cabecera']['idtienda']  = $idTienda;
+            /*
+            * Datos internos del contexto de ejecución.
+            * No vienen del frontend.
+            */
+            $data['cabecera']['idempresa']  = $idEmpresa;
+            $data['cabecera']['idtienda']   = $idTienda;
             $data['cabecera']['idusercrea'] = $idUsuario;
-            $data['cabecera']['idempresa'] = $idEmpresa;
 
-            $jsonCompra = json_encode($data, JSON_UNESCAPED_UNICODE);
-
-            $resultado = Inventarios::procedureMantenimiento(
-                "prp_inventario_registrar",
-                [$jsonCompra]
+            $jsonMovimiento = json_encode(
+                $data,
+                JSON_UNESCAPED_UNICODE
             );
 
-            // convertir mysqli_result a array
+            $resultado = Inventarios::procedureMantenimiento(
+                'prm_inventario_registrar',
+                [$jsonMovimiento]
+            );
+
             $fila = $resultado->fetch_assoc();
 
             if (!$fila) {
-                throw new \Exception('No se pudo obtener resultado del procedimiento');
+                throw new \Exception(
+                    'No se pudo obtener resultado del procedimiento'
+                );
             }
 
             echo json_encode([
-                'ok'      => true,
-                'idmovimiento' => $fila['idmovimiento'],
-                'numero'  => $fila['numero']
+                'ok' => true,
+                'idmovimiento'      => $fila['idmovimiento'],
+                'serie'             => $fila['serie'],
+                'solo_numero_formateado'             => $fila['solo_numero_formateado'],
+                'numero'            => $fila['numero'],
+                'numero_formateado' => $fila['numero_formateado'],
+                'idmovimiento_relacion' => $fila['idmovimiento_relacion'] ?? null,
+                'serie_relacion'        => $fila['serie_relacion'] ?? null,
+                'numero_relacion'       => $fila['numero_relacion'] ?? null,
+                'numero_formateado_relacion' =>
+                    $fila['numero_formateado_relacion'] ?? null
             ]);
-
 
         } catch (\Throwable $e) {
 
@@ -141,8 +163,7 @@ class MovimientoController {
 
             echo json_encode([
                 'ok'      => false,
-                'mensaje' => $e->getMessage(),
-                'trace'   => $e->getLine()
+                'mensaje' => $e->getMessage()
             ]);
         }
     }
@@ -209,7 +230,7 @@ class MovimientoController {
             $dompdf->render();
 
             $dompdf->stream(
-                "Orden_Compra_{$cabecera->numero}.pdf",
+                "Movimiento_Inventario_{$cabecera->numero}.pdf",
                 ['Attachment' => false]
             );
 
