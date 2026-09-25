@@ -101,8 +101,9 @@ function actualizarTransferencia(mostrarMensaje = true){
     if(
         mostrarMensaje &&
         App.movimientos.articulos.length > 0
+        
     ){
-
+        console.log(App.movimientos.articulos);
         resetMovimientos();
 
         Swal.fire({

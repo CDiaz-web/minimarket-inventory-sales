@@ -21,7 +21,7 @@
                     type="text"
                     class="formulario__input"
                     id="serie_inventario"
-                    value="<?= $cabecera->serie ?? '----' ?>" 
+                    value="----" 
                     disabled                   
                 />
             </div> 
@@ -37,7 +37,7 @@
                     type="text"
                     class="formulario__input"
                     id="numero_inventario"
-                    value="<?= $cabecera->numero ?? '(Automático)' ?>" 
+                    value="(Automático)" 
                     disabled                   
                 />
             </div> 
@@ -75,7 +75,7 @@
                     class="formulario__input"
                     id="fecha_movimiento"
                     name="fecha"                    
-                    value="<?= $cabecera->fecha ?? $fecha ?>"  
+                    value="<?= $fecha ?>"  
                     required
                 >
             </div>
@@ -114,8 +114,7 @@
             <input
                 type = "text"
                 class = "formulario__input"
-                id="observacion_movimiento"
-                value="<?= $cabecera->observacion ?? '' ?>"  
+                id="observacion_movimiento"                
             /> 
         </div>          
 
@@ -146,7 +145,7 @@
             <button 
                 class="boton boton--success" 
                 id="Imprimir_mov"
-                <?= $modoEdicion ? '' : 'disabled' ?>>
+            >
                 <i class="fa-solid fa-print"></i> Imprimir
             </button>
             <button class="boton boton--danger-link" id="btnLimpiarMov">
@@ -163,7 +162,7 @@
             <table id="tablaArticulosMovimientos"  class="table" data-table data-page-size="20">
                 <thead class="table__thead">
                     <tr>               
-                        <th scope='col' class="table__th">Producto</th>                        
+                        <th scope='col' class="table__th">Producto</th>                        Detalle reiniciado
                         <th scope='col' class="table__th">Cantidad</th>
                         <th scope='col' class="table__th">Stock</th>
                         <th scope='col' class="table__th">UM</th>         

@@ -90,7 +90,6 @@ $router->get('/admin/gestion/compras/orden/imprimir', [OrdenCompraController::cl
 //== INVENTARIO
 $router->get('/admin/gestion/inventarios/movimiento',[MovimientoController::class,'index']);
 $router->post('/admin/gestion/inventarios/movimiento/generar',[MovimientoController::class,'generar']);
-$router->post('/admin/gestion/inventarios/movimiento/editar',[MovimientoController::class,'editar']);
 $router->get('/admin/gestion/inventarios/movimiento/imprimir', [MovimientoController::class, 'imprimir']);
 
 //== GESTION inventario

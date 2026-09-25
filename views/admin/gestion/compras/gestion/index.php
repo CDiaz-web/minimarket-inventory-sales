@@ -77,6 +77,7 @@
                             </td>                                
                             <td class="table__col-actions" >
                                 <div class="table__acciones">
+                                    
                                     <!-- Editar -->
                                     <a href="/admin/gestion/compras/orden?id=<?= $orden->id ?>"
                                         class="boton boton--primary btn-editar-compra"

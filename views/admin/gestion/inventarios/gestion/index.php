@@ -71,8 +71,8 @@
                                 <?php echo $inventario->estado;?>
                             </td>                                
                             <td class="table__col-actions" >
-                                <div class="table__acciones"> 
-
+                                <div class="table__acciones">      
+                      
                                     <!-- Imprimir -->
                                     <a 
                                         href="/admin/gestion/inventarios/movimiento/imprimir?id=<?= $inventario->id ?>" 

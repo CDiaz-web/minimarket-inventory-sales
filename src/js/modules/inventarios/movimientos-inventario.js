@@ -20,7 +20,7 @@ export function initMovimientoInventario(){
     btnGenerar.addEventListener("click", async function(e){
 
         e.preventDefault();    
-        if(!(await validarMovimiento())) return;                
+        if(!(await validarMovimiento())) return; 
         RegistraMovimiento();
 
     });     
@@ -54,6 +54,7 @@ export function initMovimientoInventario(){
                     App.compras.observacion = '';
                     App.compras.accion = null;
                     App.compras.esTransferencia = 0;
+                    App.movimientos.articulos = [];
                     
                     // ==========================================
                     // LIMPIAR DETALLE
@@ -257,12 +258,10 @@ export function initMovimientoInventario(){
                 cantidad: articulo.cantidad
             }))
         };
+        
+       
 
-        const esEdicion = !!App.movimientos.idmovimiento;
-
-        const url = esEdicion
-            ? '/admin/gestion/inventarios/movimiento/editar'
-            : '/admin/gestion/inventarios/movimiento/generar';
+        const url = '/admin/gestion/inventarios/movimiento/generar';
 
         try {
 
@@ -310,6 +309,8 @@ export function initMovimientoInventario(){
         document.getElementById('observacion_movimiento').disabled = true;
         document.getElementById('buscarProductoMov').disabled = true;
         
+        bloquearDetalleMovimiento();
+
         App.movimientos.idmovimiento  = data.idmovimiento;    
         
 
@@ -319,9 +320,7 @@ export function initMovimientoInventario(){
 
             Swal.fire(
                 "Error",
-                esEdicion
-                    ? "No se pudo actualizar el Movimiento"
-                    : "No se pudo registrar el Movimiento",
+                "No se pudo registrar el Movimiento",
                 "error"
             );
         }
@@ -363,4 +362,23 @@ function obtenerFechaActual() {
     const dia = String(hoy.getDate()).padStart(2, '0');
 
     return `${anio}-${mes}-${dia}`;
+}
+
+function bloquearDetalleMovimiento() {
+
+    document.querySelectorAll('.cantidad').forEach(input => {
+        input.disabled = true;
+    });
+
+    document.querySelectorAll('.mov-aumentar').forEach(btn => {
+        btn.disabled = true;
+    });
+
+    document.querySelectorAll('.mov-disminuir').forEach(btn => {
+        btn.disabled = true;
+    });
+
+    document.querySelectorAll('.mov-eliminar').forEach(btn => {
+        btn.disabled = true;
+    });
 }

@@ -87,7 +87,7 @@ export function initTablaMovimientos(){
                 return;
             }
 
-            let nuevaCantidad = parseInt(cantidadInput.value) + 1;
+            let nuevaCantidad = parseFloat(cantidadInput.value) + 1;
 
             // Solo valida stock para movimientos RESTA
             if(esMovimientoResta() && nuevaCantidad > maxStock){
@@ -127,6 +127,16 @@ export function initTablaMovimientos(){
         }
 
     });    
+
+    tablaBody().addEventListener('input', (e) => {
+
+        if (!e.target.classList.contains('cantidad')) {
+            return;
+        }
+
+        actualizarEstadoMov();
+    });
+
 
 
 }
@@ -332,7 +342,6 @@ export function cargarDetalleEdicion(detalle = []) {
         return;
     }
 
-    // Limpiar arreglo actual
     App.movimientos.articulos = [];
 
     detalle.forEach(item => {
