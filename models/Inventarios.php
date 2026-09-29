@@ -3,7 +3,7 @@
 namespace Model;
 
 class Inventarios extends ActiveRecord {
-    protected static $tabla = 'movimiento_inventario';
+    protected static $tabla = 'inventario';
     protected static $columnasDB = ['id','numero','idempresa','idtienda','idtipo','fecha','observacion','idrelacion','idtienda_relacion','idestado','motivo_anulacion','idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;

@@ -3,7 +3,7 @@
 namespace Model;
 
 class InventarioDetalle extends ActiveRecord {
-    protected static $tabla = 'detalle_inventario';
+    protected static $tabla = 'inventario_detalle';
     protected static $columnasDB = ['id','idmovimiento','idproducto','cantidad','costo_unitario','venta_unitario','impuesto_unitario','subtotal_venta','total_venta','stock_anterior','stock_resultante','idusercrea','fechacrea'];
 
     public ?int $id = null;
