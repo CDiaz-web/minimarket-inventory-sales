@@ -4,7 +4,7 @@ namespace Model;
 
 class Clientes extends ActiveRecord {
     protected static $tabla = 'clientes';
-    protected static $columnasDB = ['id','idempresa','tipo_persona','documento','nombre','apellidos','razon_social','nombre_cliente','idtipo','telefono','direccion','idtienda_default','idlista','activo','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id','idempresa','tipo_persona','documento','nombre','apellidos','razon_social','nombre_cliente','idtipo','telefono','direccion','idtienda_default','idlista','email','activo','idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;
     public int $idempresa = 0;
@@ -18,6 +18,7 @@ class Clientes extends ActiveRecord {
     public string $telefono = '';
     public string $direccion = '';
     public int $idtienda_default = 0;
+     public string $email = '';
     public int $activo = 1;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;

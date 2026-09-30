@@ -79,6 +79,19 @@
         />
     </div>   
     
+    <div class="formulario__campo">    
+        <label for="email" class="formulario__label">E-mail</label>
+        <input
+            type = "email"
+            class = "formulario__input"
+            id = "email"
+            name="email"
+            placeholder="email@email.com"   
+            value ="<?php echo $cliente->email;?>"     
+        />
+    </div> 
+
+
     <div class="formulario__campo">   
         <label for="direccion" class="formulario__label">Direccion</label>
         <input
