@@ -38,8 +38,7 @@ class UsuariosController {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_admin()){
                 header('Location: /login');
-            }
-           
+            }           
             // //agregamos informacion de auditoria al $_post
             date_default_timezone_set('America/Lima');
             $_POST['idusercrea']=$_SESSION['id'];
