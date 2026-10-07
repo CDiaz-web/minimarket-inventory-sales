@@ -4,23 +4,38 @@ namespace Model;
 
 class OrdenVenta extends ActiveRecord {
     protected static $tabla = 'orden_venta';
-    protected static $columnasDB = ['id','idcarrito','numero','idcliente','idtienda','idlista','idtipopago','idmoneda','fecha','observacion','tipo_cambio','tipo_cambio_mercado','subtotal','impuesto','total','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
+    protected static $columnasDB = ['id','idcarrito','idserie','serie','numero','idcliente','documento_cliente','nombre_cliente','direccion_cliente','idempresa','idtienda','idlista','idmoneda','fecha','observacion','tc_oficial','tc_operacion','subtotal_origen','porcentaje_impuesto','igv_origen','total_origen','subtotal_base','igv_base','total_base','iduserapro','fechaapro','idestado','idusercrea','fechacrea','idusermodi','fechamodi'];
 
     public ?int $id = null;
     public ?int $idcarrito = null;
+    public ?int $idserie = null;
     public string $numero = '';
     public int $idcliente = 0;
+    public string $documento_cliente = '';
+    public string $nombre_cliente = '';
+    public string $direccion_cliente = '';
+
+    public int $idempresa = 0;
     public int $idtienda = 0;
     public int $idlista = 0;
     public int $idmoneda = 0;
-    public int $idtipopago = 0;
+   
     public ?string $fecha = null;
     public string $observacion = ''; 
-    public ?float $tipo_cambio = null;
-    public ?float $tipo_cambio_mercado = null;
+    public ?float $tc_oficial = null;
+    public ?float $tc_operacion = null;
     public ?float $subtotal_origen = null;
+    public ?float $porcentaje_impuesto = null;
     public ?float $igv_origen = null;
     public ?float $total_origen = null;
+
+    public ?float $subtotal_base = null;    
+    public ?float $igv_base = null;
+    public ?float $total_base = null;   
+    
+    public int $iduserapro = 0;
+    public ?string $fechaapro = null;
+    
     public int $idestado = 0;
     public int $idusercrea = 0;
     public ?string $fechacrea = null;
@@ -41,7 +56,6 @@ class OrdenVenta extends ActiveRecord {
 
     public ?int $idorden = null;
     public string $cliente = ''; 
-    public string $direccion_cliente = ''; 
     public string $tienda = ''; 
     public string $direccion = ''; 
     public ?float $igv = null;

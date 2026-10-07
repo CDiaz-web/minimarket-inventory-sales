@@ -38,7 +38,6 @@
 
         <!-- bloque de una sola fila -->
         <div class="grupo-datos-documento">
-
             <!-- Serie -->
             <div class="campo-inline">
                 <label class="formulario__label">

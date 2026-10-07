@@ -8,6 +8,7 @@ use Model\Opciones;
 use Model\TipoPago;
 use Model\OrdenVenta;
 use Model\OrdenVentaDetalle;
+use Model\SeriesDocumento;
 use Model\Empresa;
 use MVC\Router;
 
@@ -34,7 +35,14 @@ class OrdenVentaController {
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $empresa = Empresa::where('id',$_SESSION['idempresa']);   
         $impuesto= $empresa[0]->porcentaje_imp;  
-        $lista_forma_pago = TipoPago::findArray(['idempresa'=> $_SESSION['idempresa'],'activo'=> 1],false) ?? [];
+
+        /*serie por defecto*/
+        $datos_series =SeriesDocumento::procedure(
+                'prc_serie_defecto',
+                [$idEmpresa,$idTienda,'OVE']
+        );  
+
+        $serie_defecto = $datos_series->id;
 
         date_default_timezone_set('America/Lima');
         $tc = FactorCambio::where('fecha',date("Y-m-d"));
@@ -43,8 +51,14 @@ class OrdenVentaController {
         $tpago_defecto = $_SESSION['tpago_defecto'];
         $validar_tc = $_SESSION['validar_tc'];
         $lista_monedas = Monedas::all('ASC');
-        $titulo = 'Registro Orden Compra';
+        $titulo = 'Registro Orden Venta';
         $fecha =  date('Y-m-d');
+
+        $lista_series = SeriesDocumento::procedureLista(
+                'prc_lista_series',
+                [$idEmpresa,$idTienda,'OVE']
+        );   
+
         if (!empty($idOrden)) {
       
             $cabecera = OrdenVenta::procedureLista(
@@ -54,7 +68,7 @@ class OrdenVentaController {
             $cabecera = $cabecera[0] ?? null;
 
             $titulo = 'Edición Orden Venta N° ' . $cabecera->numero;
-            
+             
             $detalle = OrdenVentaDetalle::procedureLista(
                 'prc_lista_orden_venta_edicion',
                 [$idEmpresa,$idTienda,$idOrden, 2]
@@ -67,10 +81,10 @@ class OrdenVentaController {
                 'titulo' => $titulo,
                 'opciones'=>$opciones,
                 'moneda'=>$moneda,
-                'tpago_defecto'=>$tpago_defecto,
+                'serie_defecto'=>$serie_defecto,  
                 'simbolo_moneda'=>$simbolo_moneda,
                 'lista_monedas'=>$lista_monedas,
-                'lista_forma_pago'=>$lista_forma_pago,
+                'lista_series'=>$lista_series,
                 'validar_tc'=>$validar_tc,
                 'impuesto'=>$impuesto,
                 'cabecera' => $cabecera,

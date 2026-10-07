@@ -24,8 +24,6 @@ class OrdenCompraController {
         
         $idOrden = isset($_GET['id']) ? (int) $_GET['id'] : 0;    
 
-
-
         $cabecera = null;
         $detalle = [];
         $modoEdicion = false;

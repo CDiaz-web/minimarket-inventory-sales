@@ -1,6 +1,6 @@
 <?php
     $idMonedaSeleccionada = $cabecera->idmoneda ?? $moneda;
-    $idFPagoSeleccionada = $cabecera->idtipopago ?? $tpago_defecto;    
+    $idSerieSeleccionada = $cabecera->idserie ?? $serie_defecto;    
 ?>
 <h2 class="dashboard__heading--izquierda"><?php echo $titulo; ?></h2>  
 
@@ -68,7 +68,42 @@
 
 
         <!-- boque de una sola fila -->
-        <div class="grupo-fecha-moneda-pago">
+        <div class="grupo-datos-documento">
+
+            <!-- Serie -->
+            <div class="campo-inline">
+                <label class="formulario__label">
+                    <i class="fa-solid fa-layer-group"></i>
+                    Serie
+                </label>
+                <select class="formulario__select" id="idserie" name="idserie">
+                    <option value="">-Seleccionar-</option>
+
+                    <?php foreach ($lista_series as $lista_serie) { ?>
+                        <option
+                            value="<?= $lista_serie->id ?>"
+                            <?= ($idSerieSeleccionada == $lista_serie->id) ? 'selected' : '' ?>
+                        >
+                            <?= $lista_serie->serie ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <!-- Numero -->
+            <div class="campo-inline">
+                <label class="formulario__label">
+                    <i class="fa-solid fa-hashtag"></i>
+                    Número
+                </label>
+                <input 
+                    type="text"
+                    class="formulario__input"
+                    id="numero"
+                    value="<?= $cabecera->numero ?? '(Automático)' ?>" 
+                    disabled                   
+                />
+            </div>              
 
             <!-- Fecha -->
             <div class="campo-inline">
@@ -119,28 +154,6 @@
                     disabled                   
                 />
             </div> 
-
-            <!-- Forma de pago -->
-            <div class="campo-inline">
-                <label class="formulario__label">
-                    <i class="fa-solid fa-credit-card-alt"></i>
-                    Forma de Pago
-                </label>
-                <select class="formulario__select" id="idtipopago" name="idtipopago">
-                    <option value="">-Seleccionar-</option>
-
-                    <?php foreach ($lista_forma_pago as $forma_pago_lista) { ?>
-                        <option
-                            value="<?= $forma_pago_lista->id ?>"
-                            data-requierecobro="<?= $forma_pago_lista->requiere_cobro ?>"
-                            <?= ($idFPagoSeleccionada == $forma_pago_lista->id) ? 'selected' : '' ?>
-                        >
-                            <?= $forma_pago_lista->nombre ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
-
         
         </div>
 
