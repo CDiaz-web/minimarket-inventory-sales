@@ -3,6 +3,7 @@ import { initClientesVenta } from './ventas-clientes.js';
 import { initVentaMoneda,initFechaVenta } from "./ventas-moneda.js";
 import { initProductosVenta, cargarProductosPorLista } from './ventas-productos.js';
 import { initOrdenVenta } from './ventas-orden.js';
+import { initVentasSerie } from "./ventas-series.js";
 import { initGestionOV } from "./ventas-gestion.js";
 import {
     initTablaVentas,
@@ -11,13 +12,15 @@ import {
 // ======================
 // ESTADO DEL MODULO
 // ======================
-
 window.App = window.App || {};
 
 App.ventas = {
+    idcarrito: null,
     idorden: null,
+    numero: null,
     idcliente: null,
     idlista: null,
+    idserie: null,
     tipoCambio: 2,
     tipoCambio_oficial: 2,
     articulos: [],
@@ -54,7 +57,7 @@ export function initVentas(){
         initOrdenVenta();
         initFechaVenta();
         initTablaVentas();
-
+        initVentasSerie();
         if (inputIdOrden?.value) {
             App.ventas.idorden = parseInt(inputIdOrden.value);
         }

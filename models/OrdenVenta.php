@@ -10,6 +10,7 @@ class OrdenVenta extends ActiveRecord {
     public ?int $idcarrito = null;
     public ?int $idserie = null;
     public string $numero = '';
+    public string $serie = '';
     public int $idcliente = 0;
     public string $documento_cliente = '';
     public string $nombre_cliente = '';

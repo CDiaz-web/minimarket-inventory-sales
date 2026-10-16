@@ -1,200 +1,296 @@
 import Swal from "sweetalert2";
-
 import { recalcularPreciosVenta } from "./ventas-articulos.js";
 
-export function initVentaMoneda(){
-
+/**
+ * Inicializa el selector de moneda de la orden de venta.
+ */
+export function initVentaMoneda() {
     const selectMoneda = document.getElementById("idmoneda");
-    const inputFecha = document.getElementById("fecha_venta");
 
-    if(!selectMoneda) return;
-    if(!inputFecha) return;
+    if (!selectMoneda) return;
 
-    selectMoneda.addEventListener("change", async function(){
+    selectMoneda.addEventListener("change", async function () {
+        const monedaSeleccionada = Number(this.value);
+        const monedaBase = Number(window.APP.config.moneda_base);
+        const fecha = document.getElementById("fecha_venta")?.value;
 
-        const monedaSeleccionada = this.value;
-        const monedaBase = window.APP.config.moneda_base; 
-        const validarTC = window.APP.config.validar_tc;
+        const monedaAnterior = Number(App.ventas.moneda);
 
-        const simbolo01 = document.getElementById("simboloMoneda01");     
-        const simbolo02 = document.getElementById("simboloMoneda02");     
-        const simbolo03 = document.getElementById("simboloMoneda03");  
+        if (!monedaSeleccionada) {
+            Swal.fire({
+                icon: "warning",
+                title: "Moneda requerida",
+                text: "Seleccione una moneda para la orden de venta."
+            });
 
-        if(monedaSeleccionada == monedaBase){
+            return;
+        }
 
-            App.ventas.moneda = monedaBase;
-            simbolo01.textContent = "$";
-            simbolo02.textContent = "$";
-            simbolo03.textContent = "$";
-            App.ventas.tipoCambio = 1;
+        if (!fecha) {
+            this.value = monedaAnterior || monedaBase;
 
-            if(!App.ventas.tipoCambio){
-                console.warn('No hay tipo de cambio, no se recalcula');
+            Swal.fire({
+                icon: "warning",
+                title: "Fecha requerida",
+                text: "Seleccione la fecha de la orden de venta."
+            });
+
+            return;
+        }
+
+        try {
+            const datosTC = await verificarTipoCambio(
+                fecha,
+                monedaSeleccionada
+            );
+
+            if (!esTipoCambioValido(datosTC)) {
+                this.value = monedaAnterior || monedaBase;
+
+                Swal.fire({
+                    icon: "warning",
+                    title: "Tipo de cambio no disponible",
+                    text: datosTC.mensaje ||
+                        "No existe un tipo de cambio válido para la fecha seleccionada."
+                });
+
                 return;
             }
 
+            // Actualizar moneda y tipos de cambio.
+            App.ventas.moneda = monedaSeleccionada;
+            App.ventas.tipoCambio = Number(datosTC.tc);
+            App.ventas.tipoCambio_oficial = Number(datosTC.tc_oficial);
+
+            actualizarSimbolosMoneda(
+                monedaSeleccionada,
+                monedaBase
+            );
+
+            actualizarCampoTipoCambio(App.ventas.tipoCambio);
+
+            // Recalcular precios comerciales.
             recalcularPreciosVenta();
 
-            return;
+        } catch (error) {
+            console.error("Error al cambiar la moneda:", error);
+
+            this.value = monedaAnterior || monedaBase;
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "No se pudo consultar el tipo de cambio."
+            });
         }
-
-        if(validarTC == 1){
-
-            const fecha = inputFecha.value;
-
-            if(!fecha){
-
-                Swal.fire({
-                    icon:'warning',
-                    title:'Fecha requerida',
-                    text:'Debe seleccionar la fecha de la compra.'
-                });           
-                return;
-            }
-
-            const existeTC = await verificarTipoCambio(fecha);
-
-            if(!existeTC.success){
-
-                Swal.fire({
-                    icon:'warning',
-                    title:'Tipo de cambio requerido',
-                    text:'No existe tipo de cambio para la fecha seleccionada.'
-                });
-
-                // CLAVE: limpiar estado
-                App.ventas.tipoCambio = null;
-
-                // mostrar --
-                const inputTC = document.getElementById('tipoCambio_venta');
-                if(inputTC) inputTC.value = '--';
-                
-                return;
-            }
-           
-            // ejecuta si esta conforme
-            App.ventas.tipoCambio = parseFloat(existeTC.tc);
-        }
-        App.ventas.moneda = monedaSeleccionada;
-        if(monedaSeleccionada == monedaBase){
-            simbolo01.textContent = "$";
-            simbolo02.textContent = "$";
-            simbolo03.textContent = "$";
-        }else{
-            simbolo01.textContent = "S/";
-            simbolo02.textContent = "S/";
-            simbolo03.textContent = "S/";
-        }
-
-        if(!App.ventas.tipoCambio){
-            console.warn('No hay tipo de cambio, no se recalcula');
-            return;
-        }
-
-        recalcularPreciosVenta();     
-
     });
 }
 
-export function initFechaVenta(){
-
+/**
+ * Inicializa el control de fecha de la orden de venta.
+ */
+export function initFechaVenta() {
     const inputFecha = document.getElementById("fecha_venta");
-    if(!inputFecha) return;
 
+    if (!inputFecha) return;
+
+    // Consultar las cotizaciones de la fecha inicial.
     actualizarTipoCambio();
 
-    inputFecha.addEventListener("change", async function(){
+    inputFecha.addEventListener("change", async function () {
+        const fecha = this.value;
+        const moneda = Number(
+            document.getElementById("idmoneda")?.value
+        );
 
-        const moneda = App.ventas.moneda;
-        const monedaBase = window.APP.config.moneda_base;
-        const validarTC = window.APP.config.validar_tc;        
+        if (!fecha) {
+            App.ventas.tipoCambio = null;
+            App.ventas.tipoCambio_oficial = null;
 
-        if(validarTC == 1){
+            actualizarCampoTipoCambio(null);
+            return;
+        }
 
-            const fecha = document.getElementById('fecha_venta')?.value;
-            
-            const existeTC = await verificarTipoCambio(fecha);
-            actualizarTipoCambio();
-            if(!existeTC.success){
+        try {
+            const datosTC = await verificarTipoCambio(fecha, moneda);
+
+            if (!esTipoCambioValido(datosTC)) {
+                App.ventas.tipoCambio = null;
+                App.ventas.tipoCambio_oficial = null;
+
+                actualizarCampoTipoCambio(null);
 
                 Swal.fire({
-                    icon:'warning',
-                    title:'Tipo de cambio requerido',
-                    text:'No existe tipo de cambio para la fecha seleccionada.'
+                    icon: "warning",
+                    title: "Tipo de cambio no disponible",
+                    text: datosTC.mensaje ||
+                        "No existe un tipo de cambio válido para la fecha seleccionada."
                 });
 
                 return;
             }
 
-            App.ventas.tipoCambio = parseFloat(existeTC.tc);
-            
-            if(moneda == monedaBase) return;
+            App.ventas.tipoCambio = Number(datosTC.tc);
+            App.ventas.tipoCambio_oficial = Number(datosTC.tc_oficial);
 
-            if(!App.ventas.tipoCambio){
-                console.warn('No hay tipo de cambio, no se recalcula');
-                return;
-            }
+            actualizarCampoTipoCambio(App.ventas.tipoCambio);
 
-            recalcularPreciosCompra();
+            // Actualizar los precios según el TC comercial.
+            recalcularPreciosVenta();
+
+        } catch (error) {
+            console.error("Error al cambiar la fecha:", error);
+
+            App.ventas.tipoCambio = null;
+            App.ventas.tipoCambio_oficial = null;
+
+            actualizarCampoTipoCambio(null);
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "No se pudieron consultar los tipos de cambio."
+            });
         }
-
     });
-
 }
 
-export async function verificarTipoCambio(fecha){
-
-    try{
-
+/**
+ * Consulta el tipo de cambio para una fecha y moneda.
+ */
+export async function verificarTipoCambio(fecha, idMoneda) {
+    try {
         const formData = new FormData();
-        formData.append('fecha', fecha);
-        
-        const response = await fetch('/admin/gestion/ventas/orden/validarTipoCambio', {
-            method: 'POST',
-            body: formData
-        });
+
+        formData.append("fecha", fecha);
+        formData.append("idMoneda", idMoneda);
+
+        const response = await fetch(
+            "/admin/gestion/ventas/orden/validarTipoCambio",
+            {
+                method: "POST",
+                body: formData
+            }
+        );
 
         const data = await response.json();
 
+        if (!response.ok) {
+            return {
+                success: false,
+                mensaje: data.mensaje ||
+                    "No se pudo consultar el tipo de cambio."
+            };
+        }
+
         return data;
-        
-    }catch(error){
 
-        console.error(error);
-        return { success:false };
+    } catch (error) {
+        console.error("Error al consultar el tipo de cambio:", error);
 
+        return {
+            success: false,
+            mensaje: "No se pudo consultar el tipo de cambio."
+        };
     }
-
 }
 
-export async function actualizarTipoCambio(){
+/**
+ * Actualiza los tipos de cambio correspondientes a la fecha y moneda actuales.
+ */
+export async function actualizarTipoCambio() {
+    const inputFecha = document.getElementById("fecha_venta");
+    const selectMoneda = document.getElementById("idmoneda");
 
-    const inputFecha = document.getElementById('fecha_venta');
-    const inputTC = document.getElementById('tipoCambio_venta');
-
-    if(!inputFecha || !inputTC) return;
+    if (!inputFecha || !selectMoneda) return;
 
     const fecha = inputFecha.value;
+    const moneda = Number(selectMoneda.value);
 
-    if(!fecha){
-        inputTC.value = '--';
+    if (!fecha || !moneda) {
+        App.ventas.tipoCambio = null;
+        App.ventas.tipoCambio_oficial = null;
+
+        actualizarCampoTipoCambio(null);
         return;
     }
 
-    const data = await verificarTipoCambio(fecha);
+    try {
+        const datosTC = await verificarTipoCambio(fecha, moneda);
 
-    if(!data.success){
-        inputTC.value = '--';
-        App.ventas.tipoCambio = null; 
-        return;
+        if (!esTipoCambioValido(datosTC)) {
+            App.ventas.tipoCambio = null;
+            App.ventas.tipoCambio_oficial = null;
+
+            actualizarCampoTipoCambio(null);
+            return;
+        }
+
+        App.ventas.tipoCambio = Number(datosTC.tc);
+        App.ventas.tipoCambio_oficial = Number(datosTC.tc_oficial);
+
+        actualizarCampoTipoCambio(App.ventas.tipoCambio);
+
+    } catch (error) {
+        console.error("Error al inicializar los tipos de cambio:", error);
+
+        App.ventas.tipoCambio = null;
+        App.ventas.tipoCambio_oficial = null;
+
+        actualizarCampoTipoCambio(null);
     }
-
-    const tc = parseFloat(data.tc);
-    const tc_oficial = parseFloat(data.tc_oficial);
-
-    inputTC.value = tc.toFixed(3);
-
-    App.ventas.tipoCambio = tc;
-    App.ventas.tipoCambio_oficial = tc_oficial;
 }
 
+/**
+ * Valida que la respuesta contenga ambos tipos de cambio.
+ */
+function esTipoCambioValido(datosTC) {
+    return Boolean(
+        datosTC?.success &&
+        Number.isFinite(Number(datosTC.tc)) &&
+        Number.isFinite(Number(datosTC.tc_oficial)) &&
+        Number(datosTC.tc) > 0 &&
+        Number(datosTC.tc_oficial) > 0
+    );
+}
+
+/**
+ * Actualiza los símbolos de moneda de los totales.
+ */
+function actualizarSimbolosMoneda(monedaSeleccionada, monedaBase) {
+    const simbolos = [
+        document.getElementById("simboloMoneda01"),
+        document.getElementById("simboloMoneda02"),
+        document.getElementById("simboloMoneda03")
+    ];
+
+    // Conservamos los símbolos actuales del formulario.
+    const simbolo = monedaSeleccionada === monedaBase ? "$" : "S/";
+
+    simbolos.forEach(elemento => {
+        if (elemento) {
+            elemento.textContent = simbolo;
+        }
+    });
+}
+
+/**
+ * Actualiza el campo visual del tipo de cambio.
+ */
+function actualizarCampoTipoCambio(tipoCambio) {
+    const inputTC = document.getElementById("tipoCambio_venta");
+
+    if (!inputTC) return;
+
+    if (
+        tipoCambio === null ||
+        tipoCambio === undefined ||
+        !Number.isFinite(Number(tipoCambio)) ||
+        Number(tipoCambio) <= 0
+    ) {
+        inputTC.value = "--";
+        return;
+    }
+
+    inputTC.value = Number(tipoCambio).toFixed(3);
+}

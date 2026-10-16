@@ -1,335 +1,322 @@
 import Swal from "sweetalert2";
 import { verificarTipoCambio } from "./ventas-moneda.js";
-import { modal } from "../../core/modal-manager.js";
 import { resetVenta } from "./ventas-articulos.js";
-export function initOrdenVenta(){
 
-    const btnGenerar = document.querySelector('#btngenerar');
-    if (!btnGenerar) return; 
+export function initOrdenVenta() {
+    const btnGenerar = document.querySelector("#btngenerar");
 
-    // ==============================
-    // VALIDACIONES
-    // ==============================
+    if (!btnGenerar) return;
 
-    async function validarVenta(){
+    /**
+     * Valida la información necesaria para generar la orden.
+     */
+    async function validarVenta() {
+        const fechaSeleccionada =
+            document.getElementById("fecha_venta")?.value;
 
+        const monedaBase = Number(window.APP.config.moneda_base);
+        const monedaSeleccionada = Number(App.ventas.moneda);
 
-        const fechaSeleccionada = document.getElementById('fecha_venta')?.value;
-
-        const selectFormaPago = document.getElementById('idtipopago');
-
-        const formaPago = selectFormaPago?.value;
-
-        if(!fechaSeleccionada){
-
+        // Fecha
+        if (!fechaSeleccionada) {
             Swal.fire({
-                icon:'warning',
-                title:'Fecha requerida',
-                text:'Seleccione una fecha'
+                icon: "warning",
+                title: "Fecha requerida",
+                text: "Seleccione una fecha para la orden de venta."
             });
 
             return false;
         }
 
-        if(!formaPago){
-
+        // Cliente
+        if (!App.ventas.idcliente) {
             Swal.fire({
-                icon:'warning',
-                title:'Forma de Pago Requerido',
-                text:'Seleccione Forma de Pago'
+                icon: "warning",
+                title: "Cliente requerido",
+                text: "Seleccione un cliente."
             });
 
             return false;
         }
 
-
-        if(!App.ventas.idcliente){
-
+        // Serie
+        if (!App.ventas.idserie) {
             Swal.fire({
-                icon:'warning',
-                title:'Cliente requerido',
-                text:'Seleccione un cliente'
+                icon: "warning",
+                title: "Serie requerida",
+                text: "Seleccione una serie documental."
             });
 
             return false;
         }
 
-        if(!App.ventas.idlista){
-
+        // Lista de precios
+        if (!App.ventas.idlista) {
             Swal.fire({
-                icon:'warning',
-                title:'Lista requerida',
-                text:'Seleccione una lista de precios'
+                icon: "warning",
+                title: "Lista de precios requerida",
+                text: "Seleccione una lista de precios."
             });
 
             return false;
         }
 
-        if(App.ventas.articulos.length === 0){
-
+        // Moneda
+        if (!monedaSeleccionada) {
             Swal.fire({
-                icon:'warning',
-                title:'No hay artículos',
-                text:'Agregue al menos un artículo'
+                icon: "warning",
+                title: "Moneda requerida",
+                text: "Seleccione una moneda."
             });
 
             return false;
         }
 
-        // ==============================
-        // VALIDAR STOCK
-        // ==============================
+        // Detalle
+        if (
+            !Array.isArray(App.ventas.articulos) ||
+            App.ventas.articulos.length === 0
+        ) {
+            Swal.fire({
+                icon: "warning",
+                title: "No hay artículos",
+                text: "Agregue al menos un artículo a la orden."
+            });
 
-        const articulosSinStock = App.ventas.articulos.filter(a => 
-            a.tienestock == 0
+            return false;
+        }
+
+        // Validar productos y cantidades
+        const detalleInvalido = App.ventas.articulos.some(a => {
+            return (
+                !Number(a.idproducto) ||
+                !Number.isFinite(Number(a.cantidad)) ||
+                Number(a.cantidad) <= 0 ||
+                !Number.isFinite(Number(a.precio_unitario)) ||
+                Number(a.precio_unitario) < 0 ||
+                !Number.isFinite(Number(a.precio_unitario_sin_igv)) ||
+                Number(a.precio_unitario_sin_igv) < 0 ||
+                !Number.isFinite(Number(a.total)) ||
+                Number(a.total) < 0 ||
+                !Number.isFinite(Number(a.totalsinigv)) ||
+                Number(a.totalsinigv) < 0
+            );
+        });
+
+        if (detalleInvalido) {
+            Swal.fire({
+                icon: "warning",
+                title: "Detalle inválido",
+                text: "Revise los productos, las cantidades y los importes."
+            });
+
+            return false;
+        }
+
+        // Validar totales
+        const { subtotal, impuesto, total } = App.ventas.totales;
+
+        if (
+            !Number.isFinite(Number(subtotal)) ||
+            !Number.isFinite(Number(impuesto)) ||
+            !Number.isFinite(Number(total)) ||
+            Number(subtotal) < 0 ||
+            Number(impuesto) < 0 ||
+            Number(total) < 0
+        ) {
+            Swal.fire({
+                icon: "warning",
+                title: "Importes inválidos",
+                text: "Revise los totales de la orden de venta."
+            });
+
+            return false;
+        }
+
+        /*
+         * Validar tipos de cambio.
+         *
+         * Siempre necesitamos conservar las cotizaciones reales
+         * correspondientes a la fecha seleccionada, independientemente
+         * de la moneda del documento.
+         */
+
+        const datosTC = await verificarTipoCambio(
+            fechaSeleccionada,
+            monedaSeleccionada
         );
-      
-        if(articulosSinStock.length > 0){
 
+        if (
+            !datosTC.success ||
+            !Number.isFinite(Number(datosTC.tc)) ||
+            !Number.isFinite(Number(datosTC.tc_oficial)) ||
+            Number(datosTC.tc) <= 0 ||
+            Number(datosTC.tc_oficial) <= 0
+        ) {
             Swal.fire({
-                icon:'warning',
-                title:'Stock insuficiente',
-                text:'Existen artículos sin stock disponible. Revise la cantidad o elimínelos.'
+                icon: "warning",
+                title: "Tipo de cambio no disponible",
+                text: datosTC.mensaje ||
+                    "No existe un tipo de cambio válido para la fecha seleccionada."
             });
 
             return false;
-
         }
 
-        // ==============================
-        // VALIDAR TIPO DE CAMBIO
-        // ==============================
+        // Conservar las cotizaciones reales de la fecha seleccionada.
+        App.ventas.tipoCambio = Number(datosTC.tc);
+        App.ventas.tipoCambio_oficial = Number(datosTC.tc_oficial);
 
-        const monedaBase = window.APP.config.moneda_base; 
-        const validarTC = window.APP.config.validar_tc;
-
-
-        if(validarTC == 1 ){
-
-            const existeTC = await verificarTipoCambio(fechaSeleccionada);
-            
-            if(!existeTC.success){
-
-                Swal.fire({
-                    icon:'warning',
-                    title:'Tipo de cambio requerido',
-                    text:'Debe registrar el tipo de cambio para la fecha seleccionada'
-                });
-
-                return false;
-            }
-
-            App.ventas.tipoCambio = parseFloat(existeTC.tc);
-
-        }
-
-        const opcionSeleccionada = selectFormaPago.options[selectFormaPago.selectedIndex];
-
-        const requiereCobro = Number(opcionSeleccionada.dataset.requierecobro); 
-
-        return {
-            ok: true,
-            requiereCobro,
-            idtipopago: formaPago
-        };    
-
+        return true;       
+        
     }
 
-    // ==============================
-    // MODAL
-    // ==============================
-
-    function mostrarFormulario(totalVenta,idtipopago){
-
-        const body = `
-        <form class="formulario" id="formOV">
-
-        <div class="formulario__campo">
-            <label class="formulario__label">Total</label>
-            <input type="number" class="formulario__input" id="total" disabled>
-        </div>
-
-        <div class="formulario__campo">
-            <label class="formulario__label">Importe a Pagar</label>
-            <input type="number" class="formulario__input" id="importe" name="importe" />
-        </div>
-        <div class="formulario__campo">
-            <label class="formulario__label">Vuelto</label>
-            <input type="number" class="formulario__input" id="vuelto" name="vuelto" disabled />
-        </div>
-
-        </form>
-        `;
-
-        const footer = `
-        <button class="btn btn-primary" id="registrarOV">
-            Registrar
-        </button>  
-        `;
-
-        modal.setContent({
-            title:"Registrar Orden de Venta",
-            body: body,
-            footer: footer
-        });
-
-        modal.open();
-
-
-        // ==============================
-        // ELEMENTOS
-        // ==============================
- 
-
-        const inputTotal = document.querySelector("#total");
-        const inputPagar = document.querySelector("#importe");
-        const inputVuelto = document.querySelector('#vuelto');   
-
-
-      
-        inputTotal.value = totalVenta.toFixed(2);
-        inputPagar.value = totalVenta.toFixed(2);
-
-
-      if (inputPagar) {
-        inputPagar.addEventListener('input', () => {
-          const imp = parseFloat(inputPagar.value) || 0;
-          const vuelto = imp - (parseFloat(inputTotal.value) || 0);
-          inputVuelto.value = vuelto.toFixed(2);
-        });
-      }
-
-        document.getElementById("registrarOV").addEventListener("click", async function(e){
-
-            e.preventDefault();
-            
-            RegistraVenta({
-                idtipopago,
-                total: parseFloat(inputTotal.value),         
-                importe: parseFloat(inputPagar.value) || 0,
-                vuelto: parseFloat(inputVuelto.value) || 0
-            });
-
-        });
-
-    }
-
-
-    // ==============================
-    // CLICK BOTON
-    // ==============================
-
-    btnGenerar.addEventListener("click", async function(e){
-
+    /**
+     * Evento para generar la orden de venta.
+     */
+    btnGenerar.addEventListener("click", async function (e) {
         e.preventDefault();
 
-        const validacion = await validarVenta();
+        if (btnGenerar.disabled) return;
 
-        if(!validacion) return;
+        btnGenerar.disabled = true;
 
-        const totalVenta = App.ventas.totales.total;
+        try {
+            const validacion = await validarVenta();
 
-        if(validacion.requiereCobro === 1){
+            if (!validacion) return;
 
-            mostrarFormulario(totalVenta, validacion.idtipopago);
+            await RegistraVenta();
 
-        }else{
-
-            RegistraVenta({
-                idtipopago: validacion.idtipopago,
-                total: totalVenta
-            });
-
+        } finally {
+            btnGenerar.disabled = false;
         }
-
     });
 
-    async function RegistraVenta(datos){
-    
+    /**
+     * Envía los datos al controlador para registrar la orden.
+     */
+    async function RegistraVenta() {
+        const esEdicion = Boolean(App.ventas.idorden);
+
+        /*
+         * La edición conserva su ruta actual.
+         * La generación nueva utiliza prp_orden_venta_generar.
+         */
+        const url = esEdicion
+            ? "/admin/gestion/ventas/orden/editar"
+            : "/admin/gestion/ventas/orden/generar";
+
+        /*
+         * La estructura del JSON respeta los nombres que lee
+         * prp_orden_venta_generar.
+         */
         const payload = {
+            cabecera: {
+                idorden: App.ventas.idorden || 0,
 
-            cabecera:{
-                idorden: document.getElementById('idorden')?.value || 0,
-                fecha: document.getElementById('fecha_venta')?.value,
-                idcliente: App.ventas.idcliente,
-                idlista: App.ventas.idlista,
-                idtipopago: datos.idtipopago,
-                observacion: document.getElementById('observacion_venta')?.value || '',
-                idmoneda: App.ventas.moneda,
-                subtotal: App.ventas.totales.subtotal,
-                impuesto: App.ventas.totales.impuesto,
-                total: datos.total,
-                tipocambio: App.ventas.tipoCambio,                
-                tipocambio_oficial: App.ventas.tipoCambio_oficial
+                fecha: document.getElementById("fecha_venta")?.value,
 
+                idcliente: Number(App.ventas.idcliente),
+                idlista: Number(App.ventas.idlista),
+                idserie: Number(App.ventas.idserie),
+                idmoneda: Number(App.ventas.moneda),
+
+                observacion:
+                    document.getElementById("observacion_venta")?.value || "",
+
+                subtotal: Number(App.ventas.totales.subtotal),
+                impuesto: Number(App.ventas.totales.impuesto),
+                total: Number(App.ventas.totales.total),
+
+                tipocambio_oficial:
+                    Number(App.ventas.tipoCambio_oficial),
+
+                tipocambio:
+                    Number(App.ventas.tipoCambio)
             },
 
-            detalle: App.ventas.articulos
+            detalle: App.ventas.articulos.map(a => ({
+                idproducto: Number(a.idproducto),
 
+                descripcion: String(a.descripcion ?? a.nombre ?? ""),
+
+                cantidad: Number(a.cantidad),
+
+                precio_unitario_sin_igv:
+                    Number(a.precio_unitario_sin_igv),
+
+                precio_unitario:
+                    Number(a.precio_unitario),
+
+                totalsinigv:
+                    Number(a.totalsinigv),
+
+                total:
+                    Number(a.total)
+            }))
         };
 
-        // ======================
-        // DEFINIR URL
-        // ======================
-        const esEdicion = !!App.ventas.idorden;
-        
-        const url = esEdicion
-            ? '/admin/gestion/ventas/orden/editar'
-            : '/admin/gestion/ventas/orden/generar';
-
-        try{
-
+        try {
             const res = await fetch(url, {
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify(payload)
             });
 
             const data = await res.json();
 
-            if(!data.ok){
+            if (!res.ok || !data.ok) {
+                Swal.fire({
+                    icon: "error",
+                    title: esEdicion
+                        ? "No se pudo actualizar la orden"
+                        : "No se pudo registrar la orden",
+                    text: data.mensaje ||
+                        "Ocurrió un error al procesar la solicitud."
+                });
 
-                Swal.fire("Error",data.mensaje,"error");
                 return;
-
             }
 
-            modal.close();
-            Swal.fire({
-                icon: 'success',
-                title: esEdicion
-                    ? `OV ${data.numero} actualizada`
-                    : `OV ${data.numero} generada`,
-                text: '¿Desea imprimir la orden de venta?',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, imprimir',
-                cancelButtonText: 'No'
-            }).then(result => {
+            // El controlador debe devolver el número de la orden.
+            const numeroOrden =
+                data.numero_formateado ??
+                data.numero_documento ??
+                data.numero;
 
-                if (result.isConfirmed) {
-                    window.open(
-                        `/admin/gestion/ventas/orden/imprimir?id=${data.idorden}`,
-                        '_blank'
-                    );
-                }
-             
-                resetVenta();
+            const resultado = await Swal.fire({
+                icon: "success",
+                title: esEdicion
+                    ? `OV ${numeroOrden} actualizada`
+                    : `OV ${numeroOrden} generada`,
+                text: "¿Desea imprimir la orden de venta?",
+                showCancelButton: true,
+                confirmButtonText: "Sí, imprimir",
+                cancelButtonText: "No"
             });
 
-        }catch(error){
+            if (resultado.isConfirmed) {
+                window.open(
+                    `/admin/gestion/ventas/orden/imprimir?id=${data.idorden}`,
+                    "_blank"
+                );
+            }
 
-            console.error(error);
+            resetVenta();
 
-            Swal.fire(
-                "Error",
-                esEdicion
-                    ? "No se pudo actualizar la orden"
-                    : "No se pudo registrar la orden",
-                "error"
-            );
+        } catch (error) {
+            console.error("Error al registrar la orden:", error);
 
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: esEdicion
+                    ? "No se pudo actualizar la orden."
+                    : "No se pudo registrar la orden."
+            });
         }
-        
     }
-
 }

@@ -79,7 +79,7 @@ class GestionOCController {
             $idOrden = intval($data['id']);
             $estado  = $data['estado'];
 
-            $buscar = OrdenVenta::find($idOrden);
+            $buscar = OrdenCompra::find($idOrden);
 
             if($buscar->idestado === '2'){
                 echo json_encode([
@@ -94,7 +94,7 @@ class GestionOCController {
             $idMotivo = $data['idmotivo'] ?? null;
 
             // Llamar SP
-            $resultado = OrdenVenta::procedureMantenimiento(
+            $resultado = OrdenCompra::procedureMantenimiento(
                 "prp_compra_modifica_estado",
                 [$idOrden,$idEmpresa, $idTienda, $estado, $idUsuario]
             );

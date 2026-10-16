@@ -5,7 +5,6 @@ namespace Controllers;
 use Model\Monedas;
 use Model\FactorCambio;
 use Model\Opciones;
-use Model\TipoPago;
 use Model\OrdenVenta;
 use Model\OrdenVentaDetalle;
 use Model\SeriesDocumento;
@@ -96,109 +95,205 @@ class OrdenVentaController {
     }
 
    
-    public static function validarTipoCambio() {
 
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        
-        $fecha = $_POST['fecha'] ?? null;
-        $idMoneda = $_POST['idMoneda'] ?? null;
-       
-        $monedaBase = $_SESSION['moneda'];
-        $controlTC = $_SESSION['validar_tc'];
-
-        // Si la empresa no valida TC
-        if ($controlTC != 1) {
-            echo json_encode([
-                'success' => true,
-                'requiere_tc' => false,
-                'tc' => null
-            ]);
-            return;
-        }
-
-        $FactorCambio = FactorCambio::where('fecha', $fecha, true);
-
-        if ($FactorCambio) {
-            echo json_encode([
-                'success' => true,
-                'requiere_tc' => true,
-                'tc' => $FactorCambio->venta_mercado,
-                'tc_oficial' => $FactorCambio->venta_oficial
-            ]);
-        } else {
-            echo json_encode([
-                'success' => false,
-                'requiere_tc' => true,
-                'tc' => null
-            ]);
-        }
-    }
-    
-    public static function generar() {
+    public static function validarTipoCambio()
+    {
+        header('Content-Type: application/json; charset=utf-8');
 
         try {
-            $data = json_decode(file_get_contents('php://input'), true);
-
-            if (!$data) {
-                throw new \Exception('JSON inválido o vacío');
-            }
-
-            if (empty($data['detalle'])) {
-                throw new \Exception('Detalle vacío');
-            }
-
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
 
-            $idEmpresa  = $_SESSION['idempresa'] ?? null;
-            $idTienda  = $_SESSION['idtienda'] ?? null;
-            $idUsuario = $_SESSION['id'] ?? null;
+            $fecha = $_POST['fecha'] ?? null;
+            $idMoneda = (int) ($_POST['idMoneda'] ?? 0);
 
-            if (!$idTienda || !$idUsuario || !$idEmpresa) {
-                throw new \Exception('Sesión no válida');
+            // Datos de la empresa obtenidos de la sesión
+            $idEmpresa = (int) ($_SESSION['idempresa'] ?? 0);
+            $idMonedaBase = (int) ($_SESSION['moneda'] ?? 0);
+            $validarTC = (int) ($_SESSION['validar_tc'] ?? 0);
+
+            // Validar datos necesarios
+            if (!$fecha || !$idMoneda || !$idEmpresa || !$idMonedaBase) {
+                throw new \Exception(
+                    'Faltan datos para consultar el tipo de cambio.'
+                );
             }
 
-            // 👉 completar cabecera desde backend
-            $data['cabecera']['idempresa']  = $idEmpresa;
-            $data['cabecera']['idtienda']  = $idTienda;
-            $data['cabecera']['idusercrea'] = $idUsuario;
+            // Si el documento utiliza la moneda base, no necesita conversión
+            // if ($idMoneda === $idMonedaBase) {
+            //     echo json_encode([
+            //         'success' => true,
+            //         'requiere_tc' => false,
+            //         'tc' => 1,
+            //         'tc_oficial' => 1
+            //     ]);
+            //     return;
+            // }
 
-            $jsonVenta = json_encode($data, JSON_UNESCAPED_UNICODE);     
-
-            // header('Content-Type: application/json');
-            // echo $jsonVenta;
-            // exit;
-
-            $resultado = OrdenVenta::procedureMantenimiento(
-                "prp_venta_generar",
-                [$jsonVenta]
+            // Buscar el tipo de cambio por fecha y empresa
+            $factorCambio = FactorCambio::findArray(
+                [
+                    'fecha' => $fecha,
+                    'idempresa' => $idEmpresa
+                ],
+                true
             );
 
-            // 👇 convertir mysqli_result a array
-            $fila = $resultado->fetch_assoc();
+            if ($factorCambio) {
+                $tcOperacion = (float) $factorCambio->venta_mercado;
+                $tcOficial = (float) $factorCambio->venta_oficial;
 
-            if (!$fila) {
-                throw new \Exception('No se pudo obtener resultado del procedimiento');
+                // Validar que ambos tipos de cambio sean positivos
+                if ($tcOperacion <= 0 || $tcOficial <= 0) {
+                    throw new \Exception(
+                        'El tipo de cambio registrado no es válido.'
+                    );
+                }
+
+                echo json_encode([
+                    'success' => true,
+                    'requiere_tc' => (bool) $validarTC,
+                    'tc' => $tcOperacion,
+                    'tc_oficial' => $tcOficial
+                ]);
+                return;
             }
 
+            // No existe tipo de cambio para la fecha y empresa
             echo json_encode([
-                'ok'      => true,
-                'idorden' => $fila['idorden'],
-                'numero'  => $fila['numero']
+                'success' => false,
+                'requiere_tc' => (bool) $validarTC,
+                'tc' => null,
+                'tc_oficial' => null,
+                'mensaje' => 'No existe tipo de cambio registrado para la fecha seleccionada.'
             ]);
 
         } catch (\Throwable $e) {
+            http_response_code(400);
 
+            echo json_encode([
+                'success' => false,
+                'mensaje' => $e->getMessage()
+            ]);
+        }
+    }    
+
+
+
+
+    
+    public static function generar()
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        try {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            // Leer y validar el JSON recibido
+            $data = json_decode(
+                file_get_contents('php://input'),
+                true
+            );
+
+            if (
+                json_last_error() !== JSON_ERROR_NONE ||
+                !is_array($data)
+            ) {
+                throw new \Exception('JSON inválido o vacío');
+            }
+
+            if (
+                !isset($data['cabecera']) ||
+                !is_array($data['cabecera'])
+            ) {
+                throw new \Exception(
+                    'La cabecera de la orden es inválida'
+                );
+            }
+
+            if (
+                !isset($data['detalle']) ||
+                !is_array($data['detalle']) ||
+                count($data['detalle']) === 0
+            ) {
+                throw new \Exception(
+                    'La orden debe contener al menos un artículo'
+                );
+            }
+
+            // Obtener el contexto desde la sesión
+            $idEmpresa = (int) ($_SESSION['idempresa'] ?? 0);
+            $idTienda  = (int) ($_SESSION['idtienda'] ?? 0);
+            $idUsuario = (int) ($_SESSION['id'] ?? 0);
+
+            if (
+                $idEmpresa <= 0 ||
+                $idTienda <= 0 ||
+                $idUsuario <= 0
+            ) {
+                throw new \Exception('Sesión no válida');
+            }
+
+            // Los datos de contexto no se aceptan del navegador
+            $data['cabecera']['idempresa'] = $idEmpresa;
+            $data['cabecera']['idtienda'] = $idTienda;
+            $data['cabecera']['idusercrea'] = $idUsuario;
+
+            // Preparar el JSON para el procedimiento almacenado
+            $jsonVenta = json_encode(
+                $data,
+                JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
+            );
+
+            // Generar la orden de venta
+            $resultado = OrdenVenta::procedureMantenimiento(
+                'prp_orden_venta_generar',
+                [$jsonVenta]
+            );
+
+            if (!$resultado || !method_exists($resultado, 'fetch_assoc')) {
+                throw new \Exception(
+                    'No se pudo obtener el resultado del procedimiento'
+                );
+            }
+
+            $fila = $resultado->fetch_assoc();
+
+            if (
+                !$fila ||
+                empty($fila['idorden']) ||
+                !isset(
+                    $fila['idserie'],
+                    $fila['serie'],
+                    $fila['numero'],
+                    $fila['numero_formateado']
+                )
+            ) {
+                throw new \Exception(
+                    'El procedimiento no devolvió todos los datos de la orden generada'
+                );
+            }
+
+            // Respuesta al frontend
+            echo json_encode([
+                'ok' => true,
+                'idorden' => (int) $fila['idorden'],
+                'idserie' => (int) $fila['idserie'],
+                'serie' => $fila['serie'],
+                'numero' => (int) $fila['numero'],
+                'numero_formateado' => $fila['numero_formateado']
+            ], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+
+        } catch (\Throwable $e) {
             http_response_code(500);
 
             echo json_encode([
-                'ok'      => false,
-                'mensaje' => $e->getMessage(),
-                'trace'   => $e->getLine()
-            ]);
+                'ok' => false,
+                'mensaje' => $e->getMessage()
+            ], JSON_UNESCAPED_UNICODE);
         }
     }
 

@@ -28,7 +28,7 @@ class GestionOrdenController {
             'fecha_final'   => $fechaFin
         ];  
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
-        $ordenes = OrdenVenta::procedureLista('prc_venta_listar',[$idempresa,$idtienda, $fechaInicio, $fechaFin]);
+        $ordenes = OrdenVenta::procedureLista('prc_orden_venta_listar',[$idempresa,$idtienda, $fechaInicio, $fechaFin]);
         
         $alertas = [];
         $router ->render('admin/gestion/ventas/gestion/index',[
