@@ -283,7 +283,7 @@ class OrdenVentaController {
                 'idorden' => (int) $fila['idorden'],
                 'idserie' => (int) $fila['idserie'],
                 'serie' => $fila['serie'],
-                'numero' => (int) $fila['numero'],
+                'numero' =>  $fila['numero'],
                 'numero_formateado' => $fila['numero_formateado']
             ], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
 
@@ -298,17 +298,29 @@ class OrdenVentaController {
     }
 
 
-    public static function editar() {
+
+    public static function editar()
+    {
+        header('Content-Type: application/json; charset=utf-8');
 
         try {
-            $data = json_decode(file_get_contents('php://input'), true);
+            $data = json_decode(
+                file_get_contents('php://input'),
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
 
-            if (!$data) {
-                throw new \Exception('JSON inválido o vacío');
+            if (!is_array($data)) {
+                throw new \Exception('Datos de edición inválidos');
             }
 
-            if (empty($data['detalle'])) {
-                throw new \Exception('Detalle vacío');
+            if (empty($data['cabecera']['idorden'])) {
+                throw new \Exception('Debe indicar la orden de venta que desea editar');
+            }
+
+            if (empty($data['detalle']) || !is_array($data['detalle'])) {
+                throw new \Exception('El detalle de la orden está vacío');
             }
 
             if (session_status() === PHP_SESSION_NONE) {
@@ -323,47 +335,54 @@ class OrdenVentaController {
                 throw new \Exception('Sesión no válida');
             }
 
-            // completa cabecera desde backend
-            $data['cabecera']['idtienda']  = $idTienda;
-            $data['cabecera']['idusercrea'] = $idUsuario;
-            $data['cabecera']['idempresa'] = $idEmpresa;
+            // Los datos de contexto y auditoría se establecen en el backend.
+            $data['cabecera']['idtienda'] = (int) $idTienda;
+            $data['cabecera']['idempresa'] = (int) $idEmpresa;
+            $data['cabecera']['idusercrea'] = (int) $idUsuario;
 
-            $jsonCompra = json_encode($data, JSON_UNESCAPED_UNICODE);
-
-            // header('Content-Type: application/json');
-            // echo $jsonVenta;
-            // exit;
-
-            $resultado = OrdenVenta::procedureMantenimiento(
-                "prp_venta_editar",
-                [$jsonCompra]
+            $jsonVenta = json_encode(
+                $data,
+                JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
             );
 
-            // convertir mysqli_result a array
+            $resultado = OrdenVenta::procedureMantenimiento(
+                'prp_orden_venta_editar',
+                [$jsonVenta]
+            );
+
+            if (!$resultado || !method_exists($resultado, 'fetch_assoc')) {
+                throw new \Exception(
+                    'El procedimiento no devolvió un resultado válido'
+                );
+            }
+
             $fila = $resultado->fetch_assoc();
 
             if (!$fila) {
-                throw new \Exception('No se pudo obtener resultado del procedimiento');
+                throw new \Exception(
+                    'No se pudo obtener el resultado de la edición'
+                );
             }
 
             echo json_encode([
-                'ok'      => true,
-                'idorden' => $fila['idorden'],
-                'numero'  => $fila['numero']
-            ]);
-
+                'ok' => true,
+                'idorden' => (int) $fila['idorden'],
+                'idserie' => (int) $fila['idserie'],
+                'serie' => $fila['serie'],
+                'numero' => (int) $fila['numero'],
+                'numero_formateado' => $fila['numero_formateado']
+            ], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
 
         } catch (\Throwable $e) {
-
             http_response_code(500);
 
             echo json_encode([
-                'ok'      => false,
-                'mensaje' => $e->getMessage(),
-                'trace'   => $e->getLine()
-            ]);
+                'ok' => false,
+                'mensaje' => $e->getMessage()
+            ], JSON_UNESCAPED_UNICODE);
         }
-    } 
+    }
+
 
 
     public static function imprimir(Router $router)

@@ -15,7 +15,7 @@ class OrdenVenta extends ActiveRecord {
     public string $documento_cliente = '';
     public string $nombre_cliente = '';
     public string $direccion_cliente = '';
-
+    public string $serie_numero ='';
     public int $idempresa = 0;
     public int $idtienda = 0;
     public int $idlista = 0;

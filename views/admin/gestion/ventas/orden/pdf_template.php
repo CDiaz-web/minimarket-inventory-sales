@@ -4,7 +4,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Orden de Venta #<?= $cabecera->numero ?></title>
+<title>Orden de Venta #<?= $cabecera->serie_numero ?></title>
 <style>
   body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #333; }
   h1 { text-align: center; margin-bottom: 5px; }
@@ -17,7 +17,7 @@
 </head>
 <body>
 
-  <h1>Orden de Venta N° <?= $cabecera->numero ?></h1>
+  <h1>Orden de Venta N° <?= $cabecera->serie_numero ?></h1>
   <p>
 
       <?php

@@ -283,9 +283,8 @@ export function initOrdenVenta() {
 
             // El controlador debe devolver el número de la orden.
             const numeroOrden =
-                data.numero_formateado ??
-                data.numero_documento ??
-                data.numero;
+                data.numero ??                
+                data.numero_formateado;
 
             const resultado = await Swal.fire({
                 icon: "success",
@@ -298,6 +297,16 @@ export function initOrdenVenta() {
                 cancelButtonText: "No"
             });
 
+            // Guardamos la orden actualmente registrada
+            App.ventas.idorden = data.idorden;
+            App.ventas.numero = data.numero_formateado;
+            
+            const numeroOv = document.getElementById('numero');
+
+            if (numeroOv) {
+                numeroOv.value = data.numero_formateado;               
+            }
+
             if (resultado.isConfirmed) {
                 window.open(
                     `/admin/gestion/ventas/orden/imprimir?id=${data.idorden}`,
@@ -305,7 +314,7 @@ export function initOrdenVenta() {
                 );
             }
 
-            resetVenta();
+            // resetVenta();
 
         } catch (error) {
             console.error("Error al registrar la orden:", error);
