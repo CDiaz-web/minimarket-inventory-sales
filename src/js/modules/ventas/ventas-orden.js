@@ -4,9 +4,10 @@ import { resetVenta } from "./ventas-articulos.js";
 
 export function initOrdenVenta() {
     const btnGenerar = document.querySelector("#btngenerar");
+    const btnLimpiar = document.querySelector('#LimpiarOV');
 
     if (!btnGenerar) return;
-
+    if (!btnLimpiar) return;
     /**
      * Valida la información necesaria para generar la orden.
      */
@@ -186,12 +187,50 @@ export function initOrdenVenta() {
 
             if (!validacion) return;
 
-            await RegistraVenta();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Gurdar Orden de Compra',
+                text: 'Se Guardaran los Cambios realizados',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, Guardar',
+                cancelButtonText: 'Cancelar'
+            }).then((result)=>{
+
+                if(result.isConfirmed){
+                    RegistraVenta();
+                }
+            });  
+
+            
 
         } finally {
             btnGenerar.disabled = false;
         }
     });
+
+
+    btnLimpiar.addEventListener("click", async function(e){
+
+        e.preventDefault();
+            
+            $("#buscarProducto").autocomplete("close"); 
+            document.activeElement.blur(); 
+            Swal.fire({
+                icon: 'warning',
+                title: 'Limpiar orden',
+                text: 'Se eliminarán todos los artículos de la orden.',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, limpiar',
+                cancelButtonText: 'Cancelar'
+            }).then((result)=>{
+
+                if(result.isConfirmed){
+                    resetVenta();
+                }
+
+            });
+
+    }); 
 
     /**
      * Envía los datos al controlador para registrar la orden.
@@ -286,35 +325,34 @@ export function initOrdenVenta() {
                 data.numero ??                
                 data.numero_formateado;
 
-            const resultado = await Swal.fire({
-                icon: "success",
+            Swal.fire({
+                icon: 'success',
                 title: esEdicion
                     ? `OV ${numeroOrden} actualizada`
                     : `OV ${numeroOrden} generada`,
-                text: "¿Desea imprimir la orden de venta?",
-                showCancelButton: true,
-                confirmButtonText: "Sí, imprimir",
-                cancelButtonText: "No"
+                text: 'La Orden de Venta se registró correctamente.',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+
+                // Guardamos la orden actualmente registrada
+                App.ventas.idorden = data.idorden;
+                App.ventas.numero = data.numero_formateado;
+                
+                const numeroOv = document.getElementById('numero');
+
+                if (numeroOv) {
+                    numeroOv.value = data.numero_formateado;               
+                }
+
+                const btnImprimir = document.getElementById('ImprimirOV');
+
+                if (btnImprimir) {
+                    btnImprimir.disabled = false;
+                }
+
             });
 
-            // Guardamos la orden actualmente registrada
-            App.ventas.idorden = data.idorden;
-            App.ventas.numero = data.numero_formateado;
-            
-            const numeroOv = document.getElementById('numero');
 
-            if (numeroOv) {
-                numeroOv.value = data.numero_formateado;               
-            }
-
-            if (resultado.isConfirmed) {
-                window.open(
-                    `/admin/gestion/ventas/orden/imprimir?id=${data.idorden}`,
-                    "_blank"
-                );
-            }
-
-            // resetVenta();
 
         } catch (error) {
             console.error("Error al registrar la orden:", error);
@@ -328,4 +366,27 @@ export function initOrdenVenta() {
             });
         }
     }
+
+    const btnImprimir = document.getElementById('ImprimirOV');
+
+    if (btnImprimir) {
+      
+        btnImprimir.addEventListener('click', function () {
+
+            const idorden = App.ventas.idorden;
+     
+            if (!idorden) {
+                return;
+            }
+
+            window.open(
+                `/admin/gestion/ventas/orden/imprimir?id=${idorden}`,
+                '_blank'
+            );
+
+        });
+
+    }    
+
+
 }

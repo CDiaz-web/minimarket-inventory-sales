@@ -198,8 +198,13 @@
             <button class="boton boton--primary-link" id = "btngenerar">
                 <i class="fa-solid fa-pen-to-square"></i> Guardar O.V.
             </button> 
-
-            <button class="boton boton--danger-link" id="eliminarTodo">
+            <button 
+                class="boton boton--success" 
+                id="ImprimirOV"
+                <?= $modoEdicion ? '' : 'disabled' ?>>
+                <i class="fa-solid fa-print"></i> Imprimir
+            </button>
+            <button class="boton boton--danger-link" id="LimpiarOV">
                 <i class="fa-solid fa-trash"></i> Limpiar
             </button>            
         </div>

@@ -1,4 +1,3 @@
-
 import Swal from "sweetalert2";
 // ======================
 // SELECTORES
@@ -173,9 +172,6 @@ function actualizarTotales(){
 }
 
 
-
-
-
 function mostrarAlerta(icono, titulo, mensaje) {
     Swal.fire({
         icon: icono,
@@ -223,7 +219,7 @@ export function initTablaCompras(){
     tabla.addEventListener('click', function(e){
 
         const fila = e.target.closest('tr');
-        if(!fila) return;
+        if(!fila) return;buscarCliente
 
         const cantidadInput = fila.querySelector('.cantidad-compra');    
     

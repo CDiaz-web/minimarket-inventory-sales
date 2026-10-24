@@ -43,8 +43,7 @@ export function initOrdenCompra(){
     btnLimpiar.addEventListener("click", async function(e){
 
         e.preventDefault();
-    
-            // if(App.compras.articulos.length === 0) return;
+            
             $("#buscarProducto").autocomplete("close"); 
             document.activeElement.blur(); 
             Swal.fire({

@@ -1,5 +1,5 @@
-
 import Swal from "sweetalert2";
+// import { actualizarSimbolosMoneda } from "./ventas-moneda.js";
 // ======================
 // SELECTORES
 // ======================
@@ -12,16 +12,7 @@ export function initTablaVentas(){
     if(!tabla) return;
 
     tabla.addEventListener('input', manejarCambioCantidad);
-    tabla.addEventListener('change', manejarCambioCantidad);
-    tabla.addEventListener('blur', manejarCambioCantidad, true);
-
-    tabla.addEventListener('input', function(e){
-
-        if(!e.target.classList.contains('cantidad')) return;
-
-        manejarCambioCantidad(e);
-
-    });
+    tabla.addEventListener('change', manejarCambioCantidad);  
 
     tabla.addEventListener('click', function(e){
 
@@ -145,30 +136,39 @@ export function agregarProducto(producto){
     const filaExistente = tablaBody()
         .querySelector(`tr[data-idproducto="${producto.id}"]`);
 
-    // ======================
-    // SI YA EXISTE
-    // ======================
+// ======================
+// VALIDAR STOCK DISPONIBLE
+// ======================
 
-    if(filaExistente){
+const stockDisponible = Number(
+    producto.stock_disponible ?? producto.stock ?? 0
+);
+// ======================
+// SI YA EXISTE
+// ======================
 
-        if(!producto.tiene_stock){
-            mostrarAlerta("warning","Sin stock","Este artículo no tiene stock disponible.");
-            return;
-        }
+    if (filaExistente) {
 
-        const cantidadInput = filaExistente.querySelector('.cantidad');
-        let nuevaCantidad = parseInt(cantidadInput.value) + 1;
+    const cantidadInput = filaExistente.querySelector('.cantidad');
+    const cantidadActual = Number(cantidadInput.value) || 0;
+    const nuevaCantidad = cantidadActual + 1;
 
-        if(nuevaCantidad <= producto.stock){
+    if (nuevaCantidad <= stockDisponible) {
 
-            cantidadInput.value = nuevaCantidad;
-            actualizarTotalFila(filaExistente);
-            actualizarEstado();
+        cantidadInput.value = nuevaCantidad;
 
-        }else{
+        actualizarTotalFila(filaExistente);
+        actualizarEstado();
 
-            mostrarAlerta("warning","Stock máximo alcanzado","No puedes agregar más de la cantidad en stock.");
-        }
+    } else {
+
+        mostrarAlerta(
+            "warning",
+            "Stock máximo alcanzado",
+            `Solo tienes ${stockDisponible} unidad(es) disponible(s) de este artículo.`
+        );
+
+    }
 
         return;
     }
@@ -317,26 +317,33 @@ function mostrarAlerta(icono, titulo, mensaje) {
     });
 }
 
+function manejarCambioCantidad(e) {
 
-
-function manejarCambioCantidad(e){
-
-    if(!e.target.classList.contains('cantidad')) return;
+    if (!e.target.classList.contains('cantidad')) return;
 
     const fila = e.target.closest('tr');
+    if (!fila) return;
+
     const cantidadInput = e.target;
 
-    let cantidad = parseFloat(cantidadInput.value);
-    const maxStock = parseFloat(cantidadInput.getAttribute('max'));
-    
+    const tieneStock = Number(fila.dataset.tieneStock) === 1;
+    const maxStock = Number(cantidadInput.getAttribute('max'));
 
-    if (!cantidad || !maxStock ) return;totalsinigv
-    
-    if(isNaN(cantidad) || cantidad < 0){
+    let cantidad = Number(cantidadInput.value);
+
+    // Permitir que el campo quede vacío mientras el usuario escribe.
+    if (cantidadInput.value.trim() === '') {
+        return;
+    }
+
+    // Validar cantidades negativas o no numéricas.
+    if (!Number.isFinite(cantidad) || cantidad < 0) {
         cantidad = 0;
     }
 
-    if(cantidad > maxStock){
+    // Respetar el stock máximo cuando corresponda.
+    if (tieneStock && Number.isFinite(maxStock) && maxStock >= 0
+        && cantidad > maxStock) {
 
         mostrarAlerta(
             "warning",
@@ -345,18 +352,27 @@ function manejarCambioCantidad(e){
         );
 
         cantidad = maxStock;
-        cantidadInput.value = maxStock;
     }
 
+    // Un artículo con stock no puede quedar por debajo de 1.
+    if (tieneStock && cantidad > 0 && cantidad < 1) {
+        cantidad = 1;
+    }
+
+    cantidadInput.value = cantidad;
+
+    // Recalcular importes y totales.
     actualizarTotalFila(fila);
+
+    // Sincronizar App.ventas.articulos.
     actualizarEstado();
 }
-
 
 export function resetVenta(){
 
     App.ventas.articulos = [];
-
+    App.ventas.idorden = 0;
+    App.ventas.numero = null;
     App.ventas.totales = {
         subtotal: 0,
         impuesto: 0,
@@ -370,6 +386,9 @@ export function resetVenta(){
     const clienteInput = document.querySelector("#buscarCliente");
     if(clienteInput) clienteInput.value = "";
 
+    const listaInput = document.querySelector("#buscarLista");
+    if(listaInput) listaInput.value = "";    
+
     // limpiar total visual
     const totalVenta = document.getElementById('totalVenta');
     if(totalVenta) totalVenta.textContent = "0.00";
@@ -381,8 +400,11 @@ export function resetVenta(){
     if(subtotalVenta) subtotalVenta.textContent = "0.00";
 
     document.getElementById('idmoneda').value = window.APP.config.moneda_base;
-
+    document.getElementById('observacion_venta').value = '';  
+    document.getElementById('numero').value = '(Automático)';  
     document.getElementById('buscarProducto')?.focus();
+
+    actualizaSimbolosMoneda();
 
 }
 
@@ -497,4 +519,22 @@ export function cargarDetalleEdicion(detalle = []) {
 
     actualizarEstado();
     actualizarTotales();
+    
+}
+
+function actualizaSimbolosMoneda() {
+    const simbolos = [
+        document.getElementById("simboloMoneda01"),
+        document.getElementById("simboloMoneda02"),
+        document.getElementById("simboloMoneda03")
+    ];
+
+    // Conservamos los símbolos actuales del formulario.
+    const simbolo =  "$";
+
+    simbolos.forEach(elemento => {
+        if (elemento) {
+            elemento.textContent = simbolo;
+        }
+    });
 }

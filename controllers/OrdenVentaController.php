@@ -364,14 +364,14 @@ class OrdenVentaController {
                 );
             }
 
-            echo json_encode([
-                'ok' => true,
-                'idorden' => (int) $fila['idorden'],
-                'idserie' => (int) $fila['idserie'],
-                'serie' => $fila['serie'],
-                'numero' => (int) $fila['numero'],
-                'numero_formateado' => $fila['numero_formateado']
-            ], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+        echo json_encode([
+            'ok' => true,
+            'idorden' => (int) $fila['idorden'],
+            'idserie' => (int) $fila['idserie'],
+            'serie' => $fila['serie'],
+            'numero' => $fila['numero_documento'],
+            'numero_formateado' => $fila['numero_formateado']
+        ], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
 
         } catch (\Throwable $e) {
             http_response_code(500);
