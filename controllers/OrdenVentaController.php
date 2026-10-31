@@ -21,7 +21,7 @@ class OrdenVentaController {
              return;
         }  
 
-        $idOrden = isset($_GET['id']) ? (int) $_GET['id'] : 0;    
+        $idOrden = isset($_GET['id']) ? (int) $_GET['id'] : 0;           
 
         $cabecera = null;
         $detalle = [];
@@ -30,6 +30,7 @@ class OrdenVentaController {
         $idEmpresa = $_SESSION['idempresa'];
         $idTienda = $_SESSION['idtienda'];
 
+      
 
         $opciones = Opciones::opcionesMenu($_SESSION['idperfil']); 
         $empresa = Empresa::where('id',$_SESSION['idempresa']);   
@@ -43,11 +44,13 @@ class OrdenVentaController {
 
         $serie_defecto = $datos_series->id;
 
+        
+
         date_default_timezone_set('America/Lima');
         $tc = FactorCambio::where('fecha',date("Y-m-d"));
         $simbolo_moneda = $_SESSION['simbolo_moneda'];
         $moneda = $_SESSION['moneda'];
-        $tpago_defecto = $_SESSION['tpago_defecto'];
+        // $tpago_defecto = $_SESSION['tpago_defecto'];
         $validar_tc = $_SESSION['validar_tc'];
         $lista_monedas = Monedas::all('ASC');
         $titulo = 'Registro Orden Venta';
@@ -56,24 +59,27 @@ class OrdenVentaController {
         $lista_series = SeriesDocumento::procedureLista(
                 'prc_lista_series',
                 [$idEmpresa,$idTienda,'OVE']
-        );   
+        );           
 
         if (!empty($idOrden)) {
-      
+
             $cabecera = OrdenVenta::procedureLista(
                 'prc_lista_orden_venta_edicion',
-                [$idEmpresa,$idTienda,$idOrden, 1]
-            );      
+                [$idEmpresa, $idTienda, $idOrden, 1]
+            );
+          
             $cabecera = $cabecera[0] ?? null;
 
-            $titulo = 'Edición Orden Venta N° ' . $cabecera->numero;
-             
-            $detalle = OrdenVentaDetalle::procedureLista(
-                'prc_lista_orden_venta_edicion',
-                [$idEmpresa,$idTienda,$idOrden, 2]
-            );    
-            
-            $modoEdicion = true;
+            if ($cabecera) {
+                $titulo = 'Edición Orden Venta N° ' . $cabecera->numero;
+
+                $detalle = OrdenVentaDetalle::procedureLista(
+                    'prc_lista_orden_venta_edicion',
+                    [$idEmpresa, $idTienda, $idOrden, 2]
+                );
+
+                $modoEdicion = true;
+            }
         }
 
         $router ->render('admin/gestion/ventas/orden/index',[
@@ -86,6 +92,7 @@ class OrdenVentaController {
                 'lista_series'=>$lista_series,
                 'validar_tc'=>$validar_tc,
                 'impuesto'=>$impuesto,
+                'modoEdicion'=>$modoEdicion,
                 'cabecera' => $cabecera,
                 'detalle' => $detalle,
                 'opciones'=>$opciones,

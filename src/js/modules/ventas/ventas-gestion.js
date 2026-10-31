@@ -8,7 +8,6 @@ export function initGestionOV() {
 
 }
 
-
 // ==============================
 // APROBAR ORDEN
 // ==============================
@@ -19,7 +18,9 @@ function manejarAprobacion(){
 
         const boton = e.target.closest('.btn-aprobar');
         if(!boton) return;
+
         const estadoActual = boton.dataset.estado;
+
         if(estadoActual === 'ANU'){
             Swal.fire({
                 icon:'error',
@@ -27,25 +28,40 @@ function manejarAprobacion(){
             });
             return;
         }
+
+        if(estadoActual === 'SVP'){
+            Swal.fire({
+                icon:'error',
+                title:'La Orden se encuentra con Documentos Relacionados'
+            });
+            return;
+        }
+
         const idOrden = boton.dataset.id;
-   
+
+        // Determinar operación según el estado actual
+        const nuevoEstado = estadoActual === 'APR' ? 'PEN' : 'APR';
+        const esReapertura = nuevoEstado === 'PEN';
+
         Swal.fire({
             icon:'question',
-            title:'¿Aprobar orden?',
-            text:'Se descontará el stock y se generará movimiento de inventario.',
+            title: esReapertura ? '¿Reabrir orden?' : '¿Aprobar orden?',
+            text: esReapertura
+                ? 'La orden regresará a pendiente y se liberarán las cantidades comprometidas. ¿Desea continuar?'
+                : '¿Está seguro de aprobar la orden de venta y reservar las cantidades correspondientes?',
             showCancelButton:true,
-            confirmButtonText:'Sí, aprobar',
+            confirmButtonText: esReapertura ? 'Sí, reabrir' : 'Sí, aprobar',
             cancelButtonText:'Cancelar'
         })
         .then(result => {
 
             if(!result.isConfirmed) return;
 
-            cambiarEstado(idOrden, 'APR');
+            cambiarEstado(idOrden, nuevoEstado);
 
         });
 
-    });
+    });  
 
 }
 
@@ -71,50 +87,15 @@ function manejarAnulacion(){
             return;
         }
 
-        if(estadoActual === 'APR'){
-            Swal.fire({
-                icon:'error',
-                title:'La Orden se encuentra Aprobada, no puede ser anulada'
-            });
-            return;
-        }        
+        // if(estadoActual === 'APR'){
+        //     Swal.fire({
+        //         icon:'error',
+        //         title:'La Orden se encuentra Aprobada, no puede ser anulada'
+        //     });
+        //     return;
+        // }        
 
-        if(estadoActual === 'ACT'){
-
-        //     try{
-
-        //         const response = await fetch('/admin/configuracion/devolucion/listar');
-        //         const motivos = await response.json();
-
-        //         const result = await Swal.fire({
-        //             title:'Motivo de devolución',
-        //             input:'select',
-        //             inputOptions:motivos,
-        //             inputPlaceholder:'Seleccione un motivo',
-        //             showCancelButton:true,
-        //             confirmButtonText:'Anular',
-        //             cancelButtonText:'Cancelar',
-        //             inputValidator:(value)=>{
-        //                 if(!value){
-        //                     return 'Debe seleccionar un motivo';
-        //                 }
-        //             }
-        //         });
-
-        //         if(!result.isConfirmed) return;                
-        //         cambiarEstado(idOrden, 'ANU', result.value);
-
-        //     }catch(error){
-
-        //         Swal.fire(
-        //             'Error',
-        //             'No se pudieron cargar los motivos',
-        //             'error'
-        //         );
-
-        //     }
-
-        // }else{
+        if(estadoActual === 'PEN' || estadoActual === 'APR'){      
 
             const result = await Swal.fire({
                 icon:'warning',
@@ -148,14 +129,14 @@ function manejarEdicion() {
         const estado = boton.dataset.estado;
 
         // Solo se pueden editar órdenes pendientes
-        if (estado !== 'ACT') {
+        if (estado !== 'PEN') {
 
             e.preventDefault();
 
             Swal.fire({
                 icon: 'warning',
                 title: 'Orden no editable',
-                text: 'Solo las órdenes en estado Activo pueden modificarse.'
+                text: 'Solo las órdenes en estado Pendiente pueden modificarse.'
             });
 
             return;

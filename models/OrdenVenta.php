@@ -32,9 +32,9 @@ class OrdenVenta extends ActiveRecord {
 
     public ?float $subtotal_base = null;    
     public ?float $igv_base = null;
-    public ?float $total_base = null;   
+    public ?float $total_base = null;       
     
-    public int $iduserapro = 0;
+    public ?int $iduserapro = null;
     public ?string $fechaapro = null;
     
     public int $idestado = 0;

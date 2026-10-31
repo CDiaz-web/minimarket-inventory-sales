@@ -290,6 +290,15 @@ export function resetCompras(){
 
     App.compras.idproveedor = null;
 
+
+    const fecha = new Date();
+
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dia = String(fecha.getDate()).padStart(2, "0");
+
+    document.getElementById("fecha_compra").value = `${anio}-${mes}-${dia}`;
+
     const tbody = document.querySelector('#tablaArticulosCompras tbody');
     if(tbody) tbody.innerHTML = '';
 

@@ -380,6 +380,17 @@ export function resetVenta(){
     };
 
     // limpiar tabla
+
+
+    const fecha = new Date();
+
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dia = String(fecha.getDate()).padStart(2, "0");
+
+    document.getElementById("fecha_venta").value = `${anio}-${mes}-${dia}`;
+
+
     const tbody = document.querySelector('#tablaArticulosVentas tbody');
     if(tbody) tbody.innerHTML = '';
 
@@ -399,8 +410,18 @@ export function resetVenta(){
     const subtotalVenta = document.getElementById('subtotalVenta');
     if(subtotalVenta) subtotalVenta.textContent = "0.00";
 
+    const tituloVenta = document.getElementById('tituloOV');
+    if(tituloVenta) tituloVenta.textContent = "Registro Orden Venta";
+
+
+    const btnImprimir = document.getElementById('ImprimirOV');
+
+    if (btnImprimir) {
+        btnImprimir.disabled = true;
+    }
+
     document.getElementById('idmoneda').value = window.APP.config.moneda_base;
-    document.getElementById('observacion_venta').value = '';  
+    document.getElementById('observacion_venta').value = '';      
     document.getElementById('numero').value = '(Automático)';  
     document.getElementById('buscarProducto')?.focus();
 

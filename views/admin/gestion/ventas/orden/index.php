@@ -2,7 +2,7 @@
     $idMonedaSeleccionada = $cabecera->idmoneda ?? $moneda;
     $idSerieSeleccionada = $cabecera->idserie ?? $serie_defecto;    
 ?>
-<h2 class="dashboard__heading--izquierda"><?php echo $titulo; ?></h2>  
+<h2 class="dashboard__heading--izquierda" id="tituloOV"  ><?php echo $titulo; ?></h2>  
 
 <div class="table-wrapper">      
 

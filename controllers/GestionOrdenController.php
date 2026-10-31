@@ -61,7 +61,7 @@ class GestionOrdenController {
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
-
+            $idEmpresa = $_SESSION['idempresa'] ?? null;
             $idTienda  = $_SESSION['idtienda'] ?? null;
             $idUsuario = $_SESSION['id'] ?? null;
 
@@ -90,8 +90,8 @@ class GestionOrdenController {
 
             // Llamar SP
             $resultado = OrdenVenta::procedureMantenimiento(
-                "prm_cambia_estado_orden",
-                [$idOrden, $idTienda, $estado, $idMotivo,$idUsuario]
+                "prp_cambia_estado_orden_venta",
+                [$idOrden, $idEmpresa,$idTienda, $estado, $idUsuario]
             );
 
             echo json_encode([

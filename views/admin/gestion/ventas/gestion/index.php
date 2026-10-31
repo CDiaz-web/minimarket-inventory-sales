@@ -86,11 +86,21 @@
                                     </a>
 
                                     <!-- Aprobar -->
-                                    <button 
+                                    <!-- <button 
                                         class="boton boton--success-light  btn-aprobar"
                                         data-id="<?= $orden->id ?>"
                                         data-estado="<?= $orden->estado ?>">
                                         <i class="fa-solid fa-check"></i>
+                                    </button> -->
+
+                                    <!-- Aprobar / Reabrir -->
+                                    <button
+                                        class="boton <?= $orden->estado === 'APR' ? 'boton--warning-light' : 'boton--success-light' ?> btn-aprobar"
+                                        data-id="<?= $orden->id ?>"
+                                        data-estado="<?= $orden->estado ?>"
+                                        title="<?= $orden->estado === 'APR' ? 'Reabrir orden' : 'Aprobar orden' ?>">
+
+                                        <i class="fa-solid <?= $orden->estado === 'APR' ? 'fa-rotate-left' : 'fa-check' ?>"></i>
                                     </button>
 
                                     <!-- Imprimir -->
