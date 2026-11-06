@@ -1,4 +1,4 @@
-import { agregarProducto } from './ventas-articulos.js';
+import { agregarProducto } from './orden_ventas-articulos.js';
 import Swal from "sweetalert2";
 let productosCache = [];
 

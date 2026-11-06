@@ -31,7 +31,7 @@ class GestionOrdenController {
         $ordenes = OrdenVenta::procedureLista('prc_orden_venta_listar',[$idempresa,$idtienda, $fechaInicio, $fechaFin]);
         
         $alertas = [];
-        $router ->render('admin/gestion/ventas/gestion/index',[
+        $router ->render('admin/gestion/ventas/orden_venta/gestion/index',[
                 'titulo' => 'Gestión de Ordenes de Venta',
                 'ordenes'=>$ordenes,
                 'alertas'=>$alertas,

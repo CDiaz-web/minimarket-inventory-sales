@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
-import { verificarTipoCambio } from "./ventas-moneda.js";
-import { resetVenta } from "./ventas-articulos.js";
+import { verificarTipoCambio } from "./orden_ventas-moneda.js";
+import { resetVenta } from "./orden_ventas-articulos.js";
 
 export function initOrdenVenta() {
     const btnGenerar = document.querySelector("#btngenerar");
@@ -243,8 +243,8 @@ export function initOrdenVenta() {
          * La generación nueva utiliza prp_orden_venta_generar.
          */
         const url = esEdicion
-            ? "/admin/gestion/ventas/orden/editar"
-            : "/admin/gestion/ventas/orden/generar";
+            ? "/admin/gestion/ventas/orden_venta/registro/editar"
+            : "/admin/gestion/ventas/orden_venta/registro/generar";
 
         /*
          * La estructura del JSON respeta los nombres que lee
@@ -380,7 +380,7 @@ export function initOrdenVenta() {
             }
 
             window.open(
-                `/admin/gestion/ventas/orden/imprimir?id=${idorden}`,
+                `/admin/gestion/ventas/orden_venta/registro/imprimir?id=${idorden}`,
                 '_blank'
             );
 

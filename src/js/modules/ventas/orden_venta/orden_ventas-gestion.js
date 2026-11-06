@@ -157,7 +157,7 @@ async function cambiarEstado(idOrden, estado, idMotivo = null){
 
     try{
 
-        const response = await fetch('/admin/gestion/ventas/gestion/cambiarestado', {
+        const response = await fetch('/admin/gestion/ventas/orden_venta/gestion/cambiarestado', {
             method:'POST',
             headers:{
                 'Content-Type':'application/json'

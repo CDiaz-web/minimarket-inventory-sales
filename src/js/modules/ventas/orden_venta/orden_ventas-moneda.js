@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { recalcularPreciosVenta } from "./ventas-articulos.js";
+import { recalcularPreciosVenta } from "./orden_ventas-articulos.js";
 
 /**
  * Inicializa el selector de moneda de la orden de venta.
@@ -166,7 +166,7 @@ export async function verificarTipoCambio(fecha, idMoneda) {
         formData.append("idMoneda", idMoneda);
 
         const response = await fetch(
-            "/admin/gestion/ventas/orden/validarTipoCambio",
+            "/admin/gestion/ventas/orden_venta/validarTipoCambio",
             {
                 method: "POST",
                 body: formData

@@ -401,6 +401,17 @@ tbody tr:nth-child(even) {
     }
 }
 
+.grupo-datos-tipo-documento {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @include m.respond(tablet) {
+        grid-template-columns: 200px 250px 200px ; // 🔥 tamaños reales
+        justify-content: start; // 👈 clave
+    }
+}
 
 .campo-inline input,
 .campo-inline select {
@@ -469,6 +480,10 @@ tbody tr:nth-child(even) {
         grid-template-columns: 1fr 1fr 1fr 1fr;
         align-items: end;
     }
+    .grupo-datos-tipo-documento {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        align-items: end;
+    }
 
 }
 
@@ -483,6 +498,22 @@ tbody tr:nth-child(even) {
     @include m.respond(tablet) {
 
         grid-template-columns: 2fr 1fr;
+
+        align-items: end;
+    }
+}
+
+.grupo-cliente-lista-orden {
+
+    grid-column: 1 / -1;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @include m.respond(tablet) {
+
+        grid-template-columns: 2fr 1fr 1fr;
 
         align-items: end;
     }

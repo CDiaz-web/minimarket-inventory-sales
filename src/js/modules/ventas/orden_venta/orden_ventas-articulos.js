@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-// import { actualizarSimbolosMoneda } from "./ventas-moneda.js";
+
 // ======================
 // SELECTORES
 // ======================

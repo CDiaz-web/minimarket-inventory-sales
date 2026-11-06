@@ -82,7 +82,7 @@ class OrdenVentaController {
             }
         }
 
-        $router ->render('admin/gestion/ventas/orden/index',[
+        $router ->render('admin/gestion/ventas/orden_venta/registro/index',[
                 'titulo' => $titulo,
                 'opciones'=>$opciones,
                 'moneda'=>$moneda,
@@ -126,17 +126,6 @@ class OrdenVentaController {
                     'Faltan datos para consultar el tipo de cambio.'
                 );
             }
-
-            // Si el documento utiliza la moneda base, no necesita conversión
-            // if ($idMoneda === $idMonedaBase) {
-            //     echo json_encode([
-            //         'success' => true,
-            //         'requiere_tc' => false,
-            //         'tc' => 1,
-            //         'tc_oficial' => 1
-            //     ]);
-            //     return;
-            // }
 
             // Buscar el tipo de cambio por fecha y empresa
             $factorCambio = FactorCambio::findArray(
@@ -436,7 +425,7 @@ class OrdenVentaController {
 
             // Renderizar plantilla
             ob_start();
-            include __DIR__ . '/../views/admin/gestion/ventas/orden/pdf_template.php';
+            include __DIR__ . '/../views/admin/gestion/ventas/orden_venta/registro/pdf_template.php';
             $html = ob_get_clean();
 
             // DOMPDF

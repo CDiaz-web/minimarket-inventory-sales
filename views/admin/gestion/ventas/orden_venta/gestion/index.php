@@ -78,20 +78,13 @@
 
                                     <!-- Editar -->
 
-                                    <a href="/admin/gestion/ventas/orden?id=<?= $orden->id ?>"
+                                    <a href="/admin/gestion/ventas/orden_venta/registro?id=<?= $orden->id ?>"
                                         class="boton boton--primary btn-editar-venta"
                                         data-id="<?= $orden->id; ?>"
                                         data-estado="<?= $orden->estado; ?>">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
 
-                                    <!-- Aprobar -->
-                                    <!-- <button 
-                                        class="boton boton--success-light  btn-aprobar"
-                                        data-id="<?= $orden->id ?>"
-                                        data-estado="<?= $orden->estado ?>">
-                                        <i class="fa-solid fa-check"></i>
-                                    </button> -->
 
                                     <!-- Aprobar / Reabrir -->
                                     <button
@@ -102,10 +95,14 @@
 
                                         <i class="fa-solid <?= $orden->estado === 'APR' ? 'fa-rotate-left' : 'fa-check' ?>"></i>
                                     </button>
-
+                                    <a href="/admin/gestion/ventas/registro?idorden=<?= $orden->id ?>"
+                                    class="boton boton--success-light btn-convertir-venta"
+                                    title="Convertir a venta">
+                                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                                    </a>
                                     <!-- Imprimir -->
                                     <a 
-                                        href="/admin/gestion/ventas/orden/imprimir?id=<?= $orden->id ?>" 
+                                        href="/admin/gestion/ventas/orden_venta/registro/imprimir?id=<?= $orden->id ?>" 
                                         target="_blank"
                                         class="boton boton--primary" >
                                         <i class="fa fa-print"></i>

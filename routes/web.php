@@ -14,6 +14,7 @@ use Controllers\InventariosController;
 use Controllers\ListasController;
 use Controllers\ListaProductosController;
 use Controllers\OrdenVentaController;
+use Controllers\VentaController;
 use Controllers\OrdenCompraController;
 use Controllers\GestionOCController;
 use Controllers\MovimientoController;
@@ -101,16 +102,20 @@ $router->get('/admin/gestion/inventarios/gestion/anularmovimiento',[InventariosC
 
 //===== VENTAS
 //== ORDEN VENTA
-$router->get('/admin/gestion/ventas/orden',[OrdenVentaController::class,'index']);
-$router->get('/admin/gestion/ventas/orden/validarTipoCambio',[OrdenVentaController::class,'validarTipoCambio']);
-$router->post('/admin/gestion/ventas/orden/validarTipoCambio',[OrdenVentaController::class,'validarTipoCambio']);
-$router->post('/admin/gestion/ventas/orden/generar',[OrdenVentaController::class,'generar']);
-$router->post('/admin/gestion/ventas/orden/editar',[OrdenVentaController::class,'editar']);
-$router->get('/admin/gestion/ventas/orden/imprimir', [OrdenVentaController::class, 'imprimir']);
-//====GESTION ORDENES
-$router->get('/admin/gestion/ventas/gestion',[GestionOrdenController::class,'index']);
-$router->post('/admin/gestion/ventas/gestion/cambiarestado',[GestionOrdenController::class,'cambiarestado']);
-$router->get('/admin/gestion/ventas/gestion/cambiarestado',[GestionOrdenController::class,'cambiarestado']);
+$router->get('/admin/gestion/ventas/orden_venta/registro',[OrdenVentaController::class,'index']);
+$router->get('/admin/gestion/ventas/orden_venta/validarTipoCambio',[OrdenVentaController::class,'validarTipoCambio']);
+$router->post('/admin/gestion/ventas/orden_venta/validarTipoCambio',[OrdenVentaController::class,'validarTipoCambio']);
+$router->post('/admin/gestion/ventas/orden_venta/registro/generar',[OrdenVentaController::class,'generar']);
+$router->post('/admin/gestion/ventas/orden_venta/registro/editar',[OrdenVentaController::class,'editar']);
+$router->get('/admin/gestion/ventas/orden_venta/registro/imprimir', [OrdenVentaController::class, 'imprimir']);
+//== GESTION ORDENES
+$router->get('/admin/gestion/ventas/orden_venta/gestion',[GestionOrdenController::class,'index']);
+$router->post('/admin/gestion/ventas/orden_venta/gestion/cambiarestado',[GestionOrdenController::class,'cambiarestado']);
+$router->get('/admin/gestion/ventas/orden_venta/gestion/cambiarestado',[GestionOrdenController::class,'cambiarestado']);
+
+//== VENTA
+$router->get('/admin/gestion/ventas/venta/registro',[VentaController::class,'index']);
+
 
 //====REPORTES
 $router->get('/admin/gestion/reportes',[ReportesController::class,'index']);

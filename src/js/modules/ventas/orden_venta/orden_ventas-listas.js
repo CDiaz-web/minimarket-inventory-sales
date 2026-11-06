@@ -1,6 +1,6 @@
 let listasCache = [];
-import { cargarProductosPorLista } from './ventas-productos.js';
-import { resetVenta } from './ventas-articulos.js';
+import { cargarProductosPorLista } from './orden_ventas-productos.js';
+import { resetVenta } from './orden_ventas-articulos.js';
 
 export function initListasVenta(){
 

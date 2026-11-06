@@ -1,14 +1,14 @@
-import { initListasVenta, seleccionarListaPorId } from './ventas-listas.js';
-import { initClientesVenta } from './ventas-clientes.js';
-import { initVentaMoneda,initFechaVenta } from "./ventas-moneda.js";
-import { initProductosVenta, cargarProductosPorLista } from './ventas-productos.js';
-import { initOrdenVenta } from './ventas-orden.js';
-import { initVentasSerie } from "./ventas-series.js";
-import { initGestionOV } from "./ventas-gestion.js";
+import { initListasVenta, seleccionarListaPorId } from './orden_ventas-listas.js';
+import { initClientesVenta } from './orden_ventas-clientes.js';
+import { initVentaMoneda,initFechaVenta } from "./orden_ventas-moneda.js";
+import { initProductosVenta, cargarProductosPorLista } from './orden_ventas-productos.js';
+import { initOrdenVenta } from './orden_ventas-orden.js';
+import { initVentasSerie } from "./orden_ventas-series.js";
+import { initGestionOV } from "./orden_ventas-gestion.js";
 import {
     initTablaVentas,
     cargarDetalleEdicion
-} from './ventas-articulos.js';
+} from './orden_ventas-articulos.js';
 // ======================
 // ESTADO DEL MODULO
 // ======================
@@ -36,7 +36,7 @@ App.ventas = {
 // ======================
 // INIT
 
-export function initVentas(){
+export function initOrdenVentas(){
     const inputLista = document.getElementById('buscarLista');
     const inputCliente = document.getElementById('buscarCliente');
     const inputProductos = document.getElementById('buscarProducto'); 

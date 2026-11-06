@@ -1,7 +1,7 @@
 
-import { seleccionarListaPorId } from './ventas-listas.js';
-import { cargarProductosPorLista } from './ventas-productos.js';
-import { resetVenta } from './ventas-articulos.js';
+import { seleccionarListaPorId } from './orden_ventas-listas.js';
+import { cargarProductosPorLista } from './orden_ventas-productos.js';
+import { resetVenta } from './orden_ventas-articulos.js';
 export function initClientesVenta(){
 
     $("#buscarCliente").autocomplete({
