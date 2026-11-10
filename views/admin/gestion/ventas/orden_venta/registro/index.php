@@ -48,13 +48,11 @@
                     </label>
                 </div>  
                 <div class="formulario__campo">  
-
                     <input
                         type="hidden"
                         id="idlista_hidden"
                         value="<?= $cabecera->idlista ?? '' ?>"
                     >
-
                     <input
                         type = "text"
                         class = "formulario__input"

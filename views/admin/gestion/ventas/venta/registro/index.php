@@ -2,7 +2,7 @@
     $idMonedaSeleccionada = $cabecera->idmoneda ?? $moneda;
     $idSerieSeleccionada = $cabecera->idserie ?? $serie_defecto;    
 ?>
-<h2 class="dashboard__heading--izquierda" id="tituloOV"  ><?php echo $titulo; ?></h2>  
+<h2 class="dashboard__heading--izquierda" id="tituloDocVentas"  ><?php echo $titulo; ?></h2>  
 
 <div class="table-wrapper">      
 
@@ -33,7 +33,7 @@
                     <input
                         type = "text"
                         class = "formulario__input"
-                        id="buscarCliente"            
+                        id="buscarClienteDocVentas"            
                         placeholder="Ingrese Nombre del Cliente"     
                         value="<?= $cabecera->cliente ?? '' ?>"                     
                     /> 
@@ -48,17 +48,15 @@
                     </label>
                 </div>  
                 <div class="formulario__campo">  
-
                     <input
                         type="hidden"
                         id="idlista_hidden"
                         value="<?= $cabecera->idlista ?? '' ?>"
                     >
-
                     <input
                         type = "text"
                         class = "formulario__input"
-                        id="buscarLista"            
+                        id="buscarListaDocVentas"            
                         placeholder="Ingrese Lista de Precios"    
                         value="<?= $cabecera->lista ?? '' ?>"                                         
                     /> 
@@ -113,7 +111,7 @@
                     <i class="fa-solid fa-layer-group"></i>
                     Serie
                 </label>
-                <select class="formulario__select" id="idserie" name="idserie">
+                <select class="formulario__select" id="idserieDocVentas" name="idserieDocVentas">
                     <option value="">-Seleccionar-</option>
 
                     <?php foreach ($lista_series as $lista_serie) { ?>
@@ -136,7 +134,7 @@
                 <input 
                     type="text"
                     class="formulario__input"
-                    id="numero"
+                    id="numeroDocVentas"
                     value="<?= $cabecera->numero ?? '(Automático)' ?>" 
                     disabled                   
                 />
@@ -151,7 +149,7 @@
                 <input 
                     type="date"
                     class="formulario__input"
-                    id="fecha_venta"
+                    id="fecha_DocVentas"
                     name="fecha"                    
                     value="<?= $cabecera->fecha ?? $fecha ?>"  
                     required
@@ -164,7 +162,7 @@
                     <i class="fa-solid fa-coins"></i>
                     Moneda
                 </label>
-                <select class="formulario__select" id="idmoneda" name="idmoneda">
+                <select class="formulario__select" id="idmonedaDocVentas" name="idmonedaDocVentas">
                     <option value="">-Seleccionar-</option>
 
                     <?php foreach ($lista_monedas as $moneda_lista) { ?>
@@ -187,7 +185,7 @@
                 <input 
                     type="text"
                     class="formulario__input"
-                    id="tipoCambio_venta"
+                    id="tipoCambio_DocVentas"
                     disabled                   
                 />
             </div> 
@@ -206,7 +204,7 @@
             <input
                 type = "text"
                 class = "formulario__input"
-                id="observacion_venta"
+                id="observacion_DocVentas"
                 value="<?= $cabecera->observacion ?? '' ?>"  
             /> 
         </div>          
@@ -224,7 +222,7 @@
             <input
                 type = "text"
                 class = "formulario__input"
-                id="buscarProducto"            
+                id="buscarProductoDocVentas"            
                 placeholder="Ingrese el código de Barras o el nombre del producto"                        
             /> 
         </div>
@@ -232,16 +230,16 @@
 
     <div class="table-header">
         <div class="table-actions">
-            <button class="boton boton--primary-link" id = "btngenerar">
-                <i class="fa-solid fa-pen-to-square"></i> Guardar O.V.
+            <button class="boton boton--primary-link" id = "btngenerarDocVentas">
+                <i class="fa-solid fa-pen-to-square"></i> Guardar D.V.
             </button> 
             <button 
                 class="boton boton--success" 
-                id="ImprimirOV"
+                id="ImprimirDocVentas"
                 <?= $modoEdicion ? '' : 'disabled' ?>>
                 <i class="fa-solid fa-print"></i> Imprimir
             </button>
-            <button class="boton boton--danger-link" id="LimpiarOV">
+            <button class="boton boton--danger-link" id="LimpiarDocVentas">
                 <i class="fa-solid fa-trash"></i> Limpiar
             </button>            
         </div>
@@ -251,8 +249,8 @@
                 for="costo" 
                 class="formulario__label">
                 Sub Total: 
-                <span id="simboloMoneda01"><?php echo $cabecera->simbolo ?? $simbolo_moneda; ?></span>
-                <span id="subtotalVenta"><?php echo $cabecera->subtotal_origen ?? "0.00"; ?></span> 
+                <span id="simboloMoneda01DocVentas"><?php echo $cabecera->simbolo ?? $simbolo_moneda; ?></span>
+                <span id="subtotalVentaDocVentas"><?php echo $cabecera->subtotal_origen ?? "0.00"; ?></span> 
             </label>
         </div>
         <div class="table-search">
@@ -260,8 +258,8 @@
                 for="costo" 
                 class="formulario__label">
                 Igv: 
-                <span id="simboloMoneda02"><?php echo $cabecera->simbolo ?? $simbolo_moneda; ?></span>
-                <span id="totalVentaIgv"><?php echo $cabecera->igv_origen ?? "0.00"; ?></span> 
+                <span id="simboloMoneda02DocVentas"><?php echo $cabecera->simbolo ?? $simbolo_moneda; ?></span>
+                <span id="totalDocVentasIgv"><?php echo $cabecera->igv_origen ?? "0.00"; ?></span> 
             </label>
         </div>
 
@@ -270,8 +268,8 @@
                 for="costo" 
                 class="formulario__label">
                 Total Venta: 
-                <span id="simboloMoneda03"><?php echo $cabecera->simbolo ?? $simbolo_moneda; ?></span>
-                <span id="totalVenta"><?php echo $cabecera->total_origen ?? "0.00"; ?></span> 
+                <span id="simboloMoneda03DocVentas"><?php echo $cabecera->simbolo ?? $simbolo_moneda; ?></span>
+                <span id="totalDocVentas"><?php echo $cabecera->total_origen ?? "0.00"; ?></span> 
             </label>
         </div>
     </div>
@@ -280,7 +278,7 @@
 
     <div class="table-body">
         
-            <table id="tablaArticulosVentas"  class="table" data-table data-page-size="20">
+            <table id="tablaArticulosDocVentas"  class="table" data-table data-page-size="20">
                 <thead class="table__thead">
                     <tr>               
                         <th scope='col' class="table__th">Producto</th>
@@ -307,7 +305,7 @@
     </div>    
 
     <div class="table-footer">
-        <div class="table-pagination" data-table-pagination="tablaArticulosVentas"></div>  
+        <div class="table-pagination" data-table-pagination="tablaArticulosDocVentas"></div>  
     </div>    
 </div>
 

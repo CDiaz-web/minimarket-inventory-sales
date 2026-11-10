@@ -19,6 +19,7 @@ import { initListaProductos } from './modules/lista-productos.js';
 import { initClientesForm } from "./modules/clientes/clientes-form.js";
 import { initTipoCambio } from "./modules/tipo-cambio/tipo-cambio.js";
 import { initOrdenVentas } from "./modules/ventas/orden_venta/orden_ventas.js";
+import { initVentas } from "./modules/ventas/venta/ventas.js";
 import { initCompras } from "./modules/compras/compras.js";
 import { initMovimientos } from "./modules/inventarios/movimientos.js";
 // import { initInventarios } from "./modules/inventarios/movimientos.js";
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initClientesForm();
     initTipoCambio();
     initOrdenVentas(); 
+    initVentas();
     initCompras(); 
     initMovimientos();
     // initInventarios();
