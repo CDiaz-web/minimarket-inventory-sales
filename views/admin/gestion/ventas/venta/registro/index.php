@@ -250,7 +250,7 @@
                 class="formulario__label">
                 Sub Total: 
                 <span id="simboloMoneda01DocVentas"><?php echo $cabecera->simbolo ?? $simbolo_moneda; ?></span>
-                <span id="subtotalVentaDocVentas"><?php echo $cabecera->subtotal_origen ?? "0.00"; ?></span> 
+                <span id="subtotalDocVentas"><?php echo $cabecera->subtotal_origen ?? "0.00"; ?></span> 
             </label>
         </div>
         <div class="table-search">

@@ -302,7 +302,7 @@ function actualizarTotales(){
         subtotalGeneral.toFixed(2);
     document.getElementById('totalDocVentasIgv').textContent =
         igvGeneral.toFixed(2);
-    document.getElementById('totalVenta').textContent =
+    document.getElementById('totalDocVentas').textContent =
         totalGeneral.toFixed(2);
 }
 

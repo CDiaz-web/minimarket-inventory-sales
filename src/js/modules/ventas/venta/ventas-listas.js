@@ -53,7 +53,7 @@ function activarAutocomplete(){
             App.ventas.idlista = ui.item.id;
             
             cargarProductosPorLista(ui.item.id);
-
+            
         }
 
     });
