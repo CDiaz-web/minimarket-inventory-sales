@@ -231,7 +231,7 @@
     <div class="table-header">
         <div class="table-actions">
             <button class="boton boton--primary-link" id = "btngenerarDocVentas">
-                <i class="fa-solid fa-pen-to-square"></i> Guardar D.V.
+                <i class="fa-solid fa-pen-to-square"></i> Guardar Doc.V.
             </button> 
             <button 
                 class="boton boton--success" 
